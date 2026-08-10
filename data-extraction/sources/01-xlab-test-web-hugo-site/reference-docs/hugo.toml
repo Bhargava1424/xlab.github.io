@@ -1,0 +1,99 @@
+baseURL = "https://xlab.cse.buffalo.edu/"
+defaultContentLanguage = "en"
+enableEmoji = true
+enableRobotsTXT = true
+languageCode = "en"
+pygmentsStyle = "monokai"
+theme = "gokarna"
+title = "XLab — Accelerating AI Systems & Solutions"
+
+[params]
+  avatarURL = "/xlab.png"
+  avatarSize = "size-m"
+  description = "XLab — Accelerating AI Systems & Solutions at University at Buffalo"
+  footer = "XLab @ University at Buffalo, Department of Computer Science & Engineering"
+  metaKeywords = ["AI", "machine learning", "deep learning", "AI systems", "research", "University at Buffalo", "UB CSE"]
+  showBackToTopButton = true
+  
+  # Banner/Header settings
+  showTaglineInHeader = false  # Set to true to show tagline below logo
+  tagline = "Accelerating AI Systems & Solutions"
+  headerLogoHeight = "60px"    # Adjust logo size: "40px", "60px", "80px", etc.
+  
+  recruiting_notice = "We are recruiting PhD students and postdoctoral fellows to conduct cutting-edge AI systems and solutions research!"
+  
+  socialIcons = [
+    {name = "email", url = "mailto:jinjun@buffalo.edu"}
+  ]
+  
+  # Custom head HTML for KaTeX math rendering
+  customHeadHTML = """
+    <!-- KaTeX -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css" integrity="sha384-5TcZemv2l/9On385z///+d7MSYlvIEw9FuZTIdZ14vJLqWphw7e7ZPuOiCHJcFCP" crossorigin="anonymous">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js" integrity="sha384-cMkvdD8LoxVzGF/RPUKAcvmm49FQ0oxwDF3BGKtDXcEc+T1b2N+teh/OJfpU0jr6" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/auto-render.min.js" integrity="sha384-hCXGrW6PitJEwbkoStFjeJxv+fSOOQKOPbJxSfM6G5sWZjAyWhXiTIIAmQqnlLlh" crossorigin="anonymous"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+          ],
+          throwOnError : false
+        });
+      });
+    </script>
+  """
+
+[menu]
+  [[menu.main]]
+    name = "About Us"
+    pre = "<span data-feather='info'></span>"
+    url = "/about/"
+    weight = 1
+
+  [[menu.main]]
+    name = "Research"
+    pre = "<span data-feather='zap'></span>"
+    url = "/research/"
+    weight = 2
+
+  [[menu.main]]
+    name = "Team"
+    pre = "<span data-feather='users'></span>"
+    url = "/team/"
+    weight = 3
+
+  [[menu.main]]
+    name = "Open Source"
+    pre = "<span data-feather='code'></span>"
+    url = "/open-source/"
+    weight = 4
+
+  [[menu.main]]
+    name = "News & Media"
+    pre = "<span data-feather='rss'></span>"
+    url = "/news/"
+    weight = 5
+
+  [[menu.main]]
+    name = "Blog"
+    pre = "<span data-feather='pen-tool'></span>"
+    url = "/blog/"
+    weight = 6
+
+  [[menu.main]]
+    name = "Gallery"
+    pre = "<span data-feather='image'></span>"
+    url = "/gallery/"
+    weight = 7
+
+[markup]
+  [markup.tableOfContents]
+    startLevel = 1
+    endLevel = 4
+    ordered = false
+
+[minify]
+  minifyOutput = true
+

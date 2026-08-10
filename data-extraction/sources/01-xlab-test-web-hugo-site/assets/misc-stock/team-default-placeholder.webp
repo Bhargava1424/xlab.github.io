@@ -1,0 +1,8 @@
+<svg width="400" height="500" xmlns="http://www.w3.org/2000/svg">
+  <!-- 4:5 aspect ratio placeholder -->
+  <rect width="400" height="500" fill="#e0e0e0"/>
+  <circle cx="200" cy="160" r="60" fill="#b0b0b0"/>
+  <path d="M 120 350 Q 200 280 280 350 L 280 500 L 120 500 Z" fill="#b0b0b0"/>
+  <text x="200" y="450" font-family="Arial, sans-serif" font-size="20" fill="#888" text-anchor="middle">No Photo</text>
+</svg>
+

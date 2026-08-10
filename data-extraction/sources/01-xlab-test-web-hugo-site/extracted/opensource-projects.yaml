@@ -1,0 +1,23 @@
+# Source: data/opensource.yaml (verbatim, 3 projects)
+# Note: repo URLs for synctree/quadranet point to the org member's personal GitHub
+# (https://github.com/utkrshkmr), not a dedicated project repo — likely a placeholder
+# the lab never got around to fixing. Verify actual repo URLs before reuse.
+
+projects:
+  - slug: "mlmodelscope"
+    title: "MLModelScope"
+    banner: "images/opensource/mlmodelscope/banner.webp"  # referenced but never added to the old site
+    repo: "https://github.com/c3sr/mlmodelscope"
+    desc: "A hardware/software agnostic platform to facilitate the evaluation, measurement, and introspection of ML models."
+
+  - slug: "synctree"
+    title: "SyncTREE"
+    banner: "images/opensource/synctree/banner.webp"
+    repo: "https://github.com/utkrshkmr"   # placeholder — points to a person, not a repo; verify real URL
+    desc: "Fast timing analysis for integrated circuit design through physics-informed tree-based graph neural networks."
+
+  - slug: "quadranet"
+    title: "QuadraNet"
+    banner: "images/opensource/quadranet/banner.webp"
+    repo: "https://github.com/utkrshkmr"   # placeholder — points to a person, not a repo; verify real URL
+    desc: "Hardware-aware quadratic neural networks for improving high-order neural interaction efficiency."

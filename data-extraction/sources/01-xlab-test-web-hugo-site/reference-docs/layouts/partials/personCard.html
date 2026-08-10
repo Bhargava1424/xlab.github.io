@@ -1,0 +1,119 @@
+{{- $person := .person -}}
+{{- $sectionName := .sectionName -}}
+
+{{- /* Photo resolution logic */ -}}
+{{- $photo := "" -}}
+{{- $firstName := index (split $person.name " ") 0 | lower -}}
+{{- $firstName = replace $firstName "-" "" -}}
+
+{{- /* Search for photo in static/team/ directory */ -}}
+{{- $teamPhotos := readDir "static/team" -}}
+{{- $matchedPhoto := "" -}}
+{{- $bestMatch := "" -}}
+
+{{- range $teamPhotos -}}
+  {{- $filename := .Name -}}
+  {{- $filenameLower := lower $filename -}}
+  {{- $nameWithoutExt := path.BaseName $filename -}}
+  {{- $ext := path.Ext $filename -}}
+  
+  {{- /* Check if filename contains the first name */ -}}
+  {{- if (findRE $firstName $filenameLower) -}}
+    {{- /* Prefer .webp > .png > .jpg */ -}}
+    {{- if eq $ext ".webp" -}}
+      {{- $bestMatch = $filename -}}
+    {{- else if and (eq $ext ".png") (ne $bestMatch "") (not (strings.HasSuffix $bestMatch ".webp")) -}}
+      {{- $bestMatch = $filename -}}
+    {{- else if and (or (eq $ext ".jpg") (eq $ext ".jpeg")) (eq $bestMatch "") -}}
+      {{- $bestMatch = $filename -}}
+    {{- else if eq $bestMatch "" -}}
+      {{- $bestMatch = $filename -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- if $bestMatch -}}
+  {{- $photo = printf "team/%s" $bestMatch | relURL -}}
+{{- else -}}
+  {{- $photo = "team/default.webp" | relURL -}}
+{{- end -}}
+
+<div class="people-card">
+  <div class="people-card-photo">
+    <img src="{{ $photo }}" alt="{{ $person.name }}" loading="lazy">
+  </div>
+  
+  <div class="people-card-content">
+    <h3 class="people-card-name">{{ $person.name }}</h3>
+    
+    {{- if $person.role -}}
+      <p class="people-card-role">{{ $person.role }}</p>
+    {{- end -}}
+    
+    {{- if $person.titles -}}
+      {{- range $person.titles -}}
+        <p class="people-card-title">{{ . }}</p>
+      {{- end -}}
+    {{- end -}}
+    
+    {{- if $person.office -}}
+      <p class="people-card-office">📍 {{ $person.office }}</p>
+    {{- end -}}
+    
+    {{- /* Years - hide for Lab Lead, hide if both joined and left are missing */ -}}
+    {{- if and (ne $sectionName "Lab Lead") (or $person.joined $person.left) -}}
+      <p class="people-card-years">
+        {{- if $person.joined -}}
+          {{- $person.joined -}}
+        {{- end -}}
+        {{- if and $person.joined (not $person.left) -}}-{{- end -}}
+        {{- if $person.left -}}
+          {{- if $person.joined -}}-{{- end -}}
+          {{- $person.left -}}
+        {{- end -}}
+      </p>
+    {{- end -}}
+    
+    {{- /* Links - icons only */ -}}
+    {{- if $person.links -}}
+      <div class="people-card-links">
+        {{- if $person.links.email -}}
+          <a href="mailto:{{ $person.links.email }}" aria-label="Email" class="people-link-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+              <polyline points="22,6 12,13 2,6"></polyline>
+            </svg>
+          </a>
+        {{- end -}}
+        
+        {{- if $person.links.university -}}
+          <a href="{{ $person.links.university }}" target="_blank" rel="noopener" aria-label="University Profile" class="people-link-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+          </a>
+        {{- end -}}
+        
+        {{- if $person.links.scholar -}}
+          <a href="{{ $person.links.scholar }}" target="_blank" rel="noopener" aria-label="Google Scholar" class="people-link-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 0L1 7.5l3.5 2.1V17l7.5 4.5L19.5 17V9.6L23 7.5L12 0zm0 3.3l7.5 4.5-7.5 4.5-7.5-4.5L12 3.3zm-5.5 9.3l5.5 3.3 5.5-3.3v4.8L12 20.7l-5.5-3.3v-4.8z"/>
+            </svg>
+          </a>
+        {{- end -}}
+        
+        {{- if $person.links.website -}}
+          <a href="{{ $person.links.website }}" target="_blank" rel="noopener" aria-label="Personal Website" class="people-link-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="2" y1="12" x2="22" y2="12"></line>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            </svg>
+          </a>
+        {{- end -}}
+      </div>
+    {{- end -}}
+  </div>
+</div>
+

@@ -1,0 +1,170 @@
+# Source: data/team/phd.yaml (verbatim data) + photo cross-reference added by extraction
+# Photo matching in the OLD site was done by fuzzy filename search (layouts/partials/personCard.html:
+# takes first token of name, lowercases, strips hyphens, then regex-searches static/team/ filenames).
+# That logic silently fails for 2 of the 13 people below (see `photo_match_issue`) — confirmed by
+# the site's own static/team-validation.json (copied verbatim as static-team-validation.json in this
+# folder). Do NOT reuse fuzzy filename matching in the new site — map photos explicitly per person.
+
+- name: "Jiajie Li"
+  role: "PhD Candidate, 4th Year, Computer Science & Engineering"
+  titles: []
+  office: ~
+  links:
+    email: "jli433@buffalo.edu"
+    scholar: "https://scholar.google.com/citations?user=oMCzOmoAAAAJ&hl=en"
+    website: "https://jiajie.li/"
+    university: ~
+  photo_candidates:
+    - "assets/team-photos/static-team/_phd1_Jiajie.png"
+    - "assets/team-photos/authors-backup/jiajie-li.png"
+
+- name: "Yuting Hu"
+  role: "PhD Candidate, 4th Year, Computer Science & Engineering"
+  titles: []
+  office: ~
+  links:
+    email: "yhu54@buffalo.edu"
+    scholar: "https://scholar.google.com/citations?user=TTsigxgAAAAJ&hl=en"
+    website: ~
+    university: ~
+  photo_candidates:
+    - "assets/team-photos/static-team/_phd2_Yuting.png"
+    - "assets/team-photos/authors-backup/yuting-hu.png"
+
+- name: "Amir Nassereldine"
+  role: "PhD Candidate, 4th Year, Computer Science & Engineering"
+  titles: []
+  office: ~
+  links:
+    email: "amirnass@buffalo.edu"
+    scholar: "https://scholar.google.com/citations?user=adznSugAAAAJ&hl=en"
+    website: ~
+    university: ~
+  photo_candidates:
+    - "assets/team-photos/static-team/_phd3_Amir.png"
+    - "assets/team-photos/authors-backup/amir-nassereldine.png"
+
+- name: "Changjae Lee"
+  role: "PhD Candidate, 4th Year, Computer Science & Engineering"
+  titles: []
+  office: ~
+  links:
+    email: "changjae@buffalo.edu"
+    scholar: "https://scholar.google.com/citations?user=N0BVPPcAAAAJ&hl=en"
+    website: ~
+    university: ~
+  photo_candidates:
+    - "assets/team-photos/static-team/_phd4_Changjae.png"
+    - "assets/team-photos/authors-backup/changjae-lee.png"
+
+- name: "Dancheng Liu"
+  role: "PhD Candidate, 3rd Year, Computer Science & Engineering"
+  titles: []
+  office: ~
+  links:
+    email: "dliu37@buffalo.edu"
+    scholar: "https://scholar.google.com/citations?user=yGDaYPoAAAAJ&hl=en"
+    website: "https://danchengliu.github.io/"
+    university: ~
+  photo_candidates:
+    - "assets/team-photos/static-team/_phd5_Dancheng.png"
+    - "assets/team-photos/authors-backup/dancheng-liu.png"
+
+- name: "Chenhui Xu"
+  role: "PhD Candidate, 3rd Year, Computer Science & Engineering"
+  titles: []
+  office: ~
+  links:
+    email: "cxu26@buffalo.edu"
+    scholar: "https://scholar.google.com/citations?user=SjjiXpYAAAAJ&hl=zh-CN"
+    website: "https://minihuihui.github.io/"
+    university: ~
+  photo_candidates:
+    - "assets/team-photos/static-team/_phd6_Chenhui.png"
+
+- name: "Muhammad Ahmad Waseem"
+  role: "PhD Student, 2nd Year, Computer Science & Engineering"
+  titles: []
+  office: ~
+  links:
+    email: "mwaseem@buffalo.edu"
+    scholar: "https://scholar.google.com/citations?user=99wrmMoAAAAJ&hl=en"
+    website: "https://ahmad-personal-web.vercel.app/"
+    university: ~
+  photo_candidates:
+    - "assets/team-photos/static-team/_phd7_Ahmad.png"
+    - "assets/team-photos/static-team/Ahmad.png"   # possible duplicate/alt of the same photo
+  photo_match_issue: "Old site's fuzzy matcher searched for 'muhammad' (first name token) and found nothing — flagged as missing in team-validation.json even though _phd7_Ahmad.png / Ahmad.png likely ARE this person's photo (matched on middle name instead). Verify with the person before using."
+
+- name: "Utkarsh Kumar"
+  role: "PhD Student, 2nd Year, Computer Science & Engineering"
+  titles: []
+  office: ~
+  links:
+    email: "utkarshk@buffalo.edu"
+    scholar: "https://scholar.google.com/citations?user=5ix_YFkAAAAJ&hl=en&oi=ao"
+    website: ~
+    university: ~
+  photo_candidates:
+    - "assets/team-photos/static-team/_phd8_Utkarsh.jpg"
+
+- name: "Yifan Yang"
+  role: "PhD Student, 2nd Year, Computer Science & Engineering"
+  titles: []
+  office: ~
+  links:
+    email: "yyang99@buffalo.edu"
+    scholar: "https://scholar.google.com/citations?user=8HptYz0AAAAJ&hl=zh-CN"
+    website: "https://www-student.cse.buffalo.edu/~yyang99/"
+    university: ~
+  photo_candidates:
+    - "assets/team-photos/static-team/_phd9_Yifan.png"
+
+- name: "Ji-Hyeon Yoo"
+  role: "PhD Student, 1st Year, Computer Science & Engineering"
+  titles: []
+  office: ~
+  links:
+    email: "jihyeony@buffalo.edu"
+    scholar: ~
+    website: ~
+    university: ~
+  photo_candidates:
+    - "assets/team-photos/static-team/_phd10_Ji-Hyeon.png"
+  photo_match_issue: "Old site's fuzzy matcher stripped hyphens from 'Ji-Hyeon' -> 'jihyeon' but the filename keeps the hyphen ('_phd10_Ji-Hyeon.png'), so the regex search never matched — flagged as missing in team-validation.json even though the photo file exists and is very likely this person."
+
+- name: "Ziyue Bai"
+  role: "PhD Student, 1st Year, Computer Science & Engineering"
+  titles: []
+  office: ~
+  links:
+    email: "ziyuebai@buffalo.edu"
+    scholar: "https://scholar.google.com/citations?user=srLdbVoAAAAJ&hl=zh-CN"
+    website: ~
+    university: ~
+  photo_candidates:
+    - "assets/team-photos/static-team/_phd11_Ziyue.png"
+
+- name: "Wenyan Zhou"
+  role: "PhD Student, 1st Year, Computer Science & Engineering"
+  titles: []
+  office: ~
+  links:
+    email: "wzhou37@buffalo.edu"
+    scholar: ~
+    website: ~
+    university: ~
+  photo_candidates:
+    - "assets/team-photos/static-team/_phd12_Wenyan.png"
+
+- name: "Meihuan Liu"
+  role: "PhD Student, 1st Year, Computer Science & Engineering"
+  titles: []
+  office: ~
+  links:
+    email: "meihuanl@buffalo.edu"
+    scholar: ~
+    website: ~
+    university: ~
+  photo_candidates:
+    - "assets/team-photos/static-team/_phd13_Meihuan.png"

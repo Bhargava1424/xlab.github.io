@@ -1,0 +1,12 @@
+{{ partial "custom-head.html" . }}
+{{ partial "default-light-theme.html" . }}
+{{ partial "theme-logo-switcher.html" . }}
+
+{{/* Team page CSS */}}
+{{ if eq .Type "team" }}
+  {{ $teamCSS := resources.Get "css/team.css" }}
+  {{ if $teamCSS }}
+    <link rel="stylesheet" href="{{ $teamCSS.RelPermalink }}">
+  {{ end }}
+{{ end }}
+

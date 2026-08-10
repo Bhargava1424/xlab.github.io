@@ -1,0 +1,22 @@
+# Sources: data/home.yaml (hero carousel) + content/contact/index.md (contact page)
+
+hero_carousel:
+  # Source: data/home.yaml — image files (images/hero/highlight-00N.webp) were never
+  # actually added to the old repo; only the intended captions exist.
+  - alt: "AI Institute for Exceptional Education Award"
+  - alt: "Research Collaboration Event"
+  - alt: "Team Research Meeting"
+  note: "These 3 captions strongly suggest hero images were meant to reuse the same
+    moments as the AI Institute award news and general lab/team photos — worth asking
+    the lab if these photos exist somewhere else (e.g. phone camera rolls, university
+    press photos) since they were never added to this repo."
+
+contact_page:
+  real_data:
+    email: "jinjun@buffalo.edu"   # same as site_meta.contact_email, consistent
+  demo_data_excluded:
+    - "Address: 450 Serra Mall, Stanford, CA 94305 — Stanford University's actual street address, unmodified starter-theme placeholder. NOT X-Lab's address (X-Lab is University at Buffalo)."
+    - "Phone: 888 888 88 88 — placeholder"
+    - "Body text: Lorem ipsum — placeholder"
+    - "Office hours, appointment_url (calendly.com generic link) — placeholder, unverified as real"
+  action_needed: "Get UB CSE department's real office address/room, and confirm whether Dr. Xiong wants office hours / a booking link on the site at all."

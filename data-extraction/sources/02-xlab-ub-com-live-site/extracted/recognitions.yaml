@@ -1,0 +1,195 @@
+# Source: https://www.xlab-ub.com/recognitions, fetched 2026-08-10. Full itemized award list.
+
+best_paper_awards:
+  - award: "Best Student Paper Award"
+    year: 2020
+    title: "The Design and Implementation of a Scalable DL Benchmarking Platform"
+    venue: "IEEE International Conference on Cloud Computing (CLOUD)"
+  - award: "Best Paper Award"
+    year: 2020
+    title: "XSP: Across-Stack Profiling and Analysis of Machine Learning Models on GPUs"
+    venue: "34th IEEE International Parallel and Distributed Processing Symposium (IPDPS)"
+  - award: "Best Research Paper Award"
+    year: 2019
+    title: "Evaluating Characteristics of CUDA Communication Primitives on High-Bandwidth Interconnects"
+    venue: "10th ACM/SPEC International Conference on Performance Engineering (ICPE)"
+  - award: "IEEE/ACM William J. McCalla Best Paper Award"
+    year: 2018
+    title: "DNNBuilder: an Automated Tool for Building High-Performance DNN Hardware Accelerators for FPGAs"
+    venue: "ACM/IEEE International Conference on Computer Aided Design (ICCAD)"
+  - award: "Best Paper in Track Award"
+    year: 2014
+    title: "Variation Aware Optimal Threshold Voltage Computation for On-chip Noise Sensors"
+    venue: "ACM/IEEE International Conference on Computer-Aided Design (ICCAD)"
+  - award: "Best Paper Award"
+    year: 2006
+    title: "Robust Extraction of Spatial Correlation"
+    venue: "ACM/IEEE International Symposium on Physical Design (ISPD)"
+  - award: "Best Student Paper Award"
+    year: 2003
+    title: "Performance Optimization Global Routing with RLC Crosstalk Constraints"
+    venue: "IEEE International Conference on Application Specific Integrated Circuits (ASICON)"
+
+best_paper_award_nominations:
+  - year: 2018
+    title: "Application-Transparent Near-Memory Processing Architecture with Memory Channel Network"
+    venue: "51st Annual IEEE/ACM International Symposium on Microarchitecture (MICRO'51)"
+  - year: 2011
+    title: "Path Criticality Computation in Parameterized Statistical Timing Analysis"
+    venue: "IEEE/ACM Asia and South Pacific Design Automation Conference (ASP-DAC)"
+  - year: 2011
+    title: "Optimal Statistical Chip Disposition"
+    venue: "ACM/IEEE International Conference on Computer Aided Design (ICCAD)"
+  - year: 2009
+    title: "Stochastic Current Prediction Enabled Frequency Actuator for Runtime Resonance Noise Reduction"
+    venue: "IEEE/ACM Asia and South Pacific Design Automation Conference (ASP-DAC)"
+  - year: 2009
+    title: "Statistical Multilayer Process Space Coverage for At-Speed Test"
+    venue: "IEEE/ACM Design Automation Conference (DAC)"
+  - year: 2008
+    title: "Statistical Path Selection for At-Speed Test"
+    venue: "ACM/IEEE International Conference on Computer Aided Design (ICCAD)"
+  - year: 2007
+    title: "Compact Modeling of Variational Waveforms"
+    venue: "ACM/IEEE International Conference on Computer Aided Design (ICCAD)"
+  - year: 2007
+    title: "Efficient Decoupling Capacitance Budgeting Considering Current Correlation Including Process Variation"
+    venue: "ACM/IEEE International Conference on Computer Aided Design (ICCAD)"
+
+best_poster_awards:
+  - year: 2019
+    title: "SPGNet: Semantic Prediction Guidance for Scene Parsing"
+    venue: "IBM AI Horizons Colloquium"
+  - year: 2019
+    title: "A Bi-Directional Co-Design Approach to Enable Deep Learning on IoT Devices"
+    venue: "ICML'19 Joint Workshop on On-Device Machine Learning and Compact Deep Neural Network Representations (ODML-CDNNR)"
+  - year: 2018
+    title: "DNNBuilder: an Automated Tool for Building High-Performance DNN Hardware Accelerators for FPGAs"
+    venue: "IBM AI Horizons Colloquium"
+
+international_competition_awards:
+  - award: "Student Innovation Award"
+    year: 2021
+    title: "HyKernel: A Hybrid Selection of One/Two-Phase Kernels for Triangle Counting on GPUs"
+    venue: "IEEE-HPEC MIT and Amazon GraphChallenge"
+  - award: "Champion Award"
+    year: 2020
+    title: "At-Scale Sparse Deep Neural Network Inference With Efficient GPU Implementation"
+    venue: "IEEE-HPEC MIT and Amazon GraphChallenge"
+  - award: "Third Place Award"
+    year: 2020
+    title: "Embedded System Implementation of Neural Network based Object Detection for Drones"
+    venue: "System Design Contest (FPGA track), 57th Design Automation Conference (DAC)"
+  - award: "Student Innovation Award"
+    year: 2019
+    title: "Update on k-truss Decomposition on GPU"
+    venue: "IEEE-HPEC MIT and Amazon GraphChallenge"
+  - award: "Honorable Mention"
+    year: 2019
+    title: "Update on Triangle Counting on GPU"
+    venue: "IEEE-HPEC MIT and Amazon GraphChallenge"
+  - award: "Honorable Mention"
+    year: 2019
+    title: "Accelerating Sparse Deep Neural Network on FPGAs"
+    venue: "IEEE-HPEC MIT and Amazon GraphChallenge"
+  - award: "First Place Award"
+    year: 2019
+    title: "Embedded System Implementation of Neural Network based Object Detection for Drones"
+    venue: "System Design Contest (GPU track), 56th Design Automation Conference (DAC)"
+  - award: "First Place Award"
+    year: 2019
+    title: "Embedded System Implementation of Neural Network based Object Detection for Drones"
+    venue: "System Design Contest (FPGA track), 56th Design Automation Conference (DAC)"
+  - award: "Student Innovation Award"
+    year: 2018
+    title: "Triangle Counting and Truss Decomposition using FPGA"
+    venue: "IEEE-HPEC MIT and Amazon GraphChallenge"
+  - award: "Finalist"
+    year: 2018
+    title: "Collaborative (CPU + GPU) Algorithms for Triangle Counting and Truss Decomposition"
+    venue: "IEEE-HPEC MIT and Amazon GraphChallenge"
+  - award: "Third Place Award"
+    year: 2018
+    title: "Embedded System Implementation of Neural Network based Object Detection for Drones"
+    venue: "System Design Contest (FPGA track), 55th Design Automation Conference (DAC)"
+  - award: "First Place Award"
+    year: 2018
+    title: "Single-Person Human Parsing Task"
+    venue: "2018 CVPR Challenge on Look Into Person (LIP), 30th IEEE/CVF CVPR"
+  - award: "First Place Award"
+    year: 2018
+    title: "Multi-Person Human Parsing Task"
+    venue: "2018 CVPR Challenge on Look Into Person (LIP), 30th IEEE/CVF CVPR"
+  - award: "Honorable Mention"
+    year: 2017
+    title: "Collaborative (CPU+GPU) algorithms for triangle counting and truss decomposition on the Minsky architecture"
+    venue: "IEEE-HPEC MIT and Amazon GraphChallenge"
+
+professional_awards:
+  - award: "Thirteenth Invention Plateau Achievement Award"
+    date: "June 2021"
+    org: "IBM Research"
+  - award: "Twelfth Invention Plateau Achievement Award"
+    date: "February 2021"
+    org: "IBM Research"
+  - award: "Eleventh Invention Plateau Achievement Award"
+    date: "August 2020"
+    org: "IBM Research"
+  - award: "Google Faculty Award"
+    date: "June 2020"
+    org: "Google Inc."
+  - award: "Tenth Invention Plateau Achievement Award"
+    date: "October 2019"
+    org: "IBM Research"
+  - award: "Ninth Invention Plateau Achievement Award"
+    date: "November 2017"
+    org: "IBM Research"
+  - award: "Master Inventor Award"
+    date: "2016"
+    org: "IBM Research"
+  - award: "Eighth Invention Plateau Achievement Award"
+    date: "November 2014"
+    org: "IBM Research"
+  - award: "Outstanding Technical Achievement Award for Contributions to Statistical Test Methodology Development and Deployment for IBM 45 Nanometer High-Performance ASICs"
+    date: "2014"
+    org: "IBM Research"
+  - award: "Outstanding Technical Contribution Award for Contributions to Statistical Test and Smarter Energy Research"
+    date: "2014"
+    org: "IEEE Region One"
+  - award: "Outstanding Technical Achievement Award for Contribution to Smarter Energy Research"
+    date: "2014"
+    org: "IBM Research"
+  - award: "Seventh Invention Plateau Achievement Award"
+    date: "December 2013"
+    org: "IBM Research"
+  - award: "Research Division Award for Contributions to Smarter Energy Research Institute"
+    date: "2013"
+    org: "IBM Research"
+  - award: "Sixth Invention Plateau Achievement Award"
+    date: "September 2012"
+    org: "IBM Research"
+  - award: "Research Division Award for Contributions to Research Big Bet on Smarter Energy Research"
+    date: "2012"
+    org: "IBM Research"
+  - award: "Fifth Invention Plateau Achievement Award"
+    date: "November 2011"
+    org: "IBM Research"
+  - award: "Fourth Invention Plateau Achievement Award"
+    date: "July 2010"
+    org: "IBM Research"
+  - award: "Third Invention Plateau Achievement Award"
+    date: "October 2009"
+    org: "IBM Research"
+  - award: "Second Invention Plateau Achievement Award"
+    date: "April 2008"
+    org: "IBM Research"
+  - award: "Research Division Award for Contributions to Statistical Timing IP Revenue"
+    date: "2007"
+    org: "IBM Research"
+  - award: "First Invention Plateau Achievement Award"
+    date: "April 2007"
+    org: "IBM Research"
+  - award: "Beijing Science and Technology Bronze Award"
+    title: "Embedded System Design for Mass Optical Storage Systems"
+    date: "2002"
+    org: "The Government of Beijing, China"

@@ -1,0 +1,64 @@
+# Source: https://www.xlab-ub.com/publication/invited-papers, fetched 2026-08-10. 12 invited papers.
+# Site notes no direct links to individual papers were provided.
+
+invited_papers:
+  - title: "Exploration of Quantum Neural Architecture by Mixing Quantum Neuron Designs"
+    authors: "Z. Wang, Z. Liang, S. Zhou, C. Ding, J. Xiong, Y. Shi, W. Jiang"
+    venue: "2021 International Conference On Computer Aided Design (ICCAD)"
+    year: 2021
+    location: "Online, Nov 1-5"
+  - title: "Can Noise on Qubits Be Learned in Quantum Neural Network? A Case Study on QuantumFlow"
+    authors: "Z. Liang, Z. Wang, J. Yang, L. Yang, J. Xiong, Y. Shi, W. Jiang"
+    venue: "2021 International Conference On Computer Aided Design (ICCAD)"
+    year: 2021
+    location: "Online, Nov 1-5"
+  - title: "When Machine Learning Meets Quantum Computers: a Case Study"
+    authors: "W. Jiang, J. Xiong, Y. Shi"
+    venue: "IEEE/ACM Asia South Pacific Design Automation Conference (ASP-DAC)"
+    year: 2021
+    location: "Tokyo, Japan, January 18-21"
+  - title: "Challenges for Building a Cloud Native Scalable and Trustable Multi-tenant AIoT Platform"
+    authors: "J. Xiong, H. Chen"
+    venue: "2020 International Conference On Computer Aided Design (ICCAD)"
+    year: 2020
+    location: "San Diego, CA, Nov 2-5"
+  - title: "Effective Algorithm-Accelerator Co-design for AI Solutions on Edge Devices"
+    authors: "C. Hao, Y. Chen, X. Zhang, Y. Li, J. Xiong, W. Hwu, D. Chen"
+    venue: "30th ACM Great Lakes Symposium on VLSI (GLSVLSI)"
+    year: 2020
+    location: "Beijing, China, September 8-11"
+  - title: "NAIS: Neural Architecture and Implementation Search and its Applications in Autonomous Driving"
+    authors: "C. Hao, Y. Chen, X. Liu, A. Sarwari, D. Sew, A. Dhar, B. Wu, D. Fu, J. Xiong, W. Hwu, J. Gu, D. Chen"
+    venue: "2019 International Conference On Computer Aided Design (ICCAD)"
+    year: 2019
+    location: "Westminster, CO, Nov 4-7"
+  - title: "Near-Memory and In-Storage FPGA Acceleration for Emerging Cognitive Computing Workloads"
+    authors: "A. Dhar, S. Huang, J. Xiong, D. Jamsek, B. Mesnet, J. Huang, N. Kim, W. Hwu, D. Chen"
+    venue: "IEEE Computer Society Annual Symposium on VLSI (ISVLSI)"
+    year: 2019
+    location: "Miami, Florida, July 15-17"
+  - title: "Rebooting the Data Access Hierarchy of Computing Systems"
+    authors: "W. Hwu, I. Hajj, S. Gonzalo, C. Pearson, N. Kim, D. Chen, J. Xiong, Z. Sura"
+    venue: "IEEE International Conference on Rebooting Computing (ICRC)"
+    year: 2017
+    location: "Washington, DC, Nov 8-9"
+  - title: "Marriage of Modern Big Data Analytics and Old-fashioned Semiconductor Manufacturing Process"
+    authors: "Y. Zhu, J. Xiong"
+    venue: "ACM International Conference on Computer-Aided Design (ICCAD)"
+    year: 2015
+    location: "Austin, TX, November"
+  - title: "Efficient Modeling of Spatial Correlations for Parameterized Statistical Static Timing Analysis"
+    authors: "J. Xiong, V. Zolotov, C. Visweswariah"
+    venue: "IEEE 8th International Conference on ASIC"
+    year: 2009
+    location: "October"
+  - title: "At-Speed Testing in the Face of Process Variations"
+    authors: "C. Visweswariah, V. Zolotov, J. Xiong"
+    venue: "IEEE VLSI Test Symposium (VTS)"
+    year: 2009
+    location: "May"
+  - title: "Variability-Driven Considerations in the Design of Integrated-Circuit Global Interconnects"
+    authors: "L. He, A. Kahng, K. Tam, J. Xiong"
+    venue: "IEEE VLSI Multilevel Interconnection Conference"
+    year: 2004
+    location: "October"

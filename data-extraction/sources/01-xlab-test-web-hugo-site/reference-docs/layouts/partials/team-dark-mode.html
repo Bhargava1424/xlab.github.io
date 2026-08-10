@@ -1,0 +1,40 @@
+<script>
+// Sync team dark theme with main dark theme
+(function() {
+  function updateTeamTheme() {
+    var darkTheme = document.getElementById("dark-theme");
+    var teamDarkTheme = document.getElementById("team-dark-theme");
+    
+    if (darkTheme && teamDarkTheme) {
+      teamDarkTheme.disabled = darkTheme.disabled;
+    }
+  }
+  
+  // Run on load
+  updateTeamTheme();
+  
+  // Watch for theme changes
+  document.addEventListener('click', function(e) {
+    if (e.target.closest('.dark-theme-toggle')) {
+      setTimeout(updateTeamTheme, 50);
+    }
+  });
+  
+  // Observe the dark-theme stylesheet
+  var checkForDarkTheme = setInterval(function() {
+    var darkTheme = document.getElementById("dark-theme");
+    if (darkTheme) {
+      clearInterval(checkForDarkTheme);
+      var observer = new MutationObserver(updateTeamTheme);
+      observer.observe(darkTheme, {
+        attributes: true,
+        attributeFilter: ['disabled']
+      });
+      updateTeamTheme();
+    }
+  }, 50);
+  
+  setTimeout(function() { clearInterval(checkForDarkTheme); }, 2000);
+})();
+</script>
+

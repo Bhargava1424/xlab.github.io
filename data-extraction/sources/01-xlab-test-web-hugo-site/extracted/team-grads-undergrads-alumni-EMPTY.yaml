@@ -1,0 +1,8 @@
+# Source: data/team/grads.yaml, data/team/undergrads.yaml, data/team/alumni.yaml
+# All three files were empty (`[]`) in the old site. No grad-collaborator, undergrad,
+# or alumni data existed there — this is a genuine gap, not an extraction miss.
+# Confirmed by reading each file directly:
+
+grads: []       # from data/team/grads.yaml
+undergrads: []  # from data/team/undergrads.yaml
+alumni: []      # from data/team/alumni.yaml

@@ -1,0 +1,28 @@
+# Source: https://www.xlab-ub.com/publication/book-chapters, fetched 2026-08-10.
+
+book_chapters:
+  - title: "Machine Learning for VLSI Chip Testing"
+    authors: "J. Xiong, Y. Zhu, J. He"
+    book: "Machine Learning in VLSI Computer-Aided Design"
+    editors: "I. Elfadel, D. Boning, X. Li"
+    publisher: "Springer"
+    year: 2019
+  - title: "System-Level Simulation for Smarter Grids"
+    authors: "J. Xiong"
+    book: "Smart Grid Handbook"
+    editors: "C. Liu, S. McArthur, S. Lee"
+    publisher: "John Wiley & Sons, Ltd."
+    year: 2016
+    online_isbn: "9781118755471"
+  - title: "Stochastic Optimization over Correlated Data Set"
+    authors: "Y. Shi, J. Xiong, L. He"
+    book: "Stochastic Optimization, Theory and Applications"
+    publisher: "Intech Publishing"
+    year: 2011
+    isbn: "978-953-307-829-8"
+
+excluded_ambiguous_entry:
+  title: "Mastering Flash 4, Illustrated"
+  author: "J. Xiong"
+  year: 2000
+  reason: "Listed on the source page but appears to be a full authored book, not a book chapter — flagged rather than filed under book_chapters. Confirm with the lab whether this should appear elsewhere on the new site (e.g. a separate 'other publications' note) or be omitted."

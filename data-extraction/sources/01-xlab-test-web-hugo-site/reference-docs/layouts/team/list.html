@@ -1,0 +1,46 @@
+{{ define "main" }}
+<div class="team-page">
+  <header class="team-header">
+    <div class="team-banner">
+      <img src="{{ "team/staff_banner.png" | relURL }}" alt="Team Banner" class="team-banner-image">
+      <h1 class="team-banner-title">{{ .Title }}</h1>
+    </div>
+  </header>
+
+  {{- /* Define section order and data files */ -}}
+  {{- $sections := slice
+    (dict "name" "Lab Lead" "file" "lead")
+    (dict "name" "Staff" "file" "staff")
+    (dict "name" "PhD Students" "file" "phd")
+    (dict "name" "Graduate Students" "file" "grads")
+    (dict "name" "Undergraduate Students" "file" "undergrads")
+    (dict "name" "Alumni" "file" "alumni")
+  -}}
+
+  {{- range $index, $section := $sections -}}
+    {{- $dataPath := printf "team/%s" $section.file -}}
+    {{- $people := index $.Site.Data.team $section.file -}}
+    
+    {{- if $people -}}
+      {{- if gt (len $people) 0 -}}
+        
+        {{- /* Add divider between sections (not before first) */ -}}
+        {{- if gt $index 0 -}}
+          <hr class="section-divider">
+        {{- end -}}
+        
+        <section class="team-section">
+          <h2 class="team-section-title">{{ $section.name }}</h2>
+          
+          <div class="people-grid">
+            {{- range $people -}}
+              {{- partial "personCard.html" (dict "person" . "sectionName" $section.name) -}}
+            {{- end -}}
+          </div>
+        </section>
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+</div>
+{{ end }}
+

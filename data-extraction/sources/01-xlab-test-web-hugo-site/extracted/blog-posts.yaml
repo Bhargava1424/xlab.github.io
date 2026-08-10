@@ -1,0 +1,133 @@
+# Source: content/post/*/index.md (front matter + full body, verbatim)
+# 2 of 4 posts are REAL blog posts written by actual lab PhD students. The other 2
+# ("wowchemy-prize", "ICML-best-paper") are unmodified starter-theme demo posts
+# about fictional people ("Richard Hendricks", "Jian Yang and Monica Hall" — Silicon
+# Valley TV show references) and must NOT be used.
+
+real_posts:
+  - title: "LLMs: Revolutionizing AI-Powered Communication"
+    date: "2022-12-20"
+    author: "Changjae Lee"
+    tags: ["AI", "Large Language Models", "NLP"]
+    summary: "Language Models (LMs) have undergone remarkable advancements in recent years, culminating in the development of Large Language Models (LLMs)."
+    image: "assets/post-images/llms-revolutionizing-communication-featured.png"
+    body_markdown: |
+      Language Models (LMs) have undergone remarkable advancements in recent years, culminating in the development of Large Language Models (LLMs). These models, powered by deep learning techniques, have demonstrated unprecedented abilities in understanding, generating, and manipulating human language. This article delves into the architecture, training methodologies, applications, and ethical considerations surrounding LLMs.
+
+      ## Evolution of Language Models
+
+      The journey from traditional n-gram models to modern transformer-based LLMs represents decades of research and innovation in natural language processing.
+
+      ### Traditional Approaches
+      Early language models relied on statistical methods and rule-based systems, with limited capability to capture complex linguistic patterns.
+
+      ### The Transformer Revolution
+      The introduction of the transformer architecture marked a turning point, enabling models to process text more efficiently and capture long-range dependencies.
+
+      ## Architecture of Modern LLMs
+
+      Modern LLMs are built on the transformer architecture, which consists of:
+
+      - **Self-Attention Mechanisms**: Allowing the model to weigh the importance of different words in context
+      - **Feed-Forward Networks**: Processing information at each layer
+      - **Layer Normalization**: Stabilizing the training process
+      - **Positional Encoding**: Capturing the order of words in sequences
+
+      ## Training Methodologies
+
+      Training LLMs involves several sophisticated techniques:
+
+      ### Pre-training
+      Models are first trained on massive text corpora to learn general language patterns and world knowledge.
+
+      ### Fine-tuning
+      Pre-trained models are then adapted to specific tasks or domains through additional training on targeted datasets.
+
+      ### Reinforcement Learning from Human Feedback (RLHF)
+      This technique aligns model outputs with human preferences, improving response quality and safety.
+
+      ## Applications in Communication
+
+      LLMs are revolutionizing various aspects of communication:
+
+      - **Content Creation**: Automated writing, copywriting, and creative content generation
+      - **Translation**: Real-time, context-aware translation between languages
+      - **Chatbots and Virtual Assistants**: More natural and helpful conversational AI
+      - **Accessibility**: Making information more accessible through summarization and simplification
+
+      ## Ethical Considerations
+
+      The deployment of LLMs raises important ethical questions:
+
+      - **Bias and Fairness**: Ensuring models don't perpetuate or amplify societal biases
+      - **Misinformation**: Preventing the generation and spread of false information
+      - **Privacy**: Protecting user data and preventing unauthorized information disclosure
+      - **Transparency**: Making model decisions more interpretable and accountable
+
+      ## Future Outlook
+
+      The field of LLMs continues to evolve rapidly, with research focusing on:
+
+      - Improving efficiency and reducing computational costs
+      - Enhancing multi-modal capabilities
+      - Better alignment with human values
+      - More robust and reliable performance
+
+      ## Conclusion
+
+      Large Language Models represent a significant milestone in AI development, offering unprecedented capabilities in understanding and generating human language. As we continue to refine these technologies and address their challenges, LLMs will play an increasingly important role in shaping how we communicate and interact with information in the digital age.
+
+  - title: "LLMs: Transforming the Landscape of AI and Beyond"
+    date: "2023-01-09"
+    author: "Yuting Hu"
+    tags: ["AI", "Large Language Models", "Deep Learning"]
+    summary: "In recent years, the field of artificial intelligence (AI) has witnessed remarkable advancements that have reshaped the way we interact with technology."
+    image: "assets/post-images/llms-transforming-ai-featured.png"
+    body_markdown: |
+      In recent years, the field of artificial intelligence (AI) has witnessed remarkable advancements that have reshaped the way we interact with technology. One of the most significant breakthroughs has been the development of Large Language Models (LLMs), which are AI systems capable of understanding and generating human-like text. These models have transcended conventional Natural Language Processing (NLP) boundaries and have far-reaching implications across various sectors, from communication to creativity, and from automation to education.
+
+      ## Introduction to Large Language Models
+
+      Large Language Models represent a paradigm shift in how machines process and generate natural language. Built on transformer architectures and trained on vast amounts of text data, these models can perform a wide range of language tasks without task-specific training.
+
+      ## Key Capabilities
+
+      LLMs demonstrate several remarkable capabilities:
+
+      - **Text Generation**: Creating coherent, contextually relevant text
+      - **Question Answering**: Providing accurate responses to queries
+      - **Translation**: Converting text between languages
+      - **Summarization**: Condensing long documents into concise summaries
+      - **Code Generation**: Writing and debugging programming code
+
+      ## Applications Across Domains
+
+      The impact of LLMs extends across multiple domains:
+
+      ### Education
+      LLMs can serve as personalized tutors, providing explanations and answering questions in various subjects.
+
+      ### Healthcare
+      These models can assist in medical documentation, research summarization, and patient communication.
+
+      ### Business
+      LLMs enhance customer service, automate content creation, and improve decision-making processes.
+
+      ## Challenges and Future Directions
+
+      While LLMs offer tremendous potential, they also present challenges including:
+
+      - Computational resource requirements
+      - Potential for generating biased or inaccurate information
+      - Privacy and security concerns
+      - Need for better interpretability
+
+      ## Conclusion
+
+      Large Language Models are transforming the AI landscape and opening new possibilities for human-AI collaboration. As research continues, we can expect even more sophisticated and capable models that will further bridge the gap between human and machine intelligence.
+
+demo_content_excluded:
+  - title: "Richard Hendricks Wins First Place in the Wowchemy Prize"
+    reason: "Fictional person (Silicon Valley TV show reference), Lorem ipsum body, unmodified starter-theme demo post."
+  - title: "Jian Yang and Monica Hall Win the Best Paper Award at Wowchemy 2020"
+    reason: "Fictional people (Silicon Valley TV show references), Lorem ipsum body, unmodified starter-theme demo post."

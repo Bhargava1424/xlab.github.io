@@ -1,0 +1,19 @@
+# Source: https://www.xlab-ub.com/teaching, fetched 2026-08-10.
+
+philosophy_quote: "Teaching: the sacred responsibility of academia"
+
+courses:
+  - code: "CSE 510"
+    title: "Enterprise-Scale AI Systems and Solutions"
+    institution: "University at Buffalo"
+    term: "Fall 2021"
+  - code: "APAN PS5335"
+    title: "Machine Learning: Concepts & Application"
+    institution: "Columbia University"
+    term: "Multiple semesters"
+  - code: "ECE498"
+    title: "Internet-of-Things and Cognitive Computing"
+    institution: "University of Illinois, Urbana-Champaign"
+    term: "Three semesters"
+
+note: "No course descriptions beyond title/institution/term were present on the source page."

@@ -1,0 +1,13 @@
+# DRY-RUN: only 1 of 58 real patents mapped here to validate the schema shape.
+# Full list: data-extraction/sources/02-xlab-ub-com-live-site/extracted/publications-patents.yaml
+# Verification finding: source data's "date" field is ambiguous (not clearly filed vs.
+# issued for older/China-patent entries) — mapped to filedDate here as a best guess;
+# the full merge pass should re-check this per-entry against the original source where
+# it matters (the China patents do cleanly say "issued", most US dockets say "filed").
+
+- id: patent-2021-global-prosody-style-transfer
+  category: patent
+  title: "Global Prosody Style Transfer Without Text Transcriptions"
+  authors: "K. Qian, Y. Zhang, S. Chang, J. Xiong, C. Gan, D. Cox"
+  patentNo: "P202102159US01"
+  filedDate: "2021-06"

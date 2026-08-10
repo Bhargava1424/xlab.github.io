@@ -1,0 +1,87 @@
+# Source: https://www.xlab-ub.com/home and /research, fetched 2026-08-10.
+# Much richer than source 01's lab-lead.yaml (which only had titles + links, no bio/education/history).
+# Merge with source 01/extracted/lab-lead.yaml when reconciling: this file has bio depth,
+# source 01 has structured `links` (email/scholar/university URLs) not repeated here.
+
+name: "Jinjun Xiong"
+title: "Empire Innovation Professor, Department of Computer Science & Engineering, University at Buffalo"
+
+education:
+  - degree: "Ph.D."
+    institution: "UCLA"
+    year: 2006
+    note: "Outstanding Ph.D. Award"
+  - degree: "M.S."
+    institution: "University of Wisconsin-Madison"
+    year: 2002
+  - degree: "M.S."
+    institution: "Tsinghua University"
+    year: 2000
+  - degree: "B.S."
+    institution: "Tsinghua University"
+    year: 1998
+
+professional_history:
+  - "Joined University at Buffalo in 2021"
+  - "Previously: Program Director and Senior Research Scientist at IBM T.J. Watson Research Center"
+  - "Co-founded the IBM-Illinois Center for Cognitive Computing Systems Research with Prof. Wen-mei Hwu"
+
+achievements_summary:
+  - "150+ peer-reviewed publications"
+  - "Seven Best Paper Awards"
+  - "Eight Best Paper Award nominations"
+  - "Championship Awards from IEEE GraphChallenge and DAC'19 Systems Design Contest"
+  # Full itemized award list is in extracted/recognitions.yaml — this is just the summary
+  # blurb as it appears on the homepage.
+
+research_philosophy: >
+  Curiosity-driven AI systems research focused on developing functional AI systems that
+  address societal challenges — described on the site as an "Earthly AI" approach:
+  "conducting research through building functional AI systems and solutions that should
+  be meaningful to the society."
+
+research_interests:
+  - "Novel applied AI solutions with emerging technologies (IoT, AR/VR, edge clouds, quantum computers)"
+  - "Data-driven science research from deployed AI systems"
+  - "Co-optimization across computing, algorithmic, and application levels"
+
+research_focus_primary: "End-to-end AI systems research for scalable, affordable, accessible personalized education"
+research_focus_secondary: "Sustainability with renewable energy integration"
+
+research_agenda_three_pronged:
+  - project: "Creative Experiential Learning Advisor (CELA)"
+    description: >
+      AI technologies for assessing knowledge gaps, suggesting personalized learning
+      modules, analyzing student behavior via video streams, inferring emotions/learning
+      states, and enabling pedagogical agent conversations.
+    representative_techniques:
+      - "Image-cue-to-textual-cue mapping (NIPS'18 Oral, ICCV'21)"
+      - "Curriculum-to-projects mapping (ACL'18)"
+      - "Fine-grain action recognition (ICCV'19 Oral)"
+      - "NLP phrase extraction (SDM'21)"
+      - "Semantic capacity assessment (EMNLP'20, ACL'21)"
+
+  - project: "Cognitive Application Builder (CAB)"
+    description: >
+      Automated tooling to identify computation, memory, and networking bottlenecks on a
+      distributed heterogeneous system.
+    representative_techniques:
+      - "Across-stack profiling platform (IPDPS'20, CLOUD'20 Best Papers)"
+      - "Communication/memory pattern tool (ICPE'19 Best Paper)"
+
+  - project: "Near-Memory Acceleration (NMA) for AI Hardware"
+    description: >
+      Hardware systems that bring AI computation near (or in) memory with storage-scale
+      capacity.
+    representative_techniques:
+      - "Near-memory prototype (MICRO'18 nomination)"
+      - "Big-data query acceleration (MICRO'19)"
+      - "DNN co-design (MLSys'20, ICCAD'18 Best Paper)"
+      - "Quantum computing impact analysis (Nature Communications'21)"
+
+future_vision: >
+  Expanding holistic AI systems research across hybrid infrastructure combining core
+  clouds, edge clouds, embedded IoT, AR/VR devices, and future quantum computers —
+  described on the site as the "X-Lab@UB Vision."
+
+teaching_philosophy_quote: "Teaching: the sacred responsibility of academia"

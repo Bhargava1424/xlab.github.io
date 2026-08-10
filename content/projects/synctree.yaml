@@ -1,0 +1,11 @@
+# Source: data-extraction/sources/01-xlab-test-web-hugo-site/extracted/opensource-projects.yaml
+# `code` link is unverified — the source pointed at a person's GitHub profile
+# (github.com/utkrshkmr), not a project repo. Flagged there, flagged again here.
+id: synctree
+title: SyncTREE
+tagline: "Fast timing analysis for integrated circuit design through physics-informed tree-based graph neural networks."
+thumbnail: /images/projects/synctree/thumbnail.jpg
+themeId: null
+status: active
+links:
+  code: "https://github.com/utkrshkmr" # UNVERIFIED — likely wrong, see note above

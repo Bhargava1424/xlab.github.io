@@ -1,0 +1,15 @@
+# DRY-RUN: only 1 of 141 real conference papers mapped here — chosen specifically
+# because it won a Best Paper Award, to validate the Publication/Recognition boundary
+# decision in docs/SCHEMA.md (award facts live on Recognition, not duplicated in
+# Publication.note). Compare to content/recognitions/best-paper-awards.yaml.
+# Full list: data-extraction/sources/02-xlab-ub-com-live-site/extracted/publications-conferences.yaml
+
+- id: conference-2020-xsp-across-stack-profiling
+  category: conference
+  title: "XSP: Across-Stack Profiling and Analysis of Machine Learning Models on GPUs"
+  authors: "C. Li et al."
+  venue: "34th IEEE International Parallel and Distributed Processing Symposium (IPDPS)"
+  year: 2020
+  dateDisplay: "May 2020"
+  featured: true
+  # No `note: "Best Paper Award"` here on purpose — see recognitions/best-paper-awards.yaml

@@ -1,0 +1,35 @@
+# Source: content/event/*/index.md (front matter + body, verbatim)
+# 2 of 3 event entries are REAL lab news. The 3rd ("Example Event") is unmodified
+# Wowchemy/HugoBlox starter-theme demo content and must NOT be used.
+
+real_events:
+  - title: "Dr. Xiong awarded $20 million to establish AI Institute for Exceptional Education"
+    date: "2023-01-09"
+    summary: "The AI Institute for Exceptional Education will focus on serving the millions of children nationwide who require speech and language services."
+    body: |
+      Dr. Xiong has been awarded $20 million to establish the AI Institute for Exceptional Education.
+
+      The AI Institute for Exceptional Education will focus on serving the millions of children nationwide who, under the Individuals with Disabilities Education Act, require speech and language services. Specifically, it will develop two advanced AI solutions:
+
+      - **AI Screener** for early identification of potential speech and/or language impairments and disorders
+      - **AI Orchestrator**, which will act as a virtual teaching assistant by providing students with ability-based interventions
+
+      For more information, visit the official announcement.
+    source_link: "https://www.buffalo.edu/grad/news.host.html/content/shared/university/news/ub-reporter-articles/stories/2023/01/nsf-award-ai.detail.html"
+    image: "assets/event-images/ai-institute-featured.png"
+
+  - title: "Dr. Xiong served as distinguished speaker in 2023 IEEE Cloud Summit"
+    date: "2023-07-06"
+    summary: "Dr. Xiong was a distinguished speaker at the 2023 IEEE Cloud Summit."
+    body: |
+      Dr. Xiong served as a distinguished speaker in the 2023 IEEE Cloud Summit.
+
+      The event brought together leading researchers and industry professionals to discuss the latest advances in cloud computing and distributed systems.
+
+      For more information, visit the IEEE Cloud Summit website.
+    source_link: "https://www.ieeecloudsummit.org/about-1"
+    image: "assets/event-images/ieee-cloud-summit-featured.png"
+
+demo_content_excluded:
+  - title: "Example Event"
+    reason: "Unmodified Wowchemy/HugoBlox starter template demo — 'Wowchemy Conference', Stanford address, Lorem ipsum abstract, year 2030 placeholder date. Not real lab content. Excluded from real_events above; not copied into extracted data."

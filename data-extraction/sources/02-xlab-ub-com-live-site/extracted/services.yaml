@@ -1,0 +1,151 @@
+# Source: https://www.xlab-ub.com/services, fetched 2026-08-10.
+
+editorial_roles:
+  - role: "Associate Editor"
+    venue: "ACM Transactions on Reconfigurable Technology and Systems (TRETS)"
+    period: "March 2019–present"
+  - role: "Associate Editor"
+    venue: "IET Cyber-Physical Systems: Theory & Applications"
+    period: "2017–present"
+  - role: "Guest Editor"
+    venue: "IEEE Design and Test — special issue on \"Machine Intelligence at the Edge\""
+    period: "December 2021"
+  - role: "Guest Editor"
+    venue: "IBM Journal of Research and Development — special issue on \"Advances in Computational Creativity Technology,\" Vol. 63, Issue 1"
+    period: "January–February 2019"
+
+conference_workshop_leadership:
+  - role: "Tutorial Chair"
+    venue: "ICCAD"
+    year: 2021
+  - role: "Hackathon Co-Chair"
+    venue: "IEEE World Congress on Services (online)"
+    year: 2021
+  - role: "TPC Co-Chair"
+    venue: "IEEE International System-on-Chip Conference (SOCC)"
+    year: "2021, 2020"
+  - role: "Panel Session Chair"
+    venue: "International Conference on Connected Health (CHASE)"
+    year: 2020
+  - role: "Tutorial Co-Chair"
+    venue: "ISPASS"
+    year: 2020
+  - role: "Tutorial Co-Chair"
+    venue: "IISWC"
+    year: 2019
+  - role: "Tutorial Co-Chair"
+    venue: "ISCA"
+    year: 2019
+  - role: "Tutorial Co-Chair"
+    venue: "ASPLOS"
+    year: 2019
+  - role: "Workshop Chair"
+    venue: "ICCAD (online)"
+    year: 2020
+  - role: "Hackathon Chair"
+    venue: "IEEE World Congress on Services (online)"
+    year: 2020
+  - role: "Program Co-Chair"
+    venue: "DAC Workshop for Young Faculties"
+    year: "2020, 2019, 2016"
+  - role: "Program Co-Chair"
+    venue: "OpenCAPI Heterogeneous Computing Design Contest"
+    year: 2020
+  - role: "Founding Chair"
+    venue: "IEEE Standards Association Smart Energy Data Repository Initiative"
+    year: "2012–2014"
+  - role: "Founding Symposium Chair"
+    venue: "China Semiconductor Technology International Conference"
+    year: "2013, 2014"
+  - role: "General Chair"
+    venue: "ACM/IEEE International Workshop on Timing Issues"
+    year: 2013
+  - role: "Technical Program Chair"
+    venue: "ACM/IEEE International Workshop on Timing Issues"
+    year: 2012
+  - role: "Program Chair"
+    venue: "DAC Workshop on Smart Power Grid Synergies"
+    year: "2010, 2011"
+
+technical_program_committees:
+  - venue: "MLSys"
+    year: 2022
+  - venue: "NeurIPS"
+    year: "2019, 2021"
+  - venue: "ISCA-48 (Industry Track)"
+    year: 2021
+  - venue: "CVPR"
+    year: 2021
+  - venue: "ICS"
+    year: 2020
+  - venue: "UAI"
+    year: 2019
+  - venue: "IJCAI"
+    year: 2019
+    note: "Senior Committee Member"
+  - venue: "ICML"
+    year: 2019
+  - venue: "AAAI"
+    year: 2019
+  - venue: "CSTIC"
+    year: "2015–present"
+  - venue: "ICCAD"
+    year: "2010–2012, 2015, 2018–2019"
+  - venue: "International Congress on Computer Applications and Computational Science"
+    year: 2010
+  - venue: "IEEE International Symposium on Circuits and Systems (ISCAS)"
+    year: 2010
+  - venue: "ACM/IEEE International Workshop on Timing Issues"
+    year: "2007–2011"
+  - venue: "IEEE North Atlantic Test Workshop"
+    year: 2009
+
+community_service:
+  - role: "Secretary"
+    org: "Chinese Institute of Engineers Greater New York Chapter"
+    period: "2021–present"
+  - role: "Board Member"
+    org: "Chinese Institute of Engineers Greater New York Chapter"
+    period: "2019–present"
+  - role: "Mentor for high school students' science projects and career planning"
+    period: "2010–present"
+  - role: "IBM URM Ambassador for college hires"
+    period: "2016–2021"
+  - role: "Volunteer, IBM On-Demand Community"
+    period: "2006–2021"
+  - role: "National Council Member"
+    org: "Chinese Institute of Engineers"
+    period: "2019–2020"
+  - role: "Lead Technical Sponsor and Mentor"
+    org: "TechTogether@Boston Hackathon"
+    period: "January 2020"
+  - role: "Lead Technical Sponsor and Mentor"
+    org: "DivHack (Columbia University)"
+    period: "April 2018"
+  - role: "Volunteer"
+    org: "Dr. Reddy's Foundation, Hyderabad India"
+    period: "2010"
+  - role: "Volunteer and Committee Member"
+    org: "IBM Diversity Networking Groups"
+    period: "2007–present"
+  - role: "Judge Committee Member"
+    org: "Tri-County Science & Technology Fair"
+    period: "2009–2010"
+
+university_service_ub:
+  - role: "Co-Chair, Student Engagement and Experiential Learning Committee"
+    period: "2021–present"
+  - role: "Member, Distinguished Speaker Committee"
+    period: "2021–present"
+  - role: "Member, Graduate Affairs Committee"
+    period: "2021–present"
+  - role: "Member, Graduate Admissions Committee"
+    period: "2021–present"
+  - role: "Member, SEAS Qualified Rank Promotion Committee"
+    period: "2021–present"
+
+note: >
+  All "–present"/open-ended periods reflect the state of the live site as fetched on
+  2026-08-10 — verify current status of ongoing roles before publishing on the new site,
+  since some of these (e.g. UB committee memberships dated "2021–present") may have
+  changed or ended since the source page was last updated.

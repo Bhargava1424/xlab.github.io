@@ -1,0 +1,38 @@
+# Source: data/team/staff.yaml (verbatim data) + photo cross-reference
+
+- name: "Zhaohui Li"
+  role: "Postdoctoral Fellow, Institute for Artificial Intelligence and Data Science"
+  titles: []
+  office: "215 Lockwood"
+  links:
+    email: "zli253@buffalo.edu"
+    university: "https://www.buffalo.edu/ai-data-science/people/ub-affiliated-faculty.host.html/content/shared/www/ai-data-science/faculty/li-zhaohui.html"
+    scholar: "https://scholar.google.com/citations?user=FuS676UAAAAJ&hl=zh-CN"
+    website: "http://zhaohuilee.com/"
+  photo_candidates:
+    - "assets/team-photos/static-team/_staff1_Zhaohui.png"
+
+- name: "Qingxiao Zheng"
+  role: "Postdoctoral Fellow, Computer Science & Engineering"
+  titles: []
+  office: "215 Lockwood"
+  links:
+    email: "qingxiao@buffalo.edu"
+    university: "https://www.buffalo.edu/ai-data-science/people/external-faculty.host.html/content/shared/www/ai-data-science/faculty/zheng-qingxiao.html"
+    scholar: "https://scholar.google.com/citations?user=9EsqxyoAAAAJ&hl=en"
+    website: "https://qingxiaozheng.com/"
+  photo_candidates:
+    - "assets/team-photos/static-team/_staff2_Qingxiao.png"
+
+- name: "Yusuf Akemoğlu"
+  role: "Research Scholar, National AI Institute for Artificial Intelligence"
+  titles:
+    - "Associate Professor, Duzce University"
+  office: "215 Lockwood"
+  links:
+    email: "yusufake@buffalo.edu"
+    university: "https://www.buffalo.edu/ai-data-science/people/external-faculty.host.html/content/shared/www/ai-data-science/faculty/akemoglu-yusuf.html"
+    scholar: "https://scholar.google.com/citations?user=o-19cEkAAAAJ&hl=en"
+    website: ~
+  photo_candidates:
+    - "assets/team-photos/static-team/_staff3_Yusuf.png"

@@ -1,0 +1,28 @@
+# Institutions the lab's people are (or have been) affiliated with.
+# Scope: only workplaces/affiliations — NOT a general org registry. Education-only
+# schools (e.g. UCLA, Tsinghua) live as free text on Person.profile.education instead,
+# since they're never referenced by a live Affiliation record.
+
+- id: ub
+  name: University at Buffalo
+  shortName: UB
+  url: https://www.buffalo.edu
+  city: Buffalo
+  state: NY
+  country: United States
+
+- id: utsa
+  name: The University of Texas at San Antonio
+  shortName: UTSA
+  url: https://www.utsa.edu
+  city: San Antonio
+  state: TX
+  country: United States
+
+- id: uiuc
+  name: University of Illinois at Urbana-Champaign
+  shortName: UIUC
+  url: https://illinois.edu
+  city: Urbana-Champaign
+  state: IL
+  country: United States

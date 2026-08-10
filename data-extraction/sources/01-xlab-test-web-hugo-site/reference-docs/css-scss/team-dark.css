@@ -1,0 +1,24 @@
+/* Dark theme overrides for team page */
+.people-card-role,
+.people-card-title,
+.people-card-office,
+.people-card-years {
+  color: #ccc !important;
+}
+
+.people-card-name {
+  color: white !important;
+}
+
+.people-link-icon {
+  color: #aaa !important;
+}
+
+.people-link-icon:hover {
+  color: #FF4D4D !important;
+}
+
+.people-card {
+  background: var(--dark-secondary-color) !important;
+}
+

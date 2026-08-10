@@ -1,0 +1,135 @@
+# Sources: LinkedIn (pasted by user, 2026-08-10), Google Scholar profile, UTSA news article (Nov 2025)
+
+current_primary_role:
+  title: "Founding Dean, College of AI, Cyber and Computing"
+  institution: "The University of Texas at San Antonio (UTSA)"
+  start_date: "2026-03-01"
+  employment_type: "Full-time"
+  note: "College of AI, Cyber and Computing itself launched 2025-09-01 — Dr. Xiong is its first dean."
+
+employment_timeline:
+  - title: "Founding Dean, College of AI, Cyber and Computing"
+    org: "University of Texas at San Antonio"
+    type: "Full-time"
+    start: "2026-03"
+    end: "present"
+  - title: "Adjunct Professor"
+    org: "University at Buffalo"
+    type: "Part-time"
+    start: "2026-03"
+    end: "present"
+  - title: "Empire Innovation Professor"
+    org: "University at Buffalo"
+    type: "Full-time"
+    start: "2021-09"
+    end: "2026-02"
+    note: "Role changed to Adjunct when he became UTSA dean."
+  - title: "Scientific Director, National AI Institute for Exceptional Education"
+    org: "NSF AI Institute for Transforming Education for Children with Speech and Language Processing Challenges"
+    start: "2023-01"
+    end: "present"
+    note: "$20M NSF institute per UTSA news article; role appears to continue post-move to UTSA."
+  - title: "Adjunct Research Professor"
+    org: "University of Illinois at Urbana-Champaign"
+    location: "Urbana-Champaign Area"
+    start: "2017-07"
+    end: "present"
+  - title: "Director, Institute for Artificial Intelligence and Data Science"
+    org: "University at Buffalo, New York"
+    start: "2023-09"
+    end: "2026-02"
+    note: "Ended when he left UB for UTSA."
+
+education_confirmed_on_linkedin:
+  - degree: "Ph.D., Electrical Engineering"
+    institution: "UCLA"
+    years: "2002–2006"
+  - degree: "Master of Science (MS), Electrical and computer engineering"
+    institution: "University of Wisconsin-Madison"
+    years: "2001–2002"
+  note: "LinkedIn shows '5 educations' total but only these 2 were visible without expanding — remaining 3 presumed to be Tsinghua BS/MS per Source 02, not independently confirmed here."
+
+certifications:
+  - name: "Applying the QM Rubric"
+    org: "QM Quality Matters"
+    issued: "2018-06"
+
+google_scholar:
+  profile_url: "https://scholar.google.com/citations?user=tRt1xPYAAAAJ&hl=en"
+  affiliation_listed: "University of Texas at San Antonio"
+  homepage_listed: "https://www.xlab-ub.com/"   # stale — still points to the old UB lab site
+  verified_email_domain: "utsa.edu"
+  total_citations: 12031
+  h_index: 52
+  i10_index: 195
+  top_cited_publications:
+    - title: "On interpretability of artificial neural networks: A survey"
+      authors: "F. Fan, J. Xiong, M. Li, G. Wang"
+      venue: "IEEE Transactions on Radiation and Plasma Medical Sciences"
+      year: 2021
+      citations: 733
+    - title: "DNNBuilder: An automated tool for building high-performance DNN hardware accelerators for FPGAs"
+      authors: "X. Zhang, J. Xiong, et al."
+      venue: "International Conference on Computer-Aided Design"
+      year: 2018
+      citations: 487
+    - title: "Revisiting RCNN: On Awakening the Classification Power of Faster RCNN"
+      authors: "B. Cheng, Y. Wei, H. Shi, R. Feris, J. Xiong, T. Huang"
+      venue: "arXiv"
+      year: 2018
+      citations: 347
+    - title: "Differential treatment for stuff and things: A simple unsupervised domain adaptation method for semantic segmentation"
+      authors: "Z. Wang, M. Yu, Y. Wei, et al."
+      venue: "IEEE/CVF CVPR"
+      year: 2020
+      citations: 328
+    - title: "Robust extraction of spatial correlation"
+      authors: "J. Xiong, V. Zolotov, L. He"
+      venue: "International Symposium on Physical Design"
+      year: 2006
+      citations: 325
+
+utsa_news_article:
+  url: "https://news.utsa.edu/2025/11/university-of-buffalo-professor-and-computer-science-expert-named-new-dean-of-the-college-of-ai-cyber-and-computing/"
+  published: "2025-11 (announcement, ahead of the March 2026 start date)"
+  key_facts:
+    - "Effective start date March 1, 2026, as founding dean."
+    - "At time of announcement, was described as SUNY Empire Innovation Professor and director of UB's Institute for Artificial Intelligence and Data Science."
+    - "PhD in computer engineering from UCLA (Outstanding PhD Award); MS in electrical/computer engineering from UW-Madison."
+    - "200+ peer-reviewed papers, 9 best paper awards, 60+ US/international patents (per this article's count — differs slightly from Source 02's itemized counts; treat as a rounded PR summary, not a precise count)."
+    - "Prior to UB: Program director/research scientist at IBM T.J. Watson Research Center; contributed to the Watson AI system that competed on Jeopardy! in 2011."
+    - "Co-founded the IBM-Illinois Center for Cognitive Computing Systems Research (C3SR) in 2016, and the IBM Smarter Energy Research Institute."
+    - "Directs the $20M National AI Institute for Exceptional Education (speech/language processing tech for children)."
+    - "Leads the AI Thrust for the $10M National Center for Early Literacy and Responsible AI (generative AI for childhood literacy)."
+    - "College of AI, Cyber and Computing at UTSA officially launched September 1, 2025."
+  leadership_quote_paraphrased: >
+    Xiong framed AI's value in terms of helping people solve problems in their own
+    fields, and stressed that sustained investment in AI research is needed to build
+    an AI-literate workforce for society's benefit.
+
+linkedin_about_section_paraphrased: >
+  Describes cross-stack AI systems research; founding/co-directing the IBM-Illinois
+  Center for Cognitive Computing Systems (C3SR.com); three flagship project threads —
+  Cognitive Application Builder (CAB), Creative Experiential Learning Advisor (CELA),
+  and Near-Memory in-storage Acceleration (NMA) — matching the "three-pronged research
+  agenda" already captured in Source 02's lab-lead-bio.yaml. Also describes his IBM
+  Smarter Energy Research Institute (SERI) work and VLSI/EDA design-automation work
+  (EinsTimer/EinsStat tools used across IBM chip generations), both already covered by
+  Source 02's recognitions/publications data. Publication summary given here (30+
+  journals, 40 patents, 100+ conference papers, 5 Best Paper Awards, 2 Best Poster
+  Awards, 8 nominations) is a noticeably OLDER/smaller snapshot than Source 02's current
+  itemized site counts — LinkedIn's About text has not been updated to match.
+
+linkedin_recent_activity_paraphrased: >
+  Last ~2 months of LinkedIn activity (posts and reposts) are almost entirely about
+  UTSA's College of AI, Cyber and Computing as an institution, not X-Lab specifically:
+  a feature on his vision for the college's move downtown; a San Antonio Report
+  interview about his "Earthly AI" philosophy (a term he says he and Dr. Wen-mei Hwu
+  coined during a 2019 joint TEDx talk while running C3SR, and that he's since been
+  asked to grow into "a global movement"); UTSA's president discussing an "anchor
+  institution" vision; two UTSA students placing in a Red Bull Basement competition;
+  UTSA's U.S. News global research ranking (No. 296 of 2,250, top 13%); UTSA's SACSCOC
+  accreditation reaffirmation; a UTSA faculty appointment to the Texas Quantum
+  Initiative Advisory Committee; an IoT forensics lab visit/writeup; and a promoted
+  Edge AI streaming event.
+skills_endorsed_top: ["VLSI", "EDA", "Computer Architecture", "Algorithms", "Machine Learning", "High Performance Computing", "ASIC", "Simulations"]

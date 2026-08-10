@@ -1,0 +1,41 @@
+# Source: data/research/themes.yaml (verbatim, 6 themes)
+# Never actually rendered on a page in the old site (content/research/_index.md was
+# never created — see XLABS_INTEGRATION_README.md), but the data itself is real
+# lab-authored content describing X-Lab's research areas.
+
+themes:
+  - id: "ai-algorithms"
+    icon: "images/icons/ai-algorithms.svg"   # icon file itself was never added (placeholder path only)
+    title: "AI Algorithms"
+    short: "Probing limits of state-of-the-art models while innovating for modern architectures."
+    long: "X-Lab's AI algorithm research probes the limits of state-of-the-art models while innovating for modern architectures. Grounded in advanced deep learning mathematics and systems design, our work spans high-order neural networks, large language models, and adaptive learning techniques."
+
+  - id: "ai-solutions"
+    icon: "images/icons/ai-solutions.svg"
+    title: "AI Solutions"
+    short: "Leveraging AI to solve real-world problems across different domains."
+    long: "AI solutions are about leveraging AI technologies to solve real-world problems across different domains, from healthcare to education. At X-Lab, we focus on developing flexible and adaptable AI solutions tailored to specific needs, ensuring practical and impactful outcomes."
+
+  - id: "ai-systems"
+    icon: "images/icons/ai-systems.svg"
+    title: "AI Systems"
+    short: "Integrating AI components for comprehensive, scalable solutions."
+    long: "AI systems integrate various AI components, such as algorithms, data, and hardware, to create comprehensive solutions that operate effectively in complex environments. X-Lab's research in AI systems focuses on optimizing these integrations to enhance performance, reliability, and scalability."
+
+  - id: "ai-accelerators"
+    icon: "images/icons/ai-accelerators.svg"
+    title: "AI Accelerators"
+    short: "Specialized hardware for optimizing AI model performance."
+    long: "AI accelerators are specialized hardware designed to optimize the performance of AI models, particularly in terms of speed and energy efficiency. X-Lab is at the forefront of developing such accelerators to support high-performance computing needs in AI applications."
+
+  - id: "ai-security"
+    icon: "images/icons/ai-security.svg"
+    title: "AI Security"
+    short: "Protecting AI systems and ensuring ethical use of AI technologies."
+    long: "AI security focuses on protecting AI systems from potential threats and ensuring the ethical use of AI technologies. At X-Lab, our research addresses the critical aspects of AI security, including model robustness and ethical considerations in AI deployment."
+
+  - id: "ai-tools"
+    icon: "images/icons/ai-tools.svg"
+    title: "AI Development Tools"
+    short: "Making AI development more accessible and efficient."
+    long: "We develop tools and frameworks that make AI development more accessible and efficient for researchers and practitioners, enabling faster prototyping and deployment of AI solutions."

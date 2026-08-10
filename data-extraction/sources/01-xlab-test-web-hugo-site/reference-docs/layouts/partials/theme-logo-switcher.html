@@ -1,0 +1,64 @@
+<!-- Logo switcher for theme changes -->
+<script>
+(function() {
+  function updateLogo() {
+    const darkThemeCss = document.getElementById("dark-theme");
+    const logoLight = document.querySelectorAll('.logo-light');
+    const logoDark = document.querySelectorAll('.logo-dark');
+    
+    // Check if dark theme is enabled (CSS file not disabled)
+    const isDark = darkThemeCss && !darkThemeCss.disabled;
+    
+    console.log('Theme state:', isDark ? 'dark' : 'light', 'Dark CSS disabled:', darkThemeCss?.disabled);
+    
+    logoLight.forEach(logo => {
+      logo.style.display = isDark ? 'none' : 'block';
+      console.log('Light logo display:', logo.style.display);
+    });
+    
+    logoDark.forEach(logo => {
+      logo.style.display = isDark ? 'block' : 'none';
+      console.log('Dark logo display:', logo.style.display);
+    });
+  }
+  
+  // Run immediately
+  updateLogo();
+  
+  // Run after DOM loads
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', updateLogo);
+  } else {
+    // DOM already loaded, run again
+    setTimeout(updateLogo, 10);
+  }
+  
+  // Run after Feather icons are replaced (Gokarna uses this)
+  setTimeout(updateLogo, 200);
+  
+  // Watch for theme toggle clicks
+  document.addEventListener('click', function(e) {
+    if (e.target.closest('.dark-theme-toggle')) {
+      setTimeout(updateLogo, 50);
+      setTimeout(updateLogo, 150);
+    }
+  });
+  
+  // Also observe changes to the dark theme stylesheet
+  const observer = new MutationObserver(updateLogo);
+  const checkForDarkTheme = setInterval(() => {
+    const darkThemeCss = document.getElementById("dark-theme");
+    if (darkThemeCss) {
+      clearInterval(checkForDarkTheme);
+      observer.observe(darkThemeCss, {
+        attributes: true,
+        attributeFilter: ['disabled']
+      });
+    }
+  }, 50);
+  
+  // Stop checking after 2 seconds
+  setTimeout(() => clearInterval(checkForDarkTheme), 2000);
+})();
+</script>
+

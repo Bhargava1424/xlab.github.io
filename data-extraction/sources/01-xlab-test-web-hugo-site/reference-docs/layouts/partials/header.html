@@ -1,0 +1,123 @@
+<header class="header">
+    <nav class="header-nav">
+
+        {{ if isset .Site.Params "avatarurl" }}
+        <div class="avatar">
+            <a href="{{ .Site.BaseURL }}">
+                <img id="theme-adaptive-logo" src='{{ "xlab-black-logo.png" | relURL }}' alt="XLab Logo">
+            </a>
+        </div>
+        <script>
+        // Logo switcher - changes src based on theme
+        (function() {
+            var baseURL = '{{ "" | relURL }}';
+            function updateLogo() {
+                var darkTheme = document.getElementById("dark-theme");
+                var logo = document.getElementById("theme-adaptive-logo");
+                
+                if (logo && darkTheme) {
+                    // darkTheme.disabled = true means LIGHT mode
+                    // darkTheme.disabled = false means DARK mode
+                    var isLightMode = darkTheme.disabled;
+                    logo.src = isLightMode ? baseURL + 'xlab-black-logo.png' : baseURL + 'xlab-white-logo.png';
+                }
+            }
+            
+            // Run immediately on load
+            updateLogo();
+            
+            // Wait for DOM to be ready
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', updateLogo);
+            } else {
+                setTimeout(updateLogo, 50);
+            }
+            
+            // Set up observer to watch for theme changes
+            function setupObserver() {
+                var darkTheme = document.getElementById("dark-theme");
+                if (darkTheme) {
+                    // Watch for changes to the disabled attribute
+                    var observer = new MutationObserver(function(mutations) {
+                        mutations.forEach(function(mutation) {
+                            if (mutation.type === 'attributes' && mutation.attributeName === 'disabled') {
+                                updateLogo();
+                            }
+                        });
+                    });
+                    
+                    observer.observe(darkTheme, {
+                        attributes: true,
+                        attributeFilter: ['disabled']
+                    });
+                    
+                    // Also update logo now
+                    updateLogo();
+                } else {
+                    // Retry if dark-theme element not found yet
+                    setTimeout(setupObserver, 50);
+                }
+            }
+            
+            setupObserver();
+        })();
+        </script>
+        {{ end }}
+
+        {{/* Site title hidden - logo only header */}}
+
+        <div class="nav-links">
+            {{ $currentPage := . }}
+            {{ range .Site.Menus.main }}
+            <div class="nav-link">
+                <a href="{{ .URL | absURL }}" 
+                   aria-label="{{ .Identifier }}" 
+                   {{ if .Params.NewPage -}}target="_blank" {{- end -}}
+                   {{ if or (eq $currentPage.RelPermalink .URL) (hasPrefix $currentPage.RelPermalink .URL) -}}
+                   class="active" aria-current="page"
+                   {{- end }}>
+                    {{- .Pre | safeHTML }} {{ .Name }} {{ .Post | safeHTML -}}
+                </a>
+            </div>
+            {{ end }}
+
+            <span class="nav-icons-divider"></span>
+            <div class="nav-link dark-theme-toggle">
+                <span class="sr-only dark-theme-toggle-screen-reader-target">theme</span>
+                <a aria-hidden="true" role="switch">
+                    <span class="theme-toggle-icon" data-feather="moon"></span>
+                </a>
+            </div>
+
+            <div class="nav-link" id="hamburger-menu-toggle">
+                <span class="sr-only hamburger-menu-toggle-screen-reader-target">menu</span>
+                <a aria-checked="false" aria-labelledby="hamburger-menu-toggle" id="hamburger-menu-toggle-target" role="switch">
+                    <span data-feather="menu"></span>
+                </a>
+            </div>
+
+            <!-- For mobile -->
+            <ul class="nav-hamburger-list visibility-hidden">
+                {{ range .Site.Menus.main }}
+                <li class="nav-item">
+                    <a href="{{ .URL | absURL }}" 
+                       {{ if .Params.NewPage -}} target="_blank"{{- end -}}
+                       {{ if or (eq $currentPage.RelPermalink .URL) (hasPrefix $currentPage.RelPermalink .URL) -}}
+                       class="active" aria-current="page"
+                       {{- end }}>
+                        {{- .Pre | safeHTML }} {{ .Name }} {{ .Post | safeHTML -}}
+                    </a>
+                </li>
+                {{ end }}
+                <li class="nav-item dark-theme-toggle">
+                    <span class="sr-only dark-theme-toggle-screen-reader-target">theme</span>
+                    <a role="switch">
+                        <span class="theme-toggle-icon" data-feather="moon"></span>
+                    </a>
+                </li>
+            </ul>
+
+        </div>
+    </nav>
+</header>
+

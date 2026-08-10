@@ -1,0 +1,22 @@
+{
+  "generated": "2025-10-13",
+  "notes": [
+    "Name validation report for team members",
+    "Manual verification recommended for external profile links"
+  ],
+  "people_checked": 17,
+  "warnings": [],
+  "recommendations": [
+    {
+      "name": "Muhammad Ahmad Waseem",
+      "issue": "Photo missing - using default placeholder",
+      "suggestion": "Add photo file matching 'Muhammad' or 'Ahmad' to static/team/"
+    },
+    {
+      "name": "Ji-Hyeon Yoo",
+      "issue": "Photo missing - using default placeholder",
+      "suggestion": "Add photo file matching 'Ji-Hyeon' or 'Ji' to static/team/"
+    }
+  ]
+}
+

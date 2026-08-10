@@ -1,0 +1,10 @@
+# Source: data/socials.yaml (verbatim) + hugo.toml [params.socialIcons]
+
+github: "https://github.com/utkrshkmr"   # again points to a member's personal account, not an org — verify
+huggingface: "https://huggingface.co/x-labs"
+linkedin_prof: "https://www.linkedin.com/in/jinjun-xiong/"   # PI's personal LinkedIn
+
+# From hugo.toml [[params.socialIcons]] (separate from data/socials.yaml above)
+social_icons_in_header:
+  - name: "email"
+    url: "mailto:jinjun@buffalo.edu"

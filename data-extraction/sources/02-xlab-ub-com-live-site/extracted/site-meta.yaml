@@ -1,0 +1,55 @@
+# Source: https://www.xlab-ub.com/ (live Google Sites site), homepage + footer, fetched 2026-08-10.
+# This is the CURRENT, live, authoritative lab site — takes priority over source 01
+# (the old half-built Hugo attempt) wherever the two disagree.
+
+site_title: "X-Lab@UB"
+tagline: "Accelerating AI Systems & Solutions"
+platform: "Google Sites (server-rendered, not a JS-only SPA — full content is present in raw HTML)"
+live_url: "https://www.xlab-ub.com/"
+
+navigation:
+  - name: "Home"
+    path: "/home"
+  - name: "Research"
+    path: "/research"
+  - name: "Publication"
+    path: "/publication"
+    children:
+      - name: "Patents"
+        path: "/publication/patents"
+      - name: "Journals"
+        path: "/publication/journals"
+      - name: "Conferences"
+        path: "/publication/conferences"
+      - name: "Workshops"
+        path: "/publication/workshops"
+      - name: "Invited Papers"
+        path: "/publication/invited-papers"
+      - name: "Book Chapters"
+        path: "/publication/book-chapters"
+  - name: "Recognitions"
+    path: "/recognitions"
+  - name: "Services"
+    path: "/services"
+  - name: "Teaching"
+    path: "/teaching"
+
+contact:
+  address:
+    room: "316 Davis Hall"
+    city: "Buffalo"
+    state: "NY"
+    zip: "14260-2500"
+  department: "Computer Science and Engineering, School of Engineering and Applied Sciences, University at Buffalo"
+  phone: "(716) 645-4760"
+  email: "jinjun@buffalo.edu"
+
+recruiting_notice: "Lab seeks PhD students, postdoctoral fellows, and interns for AI systems research."
+
+notes: >
+  No Team/People page exists on this live site at all — it's structured entirely around
+  the PI (Dr. Xiong) as an individual academic CV/portfolio site (Research, Publications,
+  Recognitions, Services, Teaching), not a lab-roster site. The team roster data (PhD
+  students, postdocs) lives ONLY in source 01 (the old Hugo attempt) — this live site
+  contributes zero team-member data. Cross-reference both sources when building the new
+  site's Team page.

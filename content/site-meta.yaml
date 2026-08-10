@@ -1,0 +1,39 @@
+# Singleton site metadata.
+# contact.address and primaryInstitutionId are intentionally left TBD — this is a
+# deferred CONTENT decision (see docs/SCHEMA.md "Deliberately deferred"), not a schema
+# gap. Do not fill these in without an explicit decision on what the site's current
+# institutional identity/contact point should be.
+
+title: "X-Lab"
+tagline: "Accelerating AI Systems & Solutions"
+description: "X-Lab — cross-stack AI systems and solutions research."
+
+nav:
+  - label: Home
+    path: /
+  - label: Research
+    path: /research
+  - label: Publications
+    path: /publications
+  - label: Team
+    path: /team
+  - label: News
+    path: /news
+
+contact:
+  email: null # TBD — pending decision, see docs/SCHEMA.md
+  phone: null
+  address: null
+
+primaryInstitutionId: null # TBD — pending decision, see docs/SCHEMA.md
+
+recruitingNotice: "We are recruiting PhD students and postdoctoral fellows to conduct cutting-edge AI systems and solutions research!"
+
+socialLinks:
+  github: null
+  linkedin: null
+  huggingface: "https://huggingface.co/x-labs"
+
+logo:
+  light: /images/logos/xlab-black-logo.png
+  dark: /images/logos/xlab-white-logo.png

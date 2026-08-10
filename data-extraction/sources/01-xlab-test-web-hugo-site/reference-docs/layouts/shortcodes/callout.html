@@ -1,0 +1,5 @@
+{{- $type := .Get 0 | default "note" -}}
+<div class="callout callout-{{ $type }}" style="padding: 1rem; margin: 1rem 0; border-left: 4px solid #007bff; background-color: rgba(0, 123, 255, 0.1); border-radius: 4px;">
+  {{ .Inner | markdownify }}
+</div>
+

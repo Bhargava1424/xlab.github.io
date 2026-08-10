@@ -1,0 +1,14 @@
+<!-- Set default theme to light -->
+<script>
+(function() {
+  // Use the same key as Gokarna theme
+  const THEME_PREF_STORAGE_KEY = "theme-preference";
+  const currentTheme = localStorage.getItem(THEME_PREF_STORAGE_KEY);
+  
+  // If no theme is set, default to light
+  if (!currentTheme) {
+    localStorage.setItem(THEME_PREF_STORAGE_KEY, 'light');
+  }
+})();
+</script>
+

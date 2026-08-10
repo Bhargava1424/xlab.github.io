@@ -1,0 +1,43 @@
+# Site-level metadata, extracted from hugo.toml (the ACTIVE config — config.backup/
+# is a stale pre-migration config and is NOT the source of truth; see SOURCE-NOTES.md)
+
+site_title: "XLab — Accelerating AI Systems & Solutions"
+tagline: "Accelerating AI Systems & Solutions"
+description: "XLab — Accelerating AI Systems & Solutions at University at Buffalo"
+footer_text: "XLab @ University at Buffalo, Department of Computer Science & Engineering"
+intended_base_url: "https://xlab.cse.buffalo.edu/"   # custom domain the old site targeted; not GitHub Pages
+recruiting_notice: "We are recruiting PhD students and postdoctoral fellows to conduct cutting-edge AI systems and solutions research!"
+contact_email: "jinjun@buffalo.edu"
+meta_keywords:
+  - "AI"
+  - "machine learning"
+  - "deep learning"
+  - "AI systems"
+  - "research"
+  - "University at Buffalo"
+  - "UB CSE"
+
+# Top nav, in order (weights from hugo.toml)
+navigation:
+  - name: "About Us"
+    path: "/about/"
+  - name: "Research"
+    path: "/research/"
+  - name: "Team"
+    path: "/team/"
+  - name: "Open Source"
+    path: "/open-source/"
+  - name: "News & Media"
+    path: "/news/"
+  - name: "Blog"
+    path: "/blog/"
+  - name: "Gallery"
+    path: "/gallery/"
+
+notes: >
+  Of these nav targets, only Team (content/team/_index.md, driven by data/team/*.yaml)
+  had a real implementation in the old site. About Us, Research, Open Source, News,
+  Blog, and Gallery pages were planned (see xlabs-integration-readme.md in this
+  source's root-docs copy) but never built — their intended data sources
+  (data/opensource.yaml, data/research/themes.yaml) do exist and are extracted
+  separately in this folder.

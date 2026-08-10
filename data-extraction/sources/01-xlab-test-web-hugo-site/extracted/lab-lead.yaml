@@ -1,0 +1,19 @@
+# Source: data/team/lead.yaml (verbatim, 1 entry)
+
+- name: "Jinjun Xiong"
+  role: ""
+  titles:
+    - "Empire Innovation Professor, CSE, University at Buffalo"
+    - "Director, Institute of Artificial Intelligence & Data Science"
+    - "Scientific Director, National AI Institute for Artificial Intelligence"
+    - "AI Thrust Lead, Center for Early Literacy and Responsible AI"
+  office: ~
+  links:
+    email: "jinjun@buffalo.edu"
+    university: "https://engineering.buffalo.edu/computer-science-engineering/people/faculty-directory.host.html/content/shared/engineering/computer-science-engineering/profiles/faculty/ladder/xiong-jinjun.detail.html"
+    scholar: "https://scholar.google.com/citations?user=tRt1xPYAAAAJ&hl=en"
+    website: ~
+  joined: ~
+  left: ~
+  photo_candidates:
+    - "assets/team-photos/static-team/Jinjun.png"
