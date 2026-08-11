@@ -71,3 +71,9 @@ See `data-extraction/README.md` for the index and each source's `SOURCE-NOTES.md
 ## 7. Next step: full data merge pass
 
 `content/` currently holds a small validated slice (2 people, 3 projects, 3 publications, 1 recognition, 2 posts — see `content/README.md`). The next step is merging the full data from all three `data-extraction/` sources into this shape: the remaining ~15 team members, ~298 publications, full service/teaching/recognitions records, and resolving the deferred `site-meta.yaml` decisions (contact address, primary institution) noted in `docs/SCHEMA.md`. Next.js app scaffolding follows once that's in hand.
+
+## 8. Content placement — **decided**
+
+`docs/SCHEMA.md` says what data exists; **`docs/content-placement/`** says where each field actually renders — every entity's every field mapped to a specific page/section/component, with a page-hierarchy skeleton (`docs/content-placement/site-map.md`) tying it all together. Read that folder before building any page component, so the UI isn't invented ad hoc against the schema.
+
+The one decision worth knowing up front: `Recognition`, `ServiceRecord`, and `Course` all render on the owning person's `/team/<slug>` page, not as standalone top-level site sections — a deliberate departure from how the real `xlab-ub.com` site presents them (as its own top-level pages), made to fit poloclub's lab-roster structure instead of a personal-CV structure. See `docs/content-placement/README.md` for the reasoning.

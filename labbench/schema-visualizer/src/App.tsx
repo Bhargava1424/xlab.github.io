@@ -11,12 +11,14 @@ import {
   type Edge,
   type NodeMouseHandler,
 } from "@xyflow/react";
+import { Workflow, Database } from "lucide-react";
 import { entities, edges as edgeDefs, ID_FIELD_INDEX, rowHandleId } from "./lib/schema-graph";
 import { computeHierarchicalLayout } from "./lib/layout";
 import contentStatus from "./content-status.generated.json";
 import { EntityCard, type EntityNodeData } from "./components/EntityCard";
 import { DetailPanel } from "./components/DetailPanel";
 import { Toolbar } from "./components/Toolbar";
+import { DataExplorerView } from "./components/explorer/DataExplorerView";
 
 const nodeTypes = { entity: EntityCard };
 
@@ -43,7 +45,7 @@ const initialNodes: Node<EntityNodeData>[] = entities.map((entity) => ({
   data: { entity, count: counts[entity.id] ?? null, dimmed: false, matched: false },
 }));
 
-function InnerApp() {
+function SchemaDiagramView() {
   const [query, setQuery] = useState("");
   const [showSecondary, setShowSecondary] = useState(true);
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -98,7 +100,7 @@ function InnerApp() {
   const onPaneClick = useCallback(() => setSelectedId(null), []);
 
   return (
-    <div className="relative h-screen w-screen bg-[#0a0a0c]">
+    <div className="relative h-full w-full bg-[#0a0a0c]">
       <ReactFlow
         className="rf-dark"
         nodes={displayedNodes}
@@ -148,10 +150,47 @@ function InnerApp() {
   );
 }
 
-export default function App() {
+type View = "schema" | "data";
+
+function ViewSwitcher({ view, onChange }: { view: View; onChange: (v: View) => void }) {
+  const tabs: Array<{ id: View; label: string; icon: typeof Workflow }> = [
+    { id: "schema", label: "Schema Diagram", icon: Workflow },
+    { id: "data", label: "Data Explorer", icon: Database },
+  ];
   return (
-    <ReactFlowProvider>
-      <InnerApp />
-    </ReactFlowProvider>
+    <div className="flex shrink-0 items-center gap-1 border-b border-zinc-800 bg-zinc-950 px-3 py-2">
+      <span className="mr-2 text-xs font-semibold text-zinc-500">X-Lab Schema Visualizer</span>
+      {tabs.map(({ id, label, icon: Icon }) => (
+        <button
+          key={id}
+          onClick={() => onChange(id)}
+          className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
+            view === id ? "bg-zinc-800 text-zinc-50" : "text-zinc-500 hover:bg-zinc-900 hover:text-zinc-300"
+          }`}
+        >
+          <Icon size={13} />
+          {label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+export default function App() {
+  const [view, setView] = useState<View>("schema");
+
+  return (
+    <div className="flex h-screen w-screen flex-col bg-[#0a0a0c]">
+      <ViewSwitcher view={view} onChange={setView} />
+      <div className="min-h-0 flex-1">
+        {view === "schema" ? (
+          <ReactFlowProvider>
+            <SchemaDiagramView />
+          </ReactFlowProvider>
+        ) : (
+          <DataExplorerView />
+        )}
+      </div>
+    </div>
   );
 }

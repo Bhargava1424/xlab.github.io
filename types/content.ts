@@ -112,7 +112,8 @@ export interface Project {
   thumbnail?: string;
   themeId?: string; // FK -> ResearchTheme.id, single/optional (not many-to-many)
   status?: ProjectStatus;
-  collaborationWith?: string;
+  collaborationWith?: string; // free-text EXTERNAL org/company name (e.g. "Apple") — not a Person link
+  contributors?: string[]; // FK -> Person.id[] — lab members who worked on this project (optional, populate only when known)
   featured?: boolean;
   order?: number;
   links?: ProjectLinks;
@@ -126,11 +127,16 @@ export type PublicationCategory =
   | "invited-paper"
   | "book-chapter";
 
+export interface AuthorRef {
+  name: string; // always present, exactly as it should display — this is the source of truth for display order/text
+  personId?: string; // FK -> Person.id, set ONLY when this specific author is a known lab member
+}
+
 export interface Publication {
   id: string; // generated once at normalization time, then immutable — referenced by Project/Recognition
   category: PublicationCategory;
   title: string;
-  authors: string; // free text (inventors for patents) — not linked Person refs, see docs/SCHEMA.md
+  authors: AuthorRef[]; // ordered list; most entries have no personId (external co-authors), see docs/SCHEMA.md
   venue?: string;
   year?: number;
   dateDisplay?: string;

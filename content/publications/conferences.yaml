@@ -4,10 +4,15 @@
 # Publication.note). Compare to content/recognitions/best-paper-awards.yaml.
 # Full list: data-extraction/sources/02-xlab-ub-com-live-site/extracted/publications-conferences.yaml
 
+# authors is a single "C. Li et al." entry, not personId-linked — the source data
+# never spelled out the individual names, so unlike the patent/journal entries above,
+# there's no way to confidently match a specific name to jinjun-xiong here without
+# guessing. Don't invent an author list we don't have; leave it as one unlinked entry.
 - id: conference-2020-xsp-across-stack-profiling
   category: conference
   title: "XSP: Across-Stack Profiling and Analysis of Machine Learning Models on GPUs"
-  authors: "C. Li et al."
+  authors:
+    - name: "C. Li et al."
   venue: "34th IEEE International Parallel and Distributed Processing Symposium (IPDPS)"
   year: 2020
   dateDisplay: "May 2020"

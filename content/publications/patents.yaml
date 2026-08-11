@@ -4,10 +4,22 @@
 # issued for older/China-patent entries) — mapped to filedDate here as a best guess;
 # the full merge pass should re-check this per-entry against the original source where
 # it matters (the China patents do cleanly say "issued", most US dockets say "filed").
+#
+# authors[].personId is only set for "J. Xiong" -> jinjun-xiong, the one author we can
+# confidently match to a real content/people/ record from the initials alone. The
+# other 5 co-authors are external (IBM/collaborator names) with no Person record —
+# left as name-only entries, not guessed at.
 
 - id: patent-2021-global-prosody-style-transfer
   category: patent
   title: "Global Prosody Style Transfer Without Text Transcriptions"
-  authors: "K. Qian, Y. Zhang, S. Chang, J. Xiong, C. Gan, D. Cox"
+  authors:
+    - name: "K. Qian"
+    - name: "Y. Zhang"
+    - name: "S. Chang"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "C. Gan"
+    - name: "D. Cox"
   patentNo: "P202102159US01"
   filedDate: "2021-06"

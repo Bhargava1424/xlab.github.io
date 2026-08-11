@@ -131,7 +131,14 @@ export const entities: EntityDef[] = [
         fk: { to: "research-theme" },
       },
       { name: "status", type: '"active" | "deployed" | "archived"', required: false },
-      { name: "collaborationWith", type: "string", required: false },
+      { name: "collaborationWith", type: "string", required: false, note: "free-text EXTERNAL org name, e.g. \"Apple\" — not a Person link" },
+      {
+        name: "contributors",
+        type: "string[]",
+        required: false,
+        note: "lab members who worked on this project — populate only when confirmed",
+        fk: { to: "person" },
+      },
       { name: "featured", type: "boolean", required: false },
       { name: "order", type: "number", required: false },
       {
@@ -151,7 +158,7 @@ export const entities: EntityDef[] = [
       "content/publications/{patents,journals,conferences,workshops,invited-papers,book-chapters}.yaml",
     summary: "One unified shape across all 6 publication categories.",
     rationale:
-      "Discriminated by category, with category-specific optional fields (patent numbers, volume/issue, book/publisher) rather than 6 parallel types. id is generated once at normalization and then treated as immutable, since Project and Recognition reference it. authors stays free text rather than linked Person records — most co-authors will never be lab members, so partial linking would be worse UX than consistent plain text. note is for non-award annotations only (\"in press\", \"Spotlight\") — award facts live on Recognition so the two can't drift out of sync.",
+      "Discriminated by category, with category-specific optional fields (patent numbers, volume/issue, book/publisher) rather than 6 parallel types. id is generated once at normalization and then treated as immutable, since Project and Recognition reference it. authors is an ordered {name, personId?}[] array — name is always the display source of truth, personId is set only for authors who are confirmed lab members (most aren't). This replaced an earlier plain-string design that avoided linking entirely to dodge \"inconsistent partial linking\" — backwards reasoning: partial linking is completely normal, and the old version meant even the PI never linked to his own Person record despite being on nearly every paper. note is for non-award annotations only (\"in press\", \"Spotlight\") — award facts live on Recognition so the two can't drift out of sync.",
     fields: [
       { name: "id", type: "string", required: true, note: "primary key — generated once, then immutable" },
       {
@@ -160,7 +167,13 @@ export const entities: EntityDef[] = [
         required: true,
       },
       { name: "title", type: "string", required: true },
-      { name: "authors", type: "string", required: true, note: "free text, not linked Person refs" },
+      {
+        name: "authors[].personId",
+        type: "string",
+        required: false,
+        note: "authors is {name, personId?}[] — most authors have no personId (external co-authors); this is the FK slot for the ones who are lab members",
+        fk: { to: "person" },
+      },
       { name: "venue", type: "string", required: false },
       { name: "year", type: "number", required: false },
       { name: "dateDisplay", type: "string", required: false },
