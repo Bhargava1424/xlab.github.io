@@ -1,0 +1,126 @@
+# Source: data-extraction/sources/02-xlab-ub-com-live-site/extracted/recognitions.yaml
+# (international_competition_awards). All 14 belong to the lab lead. publicationId set only
+# where a matching title exists in content/publications/ — competition/contest
+# submissions (DAC Systems Design Contest drone-detection entries, CVPR Challenge human
+# parsing tasks) generally aren't in the 301-entry formal publication list and are left
+# unlinked rather than guessed. Per-person attribution deferred, see SPEC.md §7.
+
+- id: comp-2021-hykernel
+  category: international-competition-award
+  personId: jinjun-xiong
+  award: "Student Innovation Award"
+  year: 2021
+  title: "HyKernel: A Hybrid Selection of One/Two-Phase Kernels for Triangle Counting on GPUs"
+  org: "IEEE-HPEC MIT and Amazon GraphChallenge"
+  publicationId: conference-2021-hykernel-a-hybrid-selection
+
+- id: comp-2020-atscale-sparse-dnn
+  category: international-competition-award
+  personId: jinjun-xiong
+  award: "Champion Award"
+  year: 2020
+  title: "At-Scale Sparse Deep Neural Network Inference With Efficient GPU Implementation"
+  org: "IEEE-HPEC MIT and Amazon GraphChallenge"
+  publicationId: conference-2020-at-scale-sparse-deep-neural-network
+
+- id: comp-2020-drone-detection-3rd-dac-fpga
+  category: international-competition-award
+  personId: jinjun-xiong
+  award: "Third Place Award"
+  year: 2020
+  title: "Embedded System Implementation of Neural Network based Object Detection for Drones"
+  org: "System Design Contest (FPGA track), 57th Design Automation Conference (DAC)"
+
+- id: comp-2019-ktruss
+  category: international-competition-award
+  personId: jinjun-xiong
+  award: "Student Innovation Award"
+  year: 2019
+  title: "Update on k-truss Decomposition on GPU"
+  org: "IEEE-HPEC MIT and Amazon GraphChallenge"
+  publicationId: conference-2019-update-on-k-truss-decomposition
+
+- id: comp-2019-triangle-counting
+  category: international-competition-award
+  personId: jinjun-xiong
+  award: "Honorable Mention"
+  year: 2019
+  title: "Update on Triangle Counting on GPU"
+  org: "IEEE-HPEC MIT and Amazon GraphChallenge"
+  publicationId: conference-2019-update-on-triangle-counting
+
+- id: comp-2019-sparse-dnn-fpga
+  category: international-competition-award
+  personId: jinjun-xiong
+  award: "Honorable Mention"
+  year: 2019
+  title: "Accelerating Sparse Deep Neural Network on FPGAs"
+  org: "IEEE-HPEC MIT and Amazon GraphChallenge"
+  publicationId: conference-2019-accelerating-sparse-deep-neural-network
+
+- id: comp-2019-drone-detection-1st-dac-gpu
+  category: international-competition-award
+  personId: jinjun-xiong
+  award: "First Place Award"
+  year: 2019
+  title: "Embedded System Implementation of Neural Network based Object Detection for Drones"
+  org: "System Design Contest (GPU track), 56th Design Automation Conference (DAC)"
+
+- id: comp-2019-drone-detection-1st-dac-fpga
+  category: international-competition-award
+  personId: jinjun-xiong
+  award: "First Place Award"
+  year: 2019
+  title: "Embedded System Implementation of Neural Network based Object Detection for Drones"
+  org: "System Design Contest (FPGA track), 56th Design Automation Conference (DAC)"
+
+- id: comp-2018-triangle-truss-fpga
+  category: international-competition-award
+  personId: jinjun-xiong
+  award: "Student Innovation Award"
+  year: 2018
+  title: "Triangle Counting and Truss Decomposition using FPGA"
+  org: "IEEE-HPEC MIT and Amazon GraphChallenge"
+  publicationId: conference-2018-triangle-counting
+
+- id: comp-2018-collaborative-cpugpu-finalist
+  category: international-competition-award
+  personId: jinjun-xiong
+  award: "Finalist"
+  year: 2018
+  title: "Collaborative (CPU + GPU) Algorithms for Triangle Counting and Truss Decomposition"
+  org: "IEEE-HPEC MIT and Amazon GraphChallenge"
+  publicationId: conference-2018-collaborative-cpu-gpu-algorithms
+
+- id: comp-2018-drone-detection-3rd-dac-fpga
+  category: international-competition-award
+  personId: jinjun-xiong
+  award: "Third Place Award"
+  year: 2018
+  title: "Embedded System Implementation of Neural Network based Object Detection for Drones"
+  org: "System Design Contest (FPGA track), 55th Design Automation Conference (DAC)"
+
+- id: comp-2018-human-parsing-single
+  category: international-competition-award
+  personId: jinjun-xiong
+  award: "First Place Award"
+  year: 2018
+  title: "Single-Person Human Parsing Task"
+  org: "2018 CVPR Challenge on Look Into Person (LIP), 30th IEEE/CVF CVPR"
+
+- id: comp-2018-human-parsing-multi
+  category: international-competition-award
+  personId: jinjun-xiong
+  award: "First Place Award"
+  year: 2018
+  title: "Multi-Person Human Parsing Task"
+  org: "2018 CVPR Challenge on Look Into Person (LIP), 30th IEEE/CVF CVPR"
+
+- id: comp-2017-collaborative-minsky-honorable
+  category: international-competition-award
+  personId: jinjun-xiong
+  award: "Honorable Mention"
+  year: 2017
+  title: "Collaborative (CPU+GPU) algorithms for triangle counting and truss decomposition on the Minsky architecture"
+  org: "IEEE-HPEC MIT and Amazon GraphChallenge"
+  publicationId: conference-2017-collaborative-cputgpu-algorithms

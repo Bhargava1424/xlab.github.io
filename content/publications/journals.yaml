@@ -1,5 +1,8 @@
-# DRY-RUN: only 1 of 40 real journal articles mapped here to validate the schema shape.
-# Full list: data-extraction/sources/02-xlab-ub-com-live-site/extracted/publications-journals.yaml
+# Source: data-extraction/sources/02-xlab-ub-com-live-site/extracted/publications-journals.yaml
+# 40 journal articles, 2003-2021, verbatim from https://www.xlab-ub.com/publication/journals.
+#
+# authors[].personId is only set for "J. Xiong" -> jinjun-xiong; all other co-authors are
+# name-only (no Person record to confidently match).
 
 - id: journal-2021-quantum-neural-network-codesign
   category: journal
@@ -12,4 +15,503 @@
   venue: "Nature Communications"
   volumeIssue: "Vol. 12, No. 579"
   year: 2021
+  month: January
+- id: journal-2021-exploring-hwsw-co-design
+  category: journal
+  title: "Exploring HW/SW Co-Design for Video Analysis on CPU-FPGA Heterogeneous Systems"
+  authors:
+    - name: "X. Zhang"
+    - name: "Y. Ma"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "W. Hwu"
+    - name: "V. Kindratenko"
+    - name: "D. Chen"
+  venue: "IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems (TCAD)"
+  year: 2021
+  note: "in press"
+- id: journal-2021-on-interpretability
+  category: journal
+  title: "On Interpretability of Artificial Neural Networks: A Survey"
+  authors:
+    - name: "F. Fan"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "M. Li"
+    - name: "G. Wang"
+  venue: "IEEE Transactions on Radiation and Plasma Medical Sciences"
+  year: 2021
+  note: "in press"
+- id: journal-2021-enabling-design-methodologies
+  category: journal
+  title: "Enabling Design Methodologies and Future Trends for Edge AI: Specialization and Co-design"
+  authors:
+    - name: "C. Hao"
+    - name: "J. Dotzel"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "L. Benini"
+    - name: "Z. Zhang"
+    - name: "D. Chen"
+  venue: "IEEE Design & Test"
+  year: 2021
+  note: "in press"
+- id: journal-2021-efficient-methods
+  category: journal
+  title: "Efficient Methods for Mapping Neural Machine Translator on FPGAs"
+  authors:
+    - name: "Q. Li"
+    - name: "X. Zhang"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "W. Hwu"
+    - name: "D. Chen"
+  venue: "IEEE Transactions on Parallel and Distributed Systems (TPDS)"
+  volumeIssue: "Vol. 32, Issue 7, pp. 1866-1877"
+  year: 2021
+  month: July
+- id: journal-2021-improved-linear-convergence
+  category: journal
+  title: "Improved Linear Convergence of Training CNNs with Generalizability Guarantees"
+  authors:
+    - name: "S. Zhang"
+    - name: "M. Wang"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "S. Liu"
+    - name: "P. Chen"
+  venue: "IEEE Transactions on Neural Networks and Learning Systems (TNNLS)"
+  volumeIssue: "Vol. 32, Issue 6, pp. 2622-2635"
+  year: 2021
+  month: June
+- id: journal-2020-achieve-data-privacy
+  category: journal
+  title: "Achieve Data Privacy and Clustering Accuracy Simultaneously Through Quantized Data Recovery"
+  authors:
+    - name: "R. Wang"
+    - name: "M. Wang"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+  venue: "EURASIP Journal on Advances in Signal Processing"
+  year: 2020
+  month: May
+- id: journal-2020-hardware-design
+  category: journal
+  title: "Hardware Design and the Competency Awareness of a Neural Network"
+  authors:
+    - name: "Y. Ding"
+    - name: "W. Jiang"
+    - name: "Q. Lou"
+    - name: "J. Liu"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "X. Hu"
+    - name: "X. Xu"
+    - name: "Y. Shi"
+  venue: "Nature Electronics"
+  volumeIssue: "Vol. 3"
+  year: 2020
+  month: September
+- id: journal-2020-universal-approximation
+  category: journal
+  title: "Universal Approximation with Quadratic Deep Networks"
+  authors:
+    - name: "F. Fan"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "G. Wang"
+  venue: "Neural Networks (Elsevier)"
+  volumeIssue: "Vol. 122"
+  year: 2020
+  month: February
+- id: journal-2019-enabling-real-time-multi-messenger-astrophysics-discoveries
+  category: journal
+  title: "Enabling real-time multi-messenger astrophysics discoveries with deep learning"
+  authors:
+    - name: "E. A. Huerta et al."
+    - name: "J. Xiong et al."
+  venue: "Nature Reviews Physics"
+  volumeIssue: "Vol. 1, Issue 3, pp. 600-608"
+  year: 2019
+  dateDisplay: "October 3, 2019"
+- id: journal-2019-automatic-curation
+  category: journal
+  title: "Automatic Curation of Sports Highlights using Multimodal Excitement Features"
+  authors:
+    - name: "M. Merler"
+    - name: "K. Mac"
+    - name: "D. Joshi"
+    - name: "Q. Nguyen"
+    - name: "S. Hammer"
+    - name: "J. Kent"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "M. Do"
+    - name: "J. Smith"
+    - name: "R. Feris"
+  venue: "IEEE Transactions on MultiMedia (TMM)"
+  volumeIssue: "Vol. 21, Issue 5"
+  year: 2019
+  month: May
+- id: journal-2018-data-recovery
+  category: journal
+  title: "Data Recovery and Subspace Clustering from Quantized and Corrupted Measurements"
+  authors:
+    - name: "R. Wang"
+    - name: "M. Wang"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+  venue: "IEEE Journal of Selected Topics in Signal Processing"
+  volumeIssue: "Vol. 12, Issue 6"
+  year: 2018
+  month: December
+  note: "cover featured"
+- id: journal-2017-heterogeneous-computing-meets-near-memory-acceleration
+  category: journal
+  title: "Heterogeneous Computing Meets Near-Memory Acceleration and High-Level Synthesis in the Post-Moore Era"
+  authors:
+    - name: "N. S. Kim"
+    - name: "D. Chen"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "W. M. Hwu"
+  venue: "IEEE Micro (special issue)"
+  year: 2017
+- id: journal-2016-demand-side-management
+  category: journal
+  title: "Demand-Side Management of Domestic Electric Water Heaters Using Approximate Dynamic Programming"
+  authors:
+    - name: "K. Al-jabery"
+    - name: "Z. Xu"
+    - name: "W. Yu"
+    - name: "D. Wunsch"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "Y. Shi"
+  venue: "IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems"
+  year: 2016
+- id: journal-2016-on-the-optimal-threshold-voltage
+  category: journal
+  title: "On the Optimal Threshold Voltage Computation of On-Chip Noise Sensors"
+  authors:
+    - name: "T. Wang"
+    - name: "C. Zhang"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "Y. Shi"
+  venue: "IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems"
+  volumeIssue: "Vol. 35, Issue 10"
+  year: 2016
+  month: October
+- id: journal-2015-asset-health-management
+  category: journal
+  title: "Asset health management using predictive and prescriptive analytics for the electric power grid"
+  authors:
+    - name: "A. Aggarwal"
+    - name: "E. Aprilia"
+    - name: "G. Janssen"
+    - name: "Y. Kim"
+    - name: "T. Kumar"
+    - name: "R. Mueller"
+    - name: "D. Phan"
+    - name: "A. Raman"
+    - name: "J. Schuddebeurs"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "R. Zhang"
+  venue: "IBM Journal of Research and Development"
+  year: 2015
+- id: journal-2015-efficient-location-recognition
+  category: journal
+  title: "Efficient Location Recognition of Multiple Line Outages with Limited PMU in Smart Grids"
+  authors:
+    - name: "J. Wu"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "Y. Shi"
+  venue: "IEEE Transactions on Power Systems"
+  year: 2015
+- id: journal-2013-order-statistics
+  category: journal
+  title: "Order Statistics for Correlated Random Variables and Its Application to At-Speed Testing"
+  authors:
+    - name: "Y. Shi"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "V. Zolotov"
+    - name: "C. Visweswariah"
+  venue: "ACM Transactions on Design Automation of Electronic Systems"
+  volumeIssue: "Vol. 18, No. 3"
+  year: 2013
+  month: July
+- id: journal-2013-on-the-deployment
+  category: journal
+  title: "On the Deployment of On-Chip Noise Sensors"
+  authors:
+    - name: "T. Wang"
+    - name: "C. Zhang"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "Y. Shi"
+  venue: "IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems"
+  year: 2013
+- id: journal-2013-transistor-sizing
+  category: journal
+  title: "Transistor sizing of custom high-performance digital circuits with parametric yield considerations"
+  authors:
+    - name: "D. K. Beece"
+    - name: "C. Visweswariah"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "V. Zolotov"
+  venue: "Optimization and Engineering (Springer US)"
+  year: 2013
+  month: January
+- id: journal-2012-testability-driven-statistical-path-selection
+  category: journal
+  title: "Testability Driven Statistical Path Selection"
+  authors:
+    - name: "J. Chung"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "V. Zolotov"
+    - name: "J. Abraham"
+  venue: "IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems"
+  volumeIssue: "Vol. 31, No. 8"
+  year: 2012
+  month: August
+- id: journal-2012-fourier-series-approximation
+  category: journal
+  title: "Fourier Series Approximation for Max Operation in Non-Gaussian and Quadratic Statistical Static Timing Analysis"
+  authors:
+    - name: "L. Cheng"
+    - name: "F. Gong"
+    - name: "W. Xu"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "L. He"
+    - name: "M. Sarrafzadeh"
+  venue: "IEEE Transactions on Very Large Scale Integration Systems"
+  volumeIssue: "Vol. 20, No. 8, pp. 1383-1391"
+  year: 2012
+  month: June
+- id: journal-2012-path-criticality-computation
+  category: journal
+  title: "Path Criticality Computation in Parameterized Statistical Timing Analysis Using a Novel Operator"
+  authors:
+    - name: "J. Chung"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "V. Zolotov"
+    - name: "J. Abraham"
+  venue: "IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems"
+  volumeIssue: "Vol. 31, No. 4"
+  year: 2012
+  month: April
+- id: journal-2011-runtime-resonance-noise-reduction
+  category: journal
+  title: "Runtime Resonance Noise Reduction with Current Prediction Enabled Frequency Actuator"
+  authors:
+    - name: "Y. Shi"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "H. Chen"
+    - name: "L. He"
+  venue: "IEEE Transactions on Very Large Scale Integration Systems"
+  volumeIssue: "Vol. 19, No. 3, pp. 508-512"
+  year: 2011
+- id: journal-2011-towards-the-virtual-power-grid
+  category: journal
+  title: "Towards the Virtual Power Grid: Large Scale Modeling and Simulation of Power Grids"
+  authors:
+    - name: "P. Feldmann"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "D. Kung"
+  venue: "The European Journal for the Informatics Professional"
+  volumeIssue: "Vol. 12, No. 4, pp. 28-40"
+  year: 2011
+  month: October
+- id: journal-2010-statistical-path-selection
+  category: journal
+  title: "Statistical Path Selection for At-Speed Test"
+  authors:
+    - name: "V. Zolotov"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "H. Fatemi"
+    - name: "C. Visweswariah"
+  venue: "IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems"
+  volumeIssue: "Vol. 29, No. 5"
+  year: 2010
+  month: May
+- id: journal-2009-optimal-test-margin-computation
+  category: journal
+  title: "Optimal Test Margin Computation for At-Speed Structural Test"
+  authors:
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "V. Zolotov"
+    - name: "C. Visweswariah"
+  venue: "IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems"
+  volumeIssue: "Vol. 28, No. 9, pp. 1414-1423"
+  year: 2009
+  month: September
+- id: journal-2009-statistical-power-analysis
+  category: journal
+  title: "Statistical Power Analysis for High-Performance Processors"
+  authors:
+    - name: "H. Chen"
+    - name: "S. Neely"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "V. Zolotov"
+    - name: "C. Visweswariah"
+  venue: "Journal of Low Power Electronics"
+  volumeIssue: "Vol. 5, No. 1, pp. 70-76"
+  year: 2009
+  month: April
+- id: journal-2009-non-gaussian-statistical-timing-analysis
+  category: journal
+  title: "Non-Gaussian Statistical Timing Analysis Using Second-Order Polynomial Fitting"
+  authors:
+    - name: "L. Cheng"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "L. He"
+  venue: "IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems"
+  volumeIssue: "Vol. 28, No. 1, pp. 130-140"
+  year: 2009
+  month: January
+- id: journal-2008-efficient-decoupling-capacitance-budgeting-considering
+  category: journal
+  title: "Efficient Decoupling Capacitance Budgeting Considering Operation and Process Variations"
+  authors:
+    - name: "Y. Shi"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "C. Liu"
+    - name: "L. He"
+  venue: "IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems"
+  volumeIssue: "Vol. 27, No. 7, pp. 1253-1263"
+  year: 2008
+  month: July
+- id: journal-2008-fashion-a-fast
+  category: journal
+  title: "Fashion: A Fast and Accurate Solution to Global Routing Problem"
+  authors:
+    - name: "Z. Cao"
+    - name: "T. Jing"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "Y. Hu"
+    - name: "L. He"
+    - name: "X. Hong"
+  venue: "IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems"
+  volumeIssue: "Vol. 27, No. 4, pp. 726-737"
+  year: 2008
+  month: April
+- id: journal-2007-robust-extraction
+  category: journal
+  title: "Robust Extraction of Spatial Correlation"
+  authors:
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "V. Zolotov"
+    - name: "L. He"
+  venue: "IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems"
+  volumeIssue: "Vol. 26, No. 4"
+  year: 2007
+  month: April
+- id: journal-2007-probabilistic-transitive-closure-ordering
+  category: journal
+  title: "Probabilistic Transitive-closure Ordering and its Application on Variational Buffer insertion"
+  authors:
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "L. He"
+  venue: "IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems"
+  volumeIssue: "Vol. 26, No. 4, pp. 739-742"
+  year: 2007
+  month: April
+- id: journal-2007-simultaneous-buffer-insertion
+  category: journal
+  title: "Simultaneous Buffer Insertion and Wire Sizing Considering Systematic CMP Variation and Random Leff Variation"
+  authors:
+    - name: "L. He"
+    - name: "A. Kahng"
+    - name: "K. Tam"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+  venue: "IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems"
+  volumeIssue: "Vol. 26, No. 4"
+  year: 2007
+  month: May
+- id: journal-2007-full-chip-multilevel-routing
+  category: journal
+  title: "Full-chip Multilevel Routing for Power and Signal Integrity"
+  authors:
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "L. He"
+  venue: "Integration - the VLSI Journal"
+  volumeIssue: "Vol. 40, pp. 226-234"
+  year: 2007
+- id: journal-2005-extended-global-routing
+  category: journal
+  title: "Extended Global Routing with RLC Crosstalk Constraints"
+  authors:
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "L. He"
+  venue: "IEEE Transactions on Very Large Scale Integration Systems"
+  volumeIssue: "Vol. 13, No. 3, pp. 319-329"
+  year: 2005
+  month: March
+- id: journal-2004-cee-gr-a-global-router
+  category: journal
+  title: "CEE-Gr: A Global Router with Performance Optimization under Multi-Constraints"
+  authors:
+    - name: "L. Zhang"
+    - name: "T. Jing"
+    - name: "X. Hong"
+    - name: "J. Xu"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "L. He"
+  venue: "Chinese Journal of Semiconductors"
+  volumeIssue: "Vol. 25, No. 5, pp. 508-515"
+  year: 2004
+- id: journal-2004-full-chip-routing-optimization
+  category: journal
+  title: "Full-chip Routing Optimization with RLC Crosstalk Budgeting"
+  authors:
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "L. He"
+  venue: "IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems"
+  volumeIssue: "Vol. 23, No. 3, pp. 366-377"
+  year: 2004
+  month: March
+- id: journal-2003-effects-of-load
+  category: journal
+  title: "The effects of load and speed on lumbar vertebral kinematics during lifting motions"
+  authors:
+    - name: "X. Zhang"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "A. Bishop"
+  venue: "Human Factors"
+  volumeIssue: "Vol. 45, No. 2, pp. 296-306"
+  year: 2003
+- id: journal-2003-model-guided-derivation
+  category: journal
+  title: "Model-guided derivation of lumbar vertebral kinematics in vivo reveals the difference between external marker-defined and internal segmental rotations"
+  authors:
+    - name: "X. Zhang"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+  venue: "Journal of Biomechanics"
+  volumeIssue: "Vol. 36, No. 1, pp. 9-17"
+  year: 2003
   month: January

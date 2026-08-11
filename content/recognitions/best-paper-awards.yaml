@@ -17,3 +17,57 @@
   title: "XSP: Across-Stack Profiling and Analysis of Machine Learning Models on GPUs"
   venue: "34th IEEE International Parallel and Distributed Processing Symposium (IPDPS)"
   publicationId: conference-2020-xsp-across-stack-profiling
+
+- id: best-paper-2020-cloud-benchmarking
+  category: best-paper-award
+  personId: jinjun-xiong
+  award: "Best Student Paper Award"
+  year: 2020
+  title: "The Design and Implementation of a Scalable DL Benchmarking Platform"
+  venue: "IEEE International Conference on Cloud Computing (CLOUD)"
+  publicationId: conference-2020-design-and-implementation
+
+- id: best-paper-2019-icpe-cuda
+  category: best-paper-award
+  personId: jinjun-xiong
+  award: "Best Research Paper Award"
+  year: 2019
+  title: "Evaluating Characteristics of CUDA Communication Primitives on High-Bandwidth Interconnects"
+  venue: "10th ACM/SPEC International Conference on Performance Engineering (ICPE)"
+  publicationId: conference-2019-evaluating-characteristics
+
+- id: best-paper-2018-dnnbuilder-iccad
+  category: best-paper-award
+  personId: jinjun-xiong
+  award: "IEEE/ACM William J. McCalla Best Paper Award"
+  year: 2018
+  title: "DNNBuilder: an Automated Tool for Building High-Performance DNN Hardware Accelerators for FPGAs"
+  venue: "ACM/IEEE International Conference on Computer Aided Design (ICCAD)"
+  publicationId: conference-2018-dnnbuilder-an-automated-tool
+
+- id: best-paper-2014-threshold-voltage
+  category: best-paper-award
+  personId: jinjun-xiong
+  award: "Best Paper in Track Award"
+  year: 2014
+  title: "Variation Aware Optimal Threshold Voltage Computation for On-chip Noise Sensors"
+  venue: "ACM/IEEE International Conference on Computer-Aided Design (ICCAD)"
+  publicationId: conference-2014-variation-aware-optimal-threshold-voltage
+
+- id: best-paper-2006-spatial-correlation
+  category: best-paper-award
+  personId: jinjun-xiong
+  award: "Best Paper Award"
+  year: 2006
+  title: "Robust Extraction of Spatial Correlation"
+  venue: "ACM/IEEE International Symposium on Physical Design (ISPD)"
+  publicationId: conference-2006-robust-extraction
+
+- id: best-paper-2003-global-routing
+  category: best-paper-award
+  personId: jinjun-xiong
+  award: "Best Student Paper Award"
+  year: 2003
+  title: "Performance Optimization Global Routing with RLC Crosstalk Constraints"
+  venue: "IEEE International Conference on Application Specific Integrated Circuits (ASICON)"
+  publicationId: conference-2003-performance-optimization-global-routing

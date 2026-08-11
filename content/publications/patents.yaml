@@ -1,13 +1,17 @@
-# DRY-RUN: only 1 of 58 real patents mapped here to validate the schema shape.
-# Full list: data-extraction/sources/02-xlab-ub-com-live-site/extracted/publications-patents.yaml
+# Source: data-extraction/sources/02-xlab-ub-com-live-site/extracted/publications-patents.yaml
+# 58 patents, 2000-2021, verbatim from https://www.xlab-ub.com/publication/patents.
+#
 # Verification finding: source data's "date" field is ambiguous (not clearly filed vs.
-# issued for older/China-patent entries) — mapped to filedDate here as a best guess;
-# the full merge pass should re-check this per-entry against the original source where
-# it matters (the China patents do cleanly say "issued", most US dockets say "filed").
+# issued for older/China-patent entries) -- mapped to filedDate as a best guess wherever
+# only a bare "date" key was given. Every explicit "filed: ..." key was mapped straight to
+# filedDate, and every explicit "issued: ..." key straight to issuedDate; three entries give
+# both and get both fields. One entry ("Optimized Asset Maintenance and Replacement
+# Schedule") has no date/filed/issued field in the source at all -- its id year is inferred
+# from its position in the list; it carries no filedDate/issuedDate since there's nothing to map.
 #
 # authors[].personId is only set for "J. Xiong" -> jinjun-xiong, the one author we can
-# confidently match to a real content/people/ record from the initials alone. The
-# other 5 co-authors are external (IBM/collaborator names) with no Person record —
+# confidently match to a real content/people/ record from the initials alone. All other
+# co-inventors are external (IBM/UB/other collaborator names) with no Person record --
 # left as name-only entries, not guessed at.
 
 - id: patent-2021-global-prosody-style-transfer
@@ -23,3 +27,633 @@
     - name: "D. Cox"
   patentNo: "P202102159US01"
   filedDate: "2021-06"
+- id: patent-2021-using-reinforcement-learning
+  category: patent
+  title: "Using Reinforcement Learning for Best Scaling Decision in Stateful Serverless Functions"
+  authors:
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "R. Huss"
+    - name: "H. Chen"
+  patentNo: "P202009568US01"
+  applicationNo: "17/199710"
+  filedDate: "2021-03"
+- id: patent-2021-explaining-outliers
+  category: patent
+  title: "Explaining Outliers in Time Series and Evaluating Anomaly Detection Methods"
+  authors:
+    - name: "Y. Zhu"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "J. He"
+    - name: "L. Zheng"
+    - name: "X. Cui"
+  patentNo: "P202006954US01"
+  filedDate: "2021-02"
+- id: patent-2021-resource-constraint-aware-deep-learning
+  category: patent
+  title: "Resource Constraint Aware Deep Learning Model Optimization for Serverless-based Inference Systems"
+  authors:
+    - name: "H. Chen"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "R. Huss"
+  patentNo: "P202009250US01"
+  applicationNo: "17/161568"
+  filedDate: "2021-01"
+- id: patent-2021-explicit-latency-control-notification
+  category: patent
+  title: "Explicit Latency Control Notification for Edge Cloud Video Streaming Analytics Service"
+  authors:
+    - name: "H. Chen"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+  patentNo: "P202009164US01"
+  applicationNo: "17/143943"
+  filedDate: "2021-01"
+- id: patent-2020-abstract-meaning-representation-parsing
+  category: patent
+  title: "Abstract Meaning Representation Parsing with Graph Translation"
+  authors:
+    - name: "L. Wu"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "H. Gong"
+    - name: "S. Bhat"
+    - name: "W. Hwu"
+  patentNo: "P202005821"
+  filedDate: "2020-12"
+- id: patent-2020-system-and-method
+  category: patent
+  title: "System and Method for Analyzing Network of Tensor Time Series"
+  authors:
+    - name: "Y. Zhu"
+    - name: "H. Tong"
+    - name: "B. Jing"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "N. Gaur"
+    - name: "A. Topol"
+  patentNo: "P202009336"
+  filedDate: "2020-11"
+- id: patent-2020-method-and-system
+  category: patent
+  title: "Method and System for Portfolio Management using Reinforcement Learning with Augmented Asset Movement Prediction States"
+  authors:
+    - name: "P. Chen"
+    - name: "Y. Zhu"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "K. Bhaskaran"
+    - name: "Y. Ye"
+    - name: "B. Li"
+  patentNo: "P201908998US01"
+  filedDate: "2020-09"
+- id: patent-2020-detecting-trojan-neural-networks
+  category: patent
+  title: "Detecting Trojan Neural Networks"
+  authors:
+    - name: "S. Liu"
+    - name: "P. Chen"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "G. Zhang"
+    - name: "M. Wang"
+    - name: "R. Wang"
+  patentNo: "P202002597US01"
+  filedDate: "2020-08"
+- id: patent-2020-method-and-system-2
+  category: patent
+  title: "Method and System for Text Style Transfer Using Reinforcement Learning without Parallel Training Corpus"
+  authors:
+    - name: "S. Bhat"
+    - name: "H. Gong"
+    - name: "L. Wu"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+  patentNo: "P201910870US01"
+  filedDate: "2020-03"
+- id: patent-2020-critical-path-analysis
+  category: patent
+  title: "Critical Path Analysis Of Activity Trace Files"
+  authors:
+    - name: "I. Chung"
+    - name: "C. Pearson"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+  patentNo: "P201809363US01"
+  filedDate: "2020-01"
+- id: patent-2019-multi-perspective-multi-task-neural-network-model
+  category: patent
+  title: "Multi-perspective, Multi-task Neural Network Model for Matching Text to Program Code"
+  authors:
+    - name: "R. Haldar"
+    - name: "L. Wu"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "J. Hockenmaier"
+  patentNo: "P20190211US01"
+  filedDate: "2019-11"
+- id: patent-2019-providing-direct-data-access-between
+  category: patent
+  title: "Providing Direct Data Access Between Accelerators and Storage in a Computing Environment"
+  authors:
+    - name: "Z. Qureshi"
+    - name: "I. Chung"
+    - name: "W. Hwu"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+  patentNo: "P201902114US01"
+  filedDate: "2019-10"
+- id: patent-2019-flatflash-system
+  category: patent
+  title: "Flatflash System for Byte Granularity Accessibility of Memory in a Unified Memory-storage Hierarchy"
+  authors:
+    - name: "A. Abulila"
+    - name: "V. S. Mailthody"
+    - name: "Z. Qureshi"
+    - name: "J. Huang"
+    - name: "N. Kim"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "W. Hwu"
+  patentNo: "P201809609US01"
+  filedDate: "2019-06"
+- id: patent-2019-crash-recoverability
+  category: patent
+  title: "Crash Recoverability for Graphics Processing Units (GPUs) in a Computing environment"
+  authors:
+    - name: "I. Chung"
+    - name: "Z. Qureshi"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "H. Franke"
+  patentNo: "P201805445US01"
+  filedDate: "2019-04"
+- id: patent-2018-action-detection
+  category: patent
+  title: "Action Detection by Exploiting Motion in Receptive Fields"
+  authors:
+    - name: "M. Do"
+    - name: "R. Feris"
+    - name: "D. Joshi"
+    - name: "K. Mac"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "R. Yeh"
+  patentNo: "YOR2201802545US01"
+  filedDate: "2018-05"
+- id: patent-2015-methods-for-deep-learning-network
+  category: patent
+  title: "Methods for Deep Learning Network Compression for Resource-constrained Devices"
+  authors:
+    - name: "W. Wu"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "V. Zolotov"
+  patentNo: "YOR820151906"
+  filedDate: "2015-09"
+- id: patent-2015-resource-supply-demand
+  category: patent
+  title: "A Resource Supply-demand based Approach for Automatic MapReduce Job Optimization"
+  authors:
+    - name: "D. Kung"
+    - name: "D. Phan"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+  patentNo: "YOR820150944"
+  filedDate: "2015-06"
+- id: patent-2015-method-for-fast-path-traversal
+  category: patent
+  title: "A Method for Fast Path Traversal in a Relational Database based Graph Structure"
+  authors:
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "V. Zolotov"
+  patentNo: "YOR820150630"
+  filedDate: "2015-05"
+- id: patent-2015-practical-method
+  category: patent
+  title: "A Practical Method for Improving Runtime of CUBLAS Matrix Multiplication on GPU"
+  authors:
+    - name: "A. Lvov"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "V. Zolotov"
+  patentNo: "YOR820150485"
+  filedDate: "2015-05"
+- id: patent-2014-optimal-capital-investment
+  category: patent
+  title: "Optimal Capital Investment to Replace a set of Distribution Transformers"
+  authors:
+    - name: "G. Janssen"
+    - name: "D. Phan"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+  patentNo: "YOR820140604"
+  filedDate: "2014-07"
+- id: patent-2014-system-and-method
+  category: patent
+  title: "System and Method to Reduce Human Activity Damage-induced Power Outage"
+  authors:
+    - name: "G. Janssen"
+    - name: "J.R. Kalagnanam"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "Y. Zhu"
+  docketNo: "YOR920140180US1"
+  filedDate: "2014-06"
+- id: patent-2014-optimized-asset-maintenance
+  category: patent
+  title: "Optimized Asset Maintenance and Replacement Schedule"
+  authors:
+    - name: "D. Phan"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+  docketNo: "YOR920140477US1"
+- id: patent-2013-solving-satisfiability-problems
+  category: patent
+  title: "Solving Satisfiability Problems through Search"
+  authors:
+    - name: "G. Janssen"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+  docketNo: "YOR920130647US1"
+  filedDate: "2013"
+- id: patent-2013-transformer-phase-permutation-causing-more
+  category: patent
+  title: "Transformer Phase Permutation Causing More Uniform Transformer Phase Aging"
+  authors:
+    - name: "G. Ditlow"
+    - name: "D. Phan"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+  docketNo: "YOR920130780US1"
+  filedDate: "2013"
+- id: patent-2013-systems-and-methods
+  category: patent
+  title: "Systems and Methods for Single Cell Product Path Delay Analysis"
+  authors:
+    - name: "J. Bickford"
+    - name: "P. Habitz"
+    - name: "V. Iyengar"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "B. Worth"
+  docketNo: "BUR920120074US2"
+  filedDate: "2013"
+- id: patent-2013-parallel-technique
+  category: patent
+  title: "Parallel Technique for Computing Problem Functions in Solving Optimal Power Flow"
+  authors:
+    - name: "G. Ditlow"
+    - name: "D. Phan"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+  docketNo: "YOR920130779US1"
+  filedDate: "2013"
+- id: patent-2012-distributed-system
+  category: patent
+  title: "Distributed System for Charging Electrical Assets"
+  authors:
+    - name: "S. Ghosh"
+    - name: "D. Phan"
+    - name: "M. Sharma"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "C. Wu"
+  docketNo: "YOR820120121"
+  filedDate: "2012"
+- id: patent-2012-system-and-method
+  category: patent
+  title: "System and Method for Acoustic Diagnosis Service"
+  authors:
+    - name: "J. Cohn"
+    - name: "C. Pickover"
+    - name: "J. Kozloski"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+  docketNo: "YOR820111274"
+  filedDate: "2012"
+- id: patent-2012-system-and-method-2
+  category: patent
+  title: "System and Method for Interactive Energy Device for Environmental Stewardship"
+  authors:
+    - name: "G. Ditlow"
+    - name: "B. Gaucher"
+    - name: "C. Pickover"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+  docketNo: "YOR820110844"
+  filedDate: "2012"
+- id: patent-2012-method-to-qualify-single-cell
+  category: patent
+  title: "Method to Qualify Single Cell IP with Product Path Delay Analysis"
+  authors:
+    - name: "J. Bickford"
+    - name: "P. Habitz"
+    - name: "V. Iyengar"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+  docketNo: "BUR820110268"
+  filedDate: "2012"
+- id: patent-2012-system-performance-improvement
+  category: patent
+  title: "System Performance Improvement Using Path Test"
+  authors:
+    - name: "J. Bickford"
+    - name: "P. Habitz"
+    - name: "V. Iyengar"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+  docketNo: "BUR820110246"
+  filedDate: "2012"
+- id: patent-2012-method-to-re-center-manufacturing-line
+  category: patent
+  title: "Method to Re-center Manufacturing Line Using Performance Path Test"
+  authors:
+    - name: "J. Bickford"
+    - name: "P. Habitz"
+    - name: "V. Iyengar"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+  docketNo: "BUR820110245"
+  filedDate: "2012"
+- id: patent-2012-enabling-statistical-testing
+  category: patent
+  title: "Enabling Statistical Testing using Deterministic Multi-corner Timing Analysis"
+  authors:
+    - name: "B. Agrawal"
+    - name: "D. Kung"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "V. Zolotov"
+  docketNo: "YOR920110749US1"
+  filedDate: "2012-04"
+- id: patent-2011-disposition-of-integrated-circuits
+  category: patent
+  title: "Disposition of Integrated Circuits Using Performance Sort Ring Oscillator and Performance Path Testing"
+  authors:
+    - name: "J. Bickford"
+    - name: "P. Habitz"
+    - name: "V. Iyengar"
+    - name: "D. Lacky"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+  docketNo: "BUR920110103US1"
+  filedDate: "2011-11"
+- id: patent-2011-test-path-selection
+  category: patent
+  title: "Test Path Selection and Test Program Generation for Performance Testing Integrated Circuit Chips"
+  authors:
+    - name: "J. Bickford"
+    - name: "P. Habitz"
+    - name: "V. Iyengar"
+    - name: "D. Lacky"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+  docketNo: "BUR920110095US1"
+  filedDate: "2011-11"
+- id: patent-2010-ordering-of-statistical-correlated-quantities
+  category: patent
+  title: "Ordering of Statistical Correlated Quantities"
+  authors:
+    - name: "C. Visweswariah"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "V. Zolotov"
+  docketNo: "YOR920090353US1"
+  filedDate: "2010-01"
+- id: patent-2010-optimal-chip-acceptance-criterion
+  category: patent
+  title: "Optimal Chip Acceptance Criterion and its Applications"
+  authors:
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "V. Zolotov"
+  docketNo: "YOR9201000562US1"
+  filedDate: "2010-11"
+- id: patent-2010-system-and-method
+  category: patent
+  title: "System and Method for Statistical Delay Testing of both Process Variation and Single Random Delay Defects"
+  authors:
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "V. Zolotov"
+  docketNo: "YOR920100405US1"
+  filedDate: "2010-11"
+- id: patent-2010-design-dependent-chip-disposition
+  category: patent
+  title: "Design Dependent Chip Disposition"
+  authors:
+    - name: "P. A. Habitz"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "V. Zolotov"
+  docketNo: "YOR920100099US1"
+  filedDate: "2010-07"
+- id: patent-2010-method-and-apparatus
+  category: patent
+  title: "Method and Apparatus for Selecting Voltage and Frequency Levels for Use in At-speed Testing"
+  authors:
+    - name: "M. J. Martinez"
+    - name: "C. Visweswariah"
+    - name: "F. C. Woytowich"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+  docketNo: "YOR920090565US1"
+  filedDate: "2010-01"
+- id: patent-2009-yield-computation
+  category: patent
+  title: "Yield Computation and Optimization for Selective Voltage Binning"
+  authors:
+    - name: "C. Visweswariah"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "V. Zolotov"
+  docketNo: "YOR920090517US1"
+  filedDate: "2009-10"
+- id: patent-2009-method-and-apparatus
+  category: patent
+  title: "Method and Apparatus for Selecting Paths for Use in At-Speed Testing"
+  authors:
+    - name: "C. Visweswariah"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "V. Zolotov"
+  docketNo: "YOR920090333US1"
+  filedDate: "2009-10"
+- id: patent-2009-system-and-method
+  category: patent
+  title: "System and Method for Generating Test Patterns for Use in At-Speed Testing"
+  authors:
+    - name: "C. Visweswariah"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "V. Zolotov"
+  docketNo: "YOR920090044US1"
+  filedDate: "2009-05"
+- id: patent-2008-system-and-method
+  category: patent
+  title: "System and Method for Covering a Multilayer Process Space during At-speed Testing"
+  authors:
+    - name: "Y. Shi"
+    - name: "C. Visweswariah"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "V. Zolotov"
+  docketNo: "YOR920080547US1"
+  filedDate: "2008-12"
+- id: patent-2008-reversible-statistical-maximum
+  category: patent
+  title: "Reversible Statistical Maximum and Minimum Operations for Efficient Incremental Statistical Timing Analysis and Optimization"
+  authors:
+    - name: "D. Sinha"
+    - name: "N. Venkateswaran"
+    - name: "C. Visweswariah"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "V. Zolotov"
+  docketNo: "YOR920080317US1"
+  filedDate: "2008-10"
+- id: patent-2007-critical-path-selection
+  category: patent
+  title: "Critical path selection for at-speed test"
+  authors:
+    - name: "V. Iyengar"
+    - name: "D. Lackey"
+    - name: "S. Venkatesan"
+    - name: "C. Visweswariah"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+  docketNo: "BUR920070146US1"
+  filedDate: "2007-11"
+- id: patent-2008-method-and-apparatus
+  category: patent
+  title: "Method and apparatus for statistical path selection for at-speed testing"
+  authors:
+    - name: "H. Fatemi"
+    - name: "C. Visweswariah"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "V. Zolotov"
+  docketNo: "YOR920070613US1"
+  filedDate: "2008-04"
+- id: patent-2008-method-and-apparatus-2
+  category: patent
+  title: "Method and apparatus for computing test margins for at-speed testing"
+  authors:
+    - name: "C. Visweswariah"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "V. Zolotov"
+  docketNo: "YOR920070614US1"
+  filedDate: "2008-01"
+- id: patent-2007-system-and-method
+  category: patent
+  title: "System and method for incremental criticality and yield gradient computation"
+  authors:
+    - name: "C. Visweswariah"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "V. Zolotov"
+  docketNo: "YOR920070374US1"
+  filedDate: "2007-10"
+- id: patent-2009-representing-and-propagating
+  category: patent
+  title: "Representing and Propagating a Variational Voltage Waveform in Statistical Static Timing Analysis of Digital Circuits"
+  authors:
+    - name: "S. Abbaspour"
+    - name: "D. J. Hathaway"
+    - name: "C. Visweswariah"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "V. Zolotov"
+  patentNo: "US7620921"
+  issuedDate: "2009-11"
+- id: patent-2007-ic-chip-at-functional-speed-testing
+  category: patent
+  title: "IC Chip At-functional-speed Testing with Process Coverage Evaluation"
+  authors:
+    - name: "E. A. Foreman"
+    - name: "G. D. Grise"
+    - name: "P. A. Habitz"
+    - name: "V. Iyengar"
+    - name: "D. E. Lackey"
+    - name: "C. Visweswariah"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "V. Zolotov"
+  patentNo: "US781448"
+  docketNo: "BUR920060235US1"
+  filedDate: "2007-04"
+  issuedDate: "2010-10"
+- id: patent-2006-method-system
+  category: patent
+  title: "Method, System, and Program Product for Computing a Yield Gradient from Statistical Timing"
+  authors:
+    - name: "C. Visweswariah"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "V. Zolotov"
+  patentNo: "US7480880"
+  docketNo: "YOR920050500US1"
+  filedDate: "2006-02"
+  issuedDate: "2009-01"
+- id: patent-2005-system-and-method
+  category: patent
+  title: "System and Method of Criticality Prediction in Statistical Timing Analysis"
+  authors:
+    - name: "N. Venkateswaran"
+    - name: "C. Visweswariah"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "V. Zolotov"
+  patentNo: "US7437697"
+  docketNo: "YOR920050245US1"
+  filedDate: "2005-12"
+  issuedDate: "2008-10"
+- id: patent-2004-extendable-high-capacity-virtual-compact-disc
+  category: patent
+  title: "An Extendable High-capacity Virtual Compact Disc File System: Construction Algorithms and Hardware Implementation"
+  authors:
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "J. Pei"
+  patentNo: "CN 1137441C"
+  issuedDate: "2004-02"
+  jurisdiction: "China Patent"
+- id: patent-2003-architecture-and-implementation
+  category: patent
+  title: "Architecture and Implementation of a Plug-and-play High-capacity Virtual Compact Disc Storage System"
+  authors:
+    - name: "J. Pei"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "Y. Li"
+    - name: "L. Pan"
+  patentNo: "CN 1118758C"
+  issuedDate: "2003-08"
+  jurisdiction: "China Patent"
+- id: patent-2002-seamless-integration
+  category: patent
+  title: "Seamless Integration of Multiple Storage Systems under One Target"
+  authors:
+    - name: "J. Pei"
+    - name: "Y. Xiao"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+  patentNo: "CN 1094217C"
+  issuedDate: "2002-11"
+  jurisdiction: "China Patent"
+- id: patent-2000-multiple-driver-connected-compact-disc-library-system
+  category: patent
+  title: "A Multiple-driver-connected Compact Disc Library System under Single SCSI Logic Unit"
+  authors:
+    - name: "J. Pei"
+    - name: "J. Xiong"
+      personId: jinjun-xiong
+    - name: "Y. Xiao"
+  patentNo: "CN 1263310A"
+  filedDate: "2000-08"
+  jurisdiction: "China Patent"

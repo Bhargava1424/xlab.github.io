@@ -1,0 +1,24 @@
+# Source: data-extraction/sources/02-xlab-ub-com-live-site/extracted/teaching.yaml
+# All 3 courses belong to the lab lead — no course descriptions or enrollment data exist
+# in the source beyond code/title/institution/term (see SPEC.md's Course entity note).
+
+- id: teaching-cse510
+  personId: jinjun-xiong
+  code: "CSE 510"
+  title: "Enterprise-Scale AI Systems and Solutions"
+  institutionId: ub
+  termDisplay: "Fall 2021"
+
+- id: teaching-apan-ps5335
+  personId: jinjun-xiong
+  code: "APAN PS5335"
+  title: "Machine Learning: Concepts & Application"
+  institutionName: "Columbia University" # not in content/institutions.yaml — one-off course outside the lab's own institutions, see docs' note on this exact case
+  termDisplay: "Multiple semesters"
+
+- id: teaching-ece498
+  personId: jinjun-xiong
+  code: "ECE498"
+  title: "Internet-of-Things and Cognitive Computing"
+  institutionId: uiuc
+  termDisplay: "Three semesters"

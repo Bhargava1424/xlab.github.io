@@ -1,0 +1,18 @@
+# Source: data-extraction/sources/01-xlab-test-web-hugo-site/extracted/team-phd.yaml
+# No joined/left year in source — labTenure left absent per SPEC.md §7 rather than invented.
+
+id: ziyue-bai
+name: Ziyue Bai
+personType: phd-student
+roleTitle: "PhD Student, 1st Year, Computer Science & Engineering"
+photo: /images/people/ziyue-bai.png
+
+links:
+  email: ziyuebai@buffalo.edu
+  scholar: "https://scholar.google.com/citations?user=srLdbVoAAAAJ&hl=zh-CN"
+
+affiliations:
+  - institutionId: ub
+    department: "Computer Science & Engineering"
+    roleTitle: "PhD Student"
+    type: primary

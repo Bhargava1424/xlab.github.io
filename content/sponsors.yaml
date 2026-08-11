@@ -1,2 +1,9 @@
-# No real current sponsor data exists yet in any collected source. Structure only.
-[]
+# Real grant-sponsor data doesn't exist in any collected source yet (see SPEC.md §3.7,
+# §7) — this single UTSA entry is a placeholder standing in for the site's institutional
+# identity, not a funded-grant sponsor. Replace/expand with real grant sponsors later.
+
+- id: utsa
+  name: The University of Texas at San Antonio
+  logo: /images/sponsors/utsa.png
+  url: https://www.utsa.edu
+

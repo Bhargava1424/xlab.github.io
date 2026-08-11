@@ -1,8 +1,5 @@
-# Singleton site metadata.
-# contact.address and primaryInstitutionId are intentionally left TBD — this is a
-# deferred CONTENT decision (see docs/SCHEMA.md "Deliberately deferred"), not a schema
-# gap. Do not fill these in without an explicit decision on what the site's current
-# institutional identity/contact point should be.
+# Singleton site metadata. Resolved per SPEC.md §3.1 (institutional identity = UTSA) and
+# §5 (nav = anchor sections on Home + real routes for /publications and /blog only).
 
 title: "X-Lab"
 tagline: "Accelerating AI Systems & Solutions"
@@ -12,26 +9,44 @@ nav:
   - label: Home
     path: /
   - label: Research
-    path: /research
+    path: /#research
+  - label: Team
+    path: /#team
+  - label: News
+    path: /#news
   - label: Publications
     path: /publications
-  - label: Team
-    path: /team
-  - label: News
-    path: /news
+  - label: Blog
+    path: /blog
 
 contact:
-  email: null # TBD — pending decision, see docs/SCHEMA.md
-  phone: null
-  address: null
+  # No UTSA-specific lab contact email exists in any collected source. jinjun@buffalo.edu
+  # is his real, still-active email (he remains UB adjunct faculty per
+  # data-extraction/sources/03-*/extracted/career-timeline-and-metrics.yaml) — usable now,
+  # flagged for replacement once a utsa.edu contact address is collected.
+  email: jinjun@buffalo.edu
+  phone: null # no UTSA department/office phone in any source
+  address:
+    # Main UTSA campus address — no specific College of AI, Cyber and Computing
+    # building/room address was found in any collected source; update once known.
+    line1: "One UTSA Circle"
+    city: San Antonio
+    state: TX
+    zip: "78249"
+    country: United States
 
-primaryInstitutionId: null # TBD — pending decision, see docs/SCHEMA.md
+primaryInstitutionId: utsa
 
 recruitingNotice: "We are recruiting PhD students and postdoctoral fellows to conduct cutting-edge AI systems and solutions research!"
 
 socialLinks:
+  # No verified lab-org GitHub exists — the only github link in any source points at a
+  # single PhD student's personal account (data-extraction/sources/01-*/extracted/socials.yaml),
+  # which would misrepresent it as the lab's own presence if used here. Left null.
   github: null
-  linkedin: null
+  # The only LinkedIn in any source is the PI's personal profile, not a lab account —
+  # used here as the de facto lab link, common practice for a solo-PI lab site.
+  linkedin: "https://www.linkedin.com/in/jinjun-xiong/"
   huggingface: "https://huggingface.co/x-labs"
 
 logo:
