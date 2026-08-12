@@ -71,6 +71,7 @@ export const PersonLinksSchema = z.object({
   universityProfile: z.string().optional(),
   linkedin: z.string().optional(),
   github: z.string().optional(),
+  redirectUrl: z.string().optional(),
 });
 
 export const PersonSchema = z.object({
@@ -154,6 +155,8 @@ export const PublicationSchema = z.object({
   category: PublicationCategorySchema,
   title: z.string(),
   authors: z.array(AuthorRefSchema),
+  themeId: z.string().optional(),
+  thumbnail: z.string().optional(),
   venue: z.string().optional(),
   year: z.number().optional(),
   dateDisplay: z.string().optional(),
@@ -263,6 +266,7 @@ export const RecognitionCategorySchema = z.enum([
   "international-competition-award",
   "professional-honor-award",
 ]);
+export type RecognitionCategory = z.infer<typeof RecognitionCategorySchema>;
 
 export const RecognitionSchema = z.object({
   id: z.string(),

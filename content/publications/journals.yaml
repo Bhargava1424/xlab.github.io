@@ -6,6 +6,8 @@
 
 - id: journal-2021-quantum-neural-network-codesign
   category: journal
+  themeId: ai-algorithms # inferred from title, not sourced
+  thumbnail: /images/publications/journal-2021-quantum-neural-network-codesign/thumbnail.png # AI-generated, see JOBS.md
   title: "A Co-Design Framework of Neural Networks and Quantum Circuits Towards Quantum Advantage"
   authors:
     - name: "W. Jiang"
@@ -32,6 +34,8 @@
   note: "in press"
 - id: journal-2021-on-interpretability
   category: journal
+  themeId: ai-security # inferred from title (interpretability/trustworthy AI), not sourced
+  thumbnail: /images/publications/journal-2021-on-interpretability/thumbnail.png # AI-generated, see JOBS.md
   title: "On Interpretability of Artificial Neural Networks: A Survey"
   authors:
     - name: "F. Fan"

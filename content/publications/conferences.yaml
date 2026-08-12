@@ -19,6 +19,8 @@
 # guessing. Don't invent an author list we don't have; leave it as one unlinked entry.
 - id: conference-2020-xsp-across-stack-profiling
   category: conference
+  themeId: ai-tools # inferred from title (across-stack profiling = measurement tooling), not sourced
+  thumbnail: /images/publications/conference-2020-xsp-across-stack-profiling/thumbnail.png # AI-generated, see JOBS.md
   title: "XSP: Across-Stack Profiling and Analysis of Machine Learning Models on GPUs"
   authors:
     - name: "C. Li et al."
@@ -46,6 +48,8 @@
   note: "Spotlight"
 - id: conference-2021-why-lottery-ticket-wins
   category: conference
+  themeId: ai-algorithms # inferred from title, not sourced
+  thumbnail: /images/publications/conference-2021-why-lottery-ticket-wins/thumbnail.png # AI-generated, see JOBS.md
   title: "Why Lottery Ticket Wins? A Theoretical Perspective of Sample Complexity on Sparse Neural Networks"
   authors:
     - name: "S. Zhang et al."
@@ -62,6 +66,8 @@
   dateDisplay: "December 2021"
 - id: conference-2021-mlharness-a-scalable-benchmarking-system
   category: conference
+  themeId: ai-tools # inferred from title, not sourced
+  thumbnail: /images/publications/conference-2021-mlharness-a-scalable-benchmarking-system/thumbnail.png # AI-generated, see JOBS.md
   title: "MLHarness: A Scalable Benchmarking System for MLCommons"
   authors:
     - name: "Y. Chang et al."
@@ -166,6 +172,8 @@
   dateDisplay: "November 2020"
 - id: conference-2020-dnnexplorer-a-framework
   category: conference
+  themeId: ai-accelerators # inferred from title (FPGA DNN accelerator), not sourced
+  thumbnail: /images/publications/conference-2020-dnnexplorer-a-framework/thumbnail.png # AI-generated, see JOBS.md
   title: "DNNExplorer: A Framework for Modeling and Exploring a Novel Paradigm of FPGA-based DNN Accelerator"
   authors:
     - name: "X. Zhang et al."
@@ -182,6 +190,8 @@
   dateDisplay: "November 2020"
 - id: conference-2020-design-and-implementation
   category: conference
+  themeId: ai-systems # inferred from title (scalable benchmarking platform), not sourced
+  thumbnail: /images/publications/conference-2020-design-and-implementation/thumbnail.png # AI-generated, see JOBS.md
   title: "The Design and Implementation of a Scalable DL Benchmarking Platform"
   authors:
     - name: "C. Li et al."
@@ -214,6 +224,8 @@
   dateDisplay: "September 2020"
 - id: conference-2020-practical-detection
   category: conference
+  themeId: ai-security # inferred from title (Trojan neural network detection), not sourced
+  thumbnail: /images/publications/conference-2020-practical-detection/thumbnail.png # AI-generated, see JOBS.md
   title: "Practical Detection of Trojan Neural Networks: Data-Limited and Data-Free Cases"
   authors:
     - name: "R. Wang et al."
@@ -246,6 +258,8 @@
   dateDisplay: "July 2020"
 - id: conference-2020-uncertainty-aware-training
   category: conference
+  themeId: ai-solutions # inferred from title (medical imaging application), not sourced
+  thumbnail: /images/publications/conference-2020-uncertainty-aware-training/thumbnail.png # AI-generated, see JOBS.md
   title: "Uncertainty-Aware Training of Neural Networks for Selective Medical Image Segmentation"
   authors:
     - name: "Y. Ding et al."
@@ -278,6 +292,8 @@
   dateDisplay: "May 2020"
 - id: conference-2020-skynet-a-hardware-efficient-method
   category: conference
+  themeId: ai-accelerators # inferred from title, not sourced
+  thumbnail: /images/publications/conference-2020-skynet-a-hardware-efficient-method/thumbnail.png # AI-generated, see JOBS.md
   title: "SkyNet: a Hardware-Efficient Method for Object Detection and Tracking on Embedded Systems"
   authors:
     - name: "X. Zhang et al."
@@ -390,6 +406,8 @@
   dateDisplay: "September 2019"
 - id: conference-2019-mlmodelscope-evaluate
   category: conference
+  themeId: ai-tools # inferred from title, not sourced
+  thumbnail: /images/publications/conference-2019-mlmodelscope-evaluate/thumbnail.png # AI-generated, see JOBS.md
   title: "MLModelScope: Evaluate and Measure ML Models within AI Pipelines"
   authors:
     - name: "A. Dakkak et al."
@@ -438,6 +456,8 @@
   dateDisplay: "June 2019"
 - id: conference-2019-on-the-universal-approximability
   category: conference
+  themeId: ai-algorithms # inferred from title, not sourced
+  thumbnail: /images/publications/conference-2019-on-the-universal-approximability/thumbnail.png # AI-generated, see JOBS.md
   title: "On the Universal Approximability and Complexity Bounds of Quantized ReLU Neural Networks"
   authors:
     - name: "Y. Ding et al."
@@ -478,6 +498,8 @@
   dateDisplay: "January 2019"
 - id: conference-2018-dnnbuilder-an-automated-tool
   category: conference
+  themeId: ai-accelerators # inferred from title, not sourced
+  thumbnail: /images/publications/conference-2018-dnnbuilder-an-automated-tool/thumbnail.png # AI-generated, see JOBS.md
   title: "DNNBuilder: an Automated Tool for Building High-Performance DNN Hardware Accelerators for FPGAs"
   authors:
     - name: "X. Zhang et al."
@@ -638,6 +660,8 @@
   dateDisplay: "June 2015"
 - id: conference-2015-optimal-selected-phasor-measurement-units
   category: conference
+  themeId: ai-solutions # inferred from title (smart grid application), not sourced
+  thumbnail: /images/publications/conference-2015-optimal-selected-phasor-measurement-units/thumbnail.png # AI-generated, see JOBS.md
   title: "Optimal Selected Phasor Measurement Units for Identifying Multiple Line Outages in Smart Grid"
   authors:
     - name: "J. Wu et al."

@@ -36,9 +36,8 @@ import {
   validateOrCollect,
 } from "./loader";
 
-// Re-export the category type so callers of getPublicationsByCategory don't need to
-// reach into ./schema directly.
-export type { PublicationCategory } from "./schema";
+// Re-export the category types so callers don't need to reach into ./schema directly.
+export type { PublicationCategory, RecognitionCategory } from "./schema";
 export type {
   AuthorRef,
   Affiliation,
@@ -249,6 +248,11 @@ export function getFeaturedPublications(): Publication[] {
   return loadAll()
     .publications.filter((p) => p.featured)
     .sort((a, b) => (a.featuredOrder ?? 0) - (b.featuredOrder ?? 0));
+}
+export function getPublicationsByTheme(themeId: string): Publication[] {
+  return loadAll()
+    .publications.filter((p) => p.themeId === themeId)
+    .sort((a, b) => (b.year ?? 0) - (a.year ?? 0));
 }
 
 // --- Post (news + blog) ---------------------------------------------------------

@@ -62,6 +62,10 @@ export interface PersonLinks {
   universityProfile?: string;
   linkedin?: string;
   github?: string;
+  // Manual override for the card/photo click target. When set, takes priority over
+  // the website -> linkedin -> github -> scholar -> Scholar-search fallback chain
+  // (SPEC.md decision #4). Leave unset to use that chain as before.
+  redirectUrl?: string;
 }
 
 export interface Person {
@@ -137,6 +141,15 @@ export interface Publication {
   category: PublicationCategory;
   title: string;
   authors: AuthorRef[]; // ordered list; most entries have no personId (external co-authors), see docs/SCHEMA.md
+  // FK -> ResearchTheme.id, optional. Unset on ~most of the 301 entries — populated
+  // only for publications with a clearly-inferable thrust match (flagged inline in
+  // the YAML as inferred, not sourced), so #research's thrust browser can show a real
+  // mix of Project + Publication cards per theme. See SPEC.md.
+  themeId?: string;
+  // Card figure for the #research thrust browser only (the /publications list view
+  // never shows it). Only set on the same themeId-tagged subset — AI-generated
+  // illustrations, not real figures, see JOBS.md Phase 1 note.
+  thumbnail?: string;
   venue?: string;
   year?: number;
   dateDisplay?: string;

@@ -6,7 +6,7 @@
 id: synctree
 title: SyncTREE
 tagline: "Fast timing analysis for integrated circuit design through physics-informed tree-based graph neural networks."
-thumbnail: /images/projects/synctree/thumbnail.jpg
+thumbnail: /images/projects/synctree/thumbnail.png
 themeId: ai-accelerators
 status: active
 links:

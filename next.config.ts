@@ -6,6 +6,10 @@ const nextConfig: NextConfig = {
   // served at the domain root, so no basePath/assetPrefix.
   output: "export",
 
+  // Emit route/index.html instead of route.html so nested static routes
+  // (e.g. /blog/<slug>) resolve unambiguously as directories on GitHub Pages.
+  trailingSlash: true,
+
   // Static export can't use the default Next.js image optimization API (no
   // server to run it). Images are served as-is from public/.
   images: {

@@ -111,6 +111,8 @@
   filedDate: "2020-09"
 - id: patent-2020-detecting-trojan-neural-networks
   category: patent
+  themeId: ai-security # inferred from title, not sourced
+  thumbnail: /images/publications/patent-2020-detecting-trojan-neural-networks/thumbnail.png # AI-generated, see JOBS.md
   title: "Detecting Trojan Neural Networks"
   authors:
     - name: "S. Liu"

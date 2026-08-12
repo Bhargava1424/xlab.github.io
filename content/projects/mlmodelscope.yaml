@@ -5,7 +5,7 @@
 id: mlmodelscope
 title: MLModelScope
 tagline: "A hardware/software agnostic platform to facilitate the evaluation, measurement, and introspection of ML models."
-thumbnail: /images/projects/mlmodelscope/thumbnail.jpg
+thumbnail: /images/projects/mlmodelscope/thumbnail.png
 themeId: ai-tools
 status: active
 links:

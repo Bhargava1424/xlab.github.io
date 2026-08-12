@@ -18,6 +18,8 @@ nav:
     path: /publications
   - label: Blog
     path: /blog
+  - label: Sponsors
+    path: /#sponsors
 
 contact:
   # No UTSA-specific lab contact email exists in any collected source. jinjun@buffalo.edu

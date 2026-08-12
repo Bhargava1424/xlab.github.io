@@ -189,6 +189,8 @@
   location: "Cambridge, Massachusetts"
 - id: workshop-2019-equipping-educational-applications
   category: workshop
+  themeId: ai-solutions # inferred from title (education application), not sourced
+  thumbnail: /images/publications/workshop-2019-equipping-educational-applications/thumbnail.png # AI-generated, see JOBS.md
   title: "Equipping Educational Applications with Domain Knowledge"
   authors:
     - name: "T. Sakakini"

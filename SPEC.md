@@ -14,12 +14,14 @@ All decisions below are locked as of 2026-08-10 — §3.8 (Publication.id scheme
 
 X-Lab is an academic AI-systems research lab site. The PI's affiliation spans two institutions — University at Buffalo, and, as of March 2026, Founding Dean of UT San Antonio's new College of AI, Cyber and Computing. The site's institutional identity is **UTSA** (decision #1 below).
 
-Structural inspiration is [poloclub.github.io](https://poloclub.github.io/) (Georgia Tech): one long-scroll homepage with anchor nav, data-driven cards fed by structured files instead of hand-written HTML per entry, and a couple of standalone pages for the handful of things that genuinely don't fit in a scroll. We're borrowing that structure, not poloclub's Bootstrap/gold visual theme — real visual design is a later phase, and the result should read as clearly ours.
+Structural inspiration is [poloclub.github.io](https://poloclub.github.io/) (Georgia Tech): one long-scroll homepage with anchor nav, data-driven cards fed by structured files instead of hand-written HTML per entry, and a couple of standalone pages for the handful of things that genuinely don't fit in a scroll. We're borrowing that structure, not poloclub's Bootstrap/gold visual theme.
+
+**Visual design (Phase 5, done 2026-08-11):** the real look comes from `Polo Club Website Inspiration/X-Lab Homepage.dc.html` (a Pencil design-canvas mockup, option "1A" — the only fully fleshed-out option in that file), recolored from its original cream/blue/orange palette to pure black/white/gray per product direction, with a real switchable light/dark mode (`next-themes`, `.dark` class). Instrument Sans (body) + JetBrains Mono (labels/meta/mono accents). No accent hue anywhere — emphasis comes from weight/size/spacing/mono-vs-sans and fill-vs-outline, not color. Design tokens live in `app/globals.css` (`--bg-alt`, `--text-faint`, `--text-placeholder`, `--hairline`, `--invert-bg`/`--invert-fg` extend the shadcn base set).
 
 ## 2. Stack & hosting (locked)
 
 - **Next.js**, static export (`output: 'export'`), TypeScript, App Router.
-- **Tailwind CSS** + **shadcn/ui** (base theme for now — real design pass is a later phase).
+- **Tailwind CSS** + **shadcn/ui** (retuned to the black/white design system, Phase 5 — see §1).
 - **GitHub Pages**, `xlab.github.io`, served at the domain root — no `basePath`.
 - **Hard constraint: fully static.** No API routes, no server actions, no middleware, no ISR, no request-time SSR. Anything that needs to feel dynamic (search/filter, animations, stat counters) runs client-side against the static bundle, not a backend.
 - No backend / FastAPI in scope. Revisit only if a genuine server-side need shows up later (e.g. a contact form) — don't let one creep in via a Next.js feature that assumes a server.
@@ -32,8 +34,8 @@ Structural inspiration is [poloclub.github.io](https://poloclub.github.io/) (Geo
 | 1 | Which institution represents the live site's identity/address? | **UTSA.** `content/site-meta.yaml`: `primaryInstitutionId: utsa`, `contact.address` = UTSA's address. |
 | 2 | Is `/blog` a separate route from `/news`? | **News has no route at all.** It's a Home-only section (`#news` anchor), recent items only, no archive page. **`/blog` is a real separate route** (+ always-generated `/blog/<slug>`), matching poloclub's own pattern of mixing in-page anchors with a couple of standalone pages in the same navbar. |
 | 3 | Publications: tabs on one page, or separate nav entries? | Stays **one `/publications` page, 6 category tabs.** This is the one place a dedicated route is clearly justified — ~301 entries can't live in a home scroll. General rule going forward: default to Home content, poloclub-style; only add a route when content genuinely can't fit inline. The old `docs/content-placement` docs leaned toward a route per entity — don't keep following that instinct. |
-| 4 | Team member detail pages — what's the threshold? | **No `/team/<slug>` pages, for anyone, for now.** Every card is a plain outbound redirect. Priority order: `links.website` → `links.linkedin` → `links.github` → `links.scholar` → fallback: auto-generated Google Scholar search for their name (`scholar.google.com/scholar?q=<name>`). Real links get collected and filled in over time; the fallback just means launch isn't blocked on having them all. |
-| 5 | Where do Recognition / ServiceRecord / Course render, given #4? | Not on a per-person page — there isn't one. **Course** still gets its poloclub-equivalent: a consolidated Teaching table on Home, across everyone. **Recognition** and **ServiceRecord** have no site placement right now — this is *not* the `xlab-ub.com` CV-page structure. Possible future exception: a one-off dedicated page for the PI (Jinjun Xiong) that could use this data — a bespoke page, not a generic per-person template. Not in scope for Phases 1–3. |
+| 4 | Team member detail pages — what's the threshold? | **No `/team/<slug>` pages, for anyone, for now.** Every card is a plain outbound redirect. `links.redirectUrl`, if set, is used directly (manual override — updated 2026-08-11). Otherwise, priority order: `links.website` → `links.linkedin` → `links.github` → `links.scholar` → fallback: auto-generated Google Scholar search for their name (`scholar.google.com/scholar?q=<name>`). Real links get collected and filled in over time; the fallback just means launch isn't blocked on having them all. |
+| 5 | Where do Recognition / ServiceRecord / Course render, given #4? | Not on a per-person page — there isn't one. **Updated 2026-08-11 (Phase 5):** the "possible future PI page" this decision originally deferred to now exists, inline — the mockup's PI layer in `#team` surfaces `Person.bio`, `profile.education`, and `affiliations` ("Appointments") for the lab lead, plus **Recognition**, summarized per-category via `getRecognitionsByPerson` ("Honors" — e.g. "7 Best Paper Awards"), finally giving that data a real UI home. **`ServiceRecord` still has no site placement** — the Honors summary doesn't have a service-record equivalent, and this still isn't the `xlab-ub.com` CV-page structure. **`Course`/Teaching was removed entirely** (Phase 5, per product direction) — no nav item, no section; `content/teaching.yaml` stays, unused, same footing as `ServiceRecord`. |
 | 6 | SyncTREE / QuadraNet have no real repo — what do the links do? | **Placeholder**, until real repos are known: point `links.code` at a Google search for `"<title> GitHub"` instead of the current (wrong) personal-profile URL. Swap for the real repo the moment it's confirmed. |
 | 7 | Sponsor data? | `content/sponsors.yaml` gets **one placeholder entry: UTSA** — standing in until real grant sponsors are collected. |
 | 8 | Publication.id scheme? | **Decided:** `{category}-{year}-{slug of the first ~5 significant words of the title}`, e.g. `conference-2023-quadranet-hardware-aware`. Year falls back to `filedDate`/`issuedDate` year for patents, or `undated` in the rare case no year exists at all. On a collision (two entries would generate the same id), append `-2`, `-3`, ... in encounter order. Simple, deterministic, human-readable in diffs — no reason to reach for anything fancier (hashes, sequence counters) for ~301 records. Frozen from first use in the Phase 1 bulk import. |
@@ -92,16 +94,16 @@ Per-record files for `people/`/`projects/` (hand-curated, one edit at a time); p
   ├─ #research        ResearchTheme × N, each with its Project cards inline.
                       No separate /research page — short + long description
                       both live here (6 themes fit fine in a scroll).
-  ├─ #team            Person, current + alumni together, poloclub-style — the full
-                      roster, not just a "current member" preview strip. Every
-                      card redirects out per decision #4.
-                      No separate /team page, same reasoning as above.
-  ├─ recruitingNotice  Banner, placed at/right after #team
+  ├─ #team            Person, three layers (Phase 5): the PI (rich bio/education/
+                      appointments/honors), current members (dense grid), alumni
+                      (hidden while empty). Every non-PI card redirects out per
+                      decision #4. No separate /team page, same reasoning as above.
   ├─ #news            Post (kind=news), most recent N. No archive, no route —
                       this is the entire News presence on the site (decision #2).
   ├─ Featured Publications   Publication (featured=true), highlight strip
-  ├─ #teaching        Course × all — consolidated table, no invented enrollment data
-  ├─ #sponsors        Sponsor × all — logo grid + grantNumbers blurb
+  ├─ #sponsors        Sponsor × all — logo grid + grantNumbers blurb, plus an
+                      inverted CTA panel carrying recruitingNotice (moved here from
+                      next-to-#team in Phase 5, matching the mockup's layout)
   └─ Footer           SiteMeta.contact / socialLinks / copyright
 
 /publications         Publication, 6 category tabs (Patents / Journals /
@@ -115,27 +117,27 @@ Per-record files for `people/`/`projects/` (hand-curated, one edit at a time); p
                       wherever referenced, never their own browsable route
 ```
 
-Nav bar mixes anchor links (`#research`, `#team`, `#news`, `#teaching`, `#sponsors` — scroll within Home) with real routes (`/publications`, `/blog`) — same pattern poloclub uses in its own navbar. Exact `SiteMeta.nav` array gets finalized during Phase 3 (page-building), not here.
+Nav bar mixes anchor links (`#research`, `#team`, `#news`, `#sponsors` — scroll within Home) with real routes (`/publications`, `/blog`) — same pattern poloclub uses in its own navbar.
 
 ## 6. Page-by-page placement
 
 **Institution** — lookup only, never its own page. Resolved inline in a Person's affiliation history and a Course's institution line. `shortName` in compact spots (team card tag), `name` elsewhere. `logo` has no UI slot currently.
 
-**Person** — `#team` gets everyone, current + alumni, grouped by `personType`, current/alumni split via `labTenure.leftYear` (null/absent = current). Card: photo, name, roleTitle, institution `shortName` tag, tenure years, link-icon row — click target follows decision #4's priority order. `secondaryTitles`, `office`, `bio`, and all of `profile.*` (education/researchPhilosophy/researchInterests/researchAgenda/futureVision/quote) are collected but **not rendered anywhere right now**, since there's no detail page — kept in the schema for the possible future PI page (see §3.5). `sortWeight` is internal ordering only.
+**Person** — `#team`, three layers (Phase 5, see decision #5): **PI** gets the rich treatment — photo, `roleTitle`, `bio` ("About"), `profile.education`, `links` as contact buttons, `affiliations` as "Appointments", `getRecognitionsByPerson` summarized as "Honors". **Current members** (everyone else with `labTenure.leftYear` null/absent) render as a flat dense grid (no `personType` sub-grouping, matching the mockup) — photo, name, short role label, whole-tile redirect per decision #4. **Alumni** (`labTenure.leftYear` set) — same tile, circular photo; section hidden entirely while empty (true of all 17 people today). `secondaryTitles`, `office`, `profile.researchPhilosophy`/`researchInterests`/`researchAgenda`/`futureVision`/`quote` are still collected but not rendered — only `bio`/`profile.education`/`affiliations` graduated to real UI, and only for the PI. `sortWeight` is internal ordering only. Institution `shortName` tag and tenure years from the earlier single-card design were dropped in the Phase 5 restyle (not in the mockup's compact tile).
 
 **ResearchTheme** — `#research` section: icon + title + `shortDescription` + `longDescription`, both together (no separate `/research` page, §5). A theme with zero `Project`s still renders fine as heading + description.
 
-**Project** — a card inside its theme's grid. `title`/`tagline`/`thumbnail`, `status` badge ("Deployed"), `collaborationWith` badge ("🤝 Collaboration with X"), `contributors` (small linked-avatar row, populate only when confirmed), link-icon row (`paperUrl`/`publicationId` → PDF icon, `code`, `demo`, `video`, `poster`, `website`). `description` is not shown, matching poloclub's own card omission. **No detail page, ever** — cards link out.
+**Project** — a card inside its theme's tab-focused grid on `#research` (Phase 5: the section became a click-to-switch thrust browser, one `ResearchTheme` in focus at a time — client-side tab state, no route change). `title`/`tagline`/`thumbnail` (or a diagonal-stripe placeholder when missing), `status` label ("Deployed"), `collaborationWith` as a plain text line ("Collaboration with X"), `contributors` (linked name list, populate only when confirmed), link row (`paperUrl`/`publicationId` → resolved paper link, `code`, `demo`, `video`, `poster`, `website` — mono text links, not icon buttons, in the Phase 5 restyle). `description` is not shown, matching poloclub's own card omission. **No detail page, ever** — cards link out. Note: `Publication` has no `themeId` FK, so unlike the mockup's card grid (which mixes Projects and Publications per thrust), this browser shows Projects only — `Publication`s stay on `/publications` and the Featured Publications strip.
 
 **Publication** — `/publications`, one list per category tab, year-desc. Entry: title, authors (mixed linked/plain-text — only authors with a confirmed `personId` link out), venue (italic), year/`dateDisplay`/`month`, location (conference/workshop only), `note` badge ("Spotlight"/"in press" — never award info, see Recognition), doi/url/pdfUrl icons. Category-specific line: patent metadata / `volumeIssue` / book+editors+publisher. `featured` publications also appear in Home's Featured Publications strip, ordered there by `featuredOrder` (independent of the chronological `/publications` order).
 
 **Post** — `kind=news` → Home `#news` only (decision #2): feed entry, no detail page ever, regardless of whether `body` is set. `kind=blog` → `/blog` archive + always-generated `/blog/<slug>`. Fields: `date`, `title`, `summary`, `body` (blog only), `image`, `authorId` ("by [Name]" byline — rare on news), `tags` (blog archive filter), `sourceUrl` ("Read more →"), `relatedPublicationId` (inline citation link).
 
-**SiteMeta** — sitewide chrome, not page content. `title`/`logo` → `<title>` + header; `tagline` → hero; `description`/`keywords` → SEO meta only; `nav[]` → navbar (§5); `contact` → footer; `primaryInstitutionId` → `utsa`, convenience-only, never the literal source of the address text; `recruitingNotice` → banner near `#team`; `socialLinks` → header + footer icon row; `logo.light`/`logo.dark` → theme-aware header swap.
+**SiteMeta** — sitewide chrome, not page content. `title`/`logo` → `<title>` + header; `tagline` → hero headline; `description`/`keywords` → SEO meta + hero intro paragraph; `nav[]` → navbar (§5); `contact` → footer; `primaryInstitutionId` → `utsa`, resolved to `Institution.name` for the header's mono institution tag, convenience-only, never the literal source of the address text; `recruitingNotice` → inverted CTA panel inside `#sponsors` (moved from next-to-`#team` in Phase 5); `socialLinks` → footer link row; `logo.light`/`logo.dark` → theme-aware header/hero swap (`.dark`-driven now that a real toggle exists, not just latent CSS).
 
-**Recognition / ServiceRecord** — no current placement. Data still gets extracted and populated (see `JOBS.md` Phase 1) but sits unused on the site until a future PI-specific page exists (§3.5). Don't build generic per-person rendering for these in Phases 1–3.
+**Recognition** — no per-record placement, but (Phase 5, decision #5) summarized per-category via `getRecognitionsByPerson` into the PI's "Honors" list on `#team` — the first real UI use of this data. **ServiceRecord** — still no site placement.
 
-**Course** — Home `#teaching` consolidated table only (no per-person section — there's no per-person page). Columns: instructor (resolved `personId` → name), code + title, institution (resolved `institutionId`, or `institutionName` fallback for one-off courses taught outside the lab's own institutions), `termDisplay` raw text. No enrollment/attendance data invented.
+**Course** — no site placement (Teaching was removed entirely in Phase 5, per product direction). `content/teaching.yaml` stays populated but unused, same footing as `ServiceRecord`.
 
 **Sponsor** — Home `#sponsors` logo grid + `grantNumbers` text blurb underneath, bottom of the scroll. No dedicated page.
 
@@ -149,4 +151,4 @@ Things intentionally left for later — don't block on these, but don't lose tra
 - **`Institution.logo`** — no planned UI slot; revisit only if an "affiliated institutions" strip is ever wanted.
 - **Real SyncTREE/QuadraNet repos** — replace the §3.6 placeholder once known.
 - **Real sponsor data** beyond the UTSA placeholder (§3.7).
-- **Possible future one-off PI bio page** (a bespoke route, not `/team/<slug>`) surfacing `PersonProfile`/`Recognition`/`ServiceRecord`/`Course` — not scheduled, not part of Phases 1–3.
+- ~~Possible future one-off PI bio page~~ — **done differently than originally imagined**: rather than a bespoke route, the PI's `bio`/`profile.education`/`affiliations`/`Recognition` now render inline in `#team`'s PI layer (Phase 5, decision #5). `profile.researchPhilosophy`/`researchInterests`/`researchAgenda`/`futureVision`/`quote` and `ServiceRecord` are still unused — a dedicated PI route remains a real possibility if that richer content ever needs a home.

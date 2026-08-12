@@ -48,6 +48,8 @@
   location: "Tokyo, Japan, January 18-21"
 - id: invited-paper-2020-challenges-for-building
   category: invited-paper
+  themeId: ai-systems # inferred from title (cloud-native scalable platform), not sourced
+  thumbnail: /images/publications/invited-paper-2020-challenges-for-building/thumbnail.png # AI-generated, see JOBS.md
   title: "Challenges for Building a Cloud Native Scalable and Trustable Multi-tenant AIoT Platform"
   authors:
     - name: "J. Xiong"
