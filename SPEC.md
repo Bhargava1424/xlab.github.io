@@ -22,7 +22,11 @@ Structural inspiration is [poloclub.github.io](https://poloclub.github.io/) (Geo
 
 - **Next.js**, static export (`output: 'export'`), TypeScript, App Router.
 - **Tailwind CSS** + **shadcn/ui** (retuned to the black/white design system, Phase 5 — see §1).
-- **GitHub Pages**, `xlab.github.io`, served at the domain root — no `basePath`.
+- **GitHub Pages**, project page (not root domain — see decision #9), served at
+  `https://bhargava1424.github.io/xlab.github.io/` with `basePath`/`assetPrefix`
+  set accordingly. `lib/base-path.ts` is the single source of truth for the
+  GitHub username/repo name this depends on — update it there if either is ever
+  renamed, nowhere else.
 - **Hard constraint: fully static.** No API routes, no server actions, no middleware, no ISR, no request-time SSR. Anything that needs to feel dynamic (search/filter, animations, stat counters) runs client-side against the static bundle, not a backend.
 - No backend / FastAPI in scope. Revisit only if a genuine server-side need shows up later (e.g. a contact form) — don't let one creep in via a Next.js feature that assumes a server.
 - `labbench/` (dev-only tooling, e.g. `schema-visualizer`) stays fully outside the root build/workspace — has its own `package.json`/`node_modules`, `next build` must never touch it.
@@ -39,6 +43,7 @@ Structural inspiration is [poloclub.github.io](https://poloclub.github.io/) (Geo
 | 6 | SyncTREE / QuadraNet have no real repo — what do the links do? | **Placeholder**, until real repos are known: point `links.code` at a Google search for `"<title> GitHub"` instead of the current (wrong) personal-profile URL. Swap for the real repo the moment it's confirmed. |
 | 7 | Sponsor data? | `content/sponsors.yaml` gets **one placeholder entry: UTSA** — standing in until real grant sponsors are collected. |
 | 8 | Publication.id scheme? | **Decided:** `{category}-{year}-{slug of the first ~5 significant words of the title}`, e.g. `conference-2023-quadranet-hardware-aware`. Year falls back to `filedDate`/`issuedDate` year for patents, or `undated` in the rare case no year exists at all. On a collision (two entries would generate the same id), append `-2`, `-3`, ... in encounter order. Simple, deterministic, human-readable in diffs — no reason to reach for anything fancier (hashes, sequence counters) for ~301 records. Frozen from first use in the Phase 1 bulk import. |
+| 9 | What URL does the site actually deploy to? (**Added 2026-08-11, Phase 6**) | **`https://bhargava1424.github.io/xlab.github.io/` — a project page, not the root domain §2 originally assumed.** `xlab.github.io` turned out to be unavailable: the GitHub account `xlab` is an unrelated third party's, permanently taken, so this repo (owned by `Bhargava1424`) can never be a root-domain user/org Pages site. Chose to keep the repo name as-is and add `basePath`/`assetPrefix` (project-page route) over renaming the repo to `Bhargava1424.github.io` (root, but loses the "xlab" branding in the URL) or buying a custom domain (root, but a recurring cost/registration step). Revisit if a custom domain is ever bought — see `lib/base-path.ts` for the one place that would need to change. **Caught a real bug in the process**: `next/image` does not auto-prepend `basePath` to local asset `src` when `images.unoptimized: true` (a static-export requirement) — every photo/thumbnail/logo across the site was 404ing under the subpath until `withBasePath()` (`lib/base-path.ts`) was applied at each call site. |
 
 ## 4. Content model
 

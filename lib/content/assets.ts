@@ -7,6 +7,8 @@
 import fs from "fs";
 import path from "path";
 
+export { withBasePath } from "@/lib/base-path";
+
 const PUBLIC_ROOT = path.join(process.cwd(), "public");
 
 export function publicFileExists(relativePath: string | undefined | null): boolean {

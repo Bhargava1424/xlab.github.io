@@ -9,7 +9,7 @@ import {
   getRecognitionsByPerson,
   type Person,
 } from "@/lib/content";
-import { publicFileExists } from "@/lib/content/assets";
+import { publicFileExists, withBasePath } from "@/lib/content/assets";
 import { sortPeople, summarizeRecognitions } from "@/lib/team";
 
 function initials(name: string): string {
@@ -84,7 +84,7 @@ function PiLayer({ pi }: { pi: Person }) {
           <div className="relative border border-border bg-background p-2">
             {hasPhoto && pi.photo ? (
               <Image
-                src={pi.photo}
+                src={withBasePath(pi.photo!)}
                 alt={pi.name}
                 width={240}
                 height={300}

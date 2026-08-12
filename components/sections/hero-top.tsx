@@ -3,7 +3,7 @@ import Image from "next/image";
 
 import { AnimatedCounter } from "@/components/animated-counter";
 import { getAllRecognitions, getSiteMeta, getStats, type RecognitionCategory } from "@/lib/content";
-import { publicFileExists } from "@/lib/content/assets";
+import { publicFileExists, withBasePath } from "@/lib/content/assets";
 import { cn } from "@/lib/utils";
 
 function countRecognitions(category: RecognitionCategory): number {
@@ -47,7 +47,7 @@ export function HeroTop() {
           {hasLogo && site.logo && (
             <>
               <Image
-                src={site.logo.light}
+                src={withBasePath(site.logo!.light)}
                 alt=""
                 width={110}
                 height={110}
@@ -55,7 +55,7 @@ export function HeroTop() {
                 priority
               />
               <Image
-                src={site.logo.dark}
+                src={withBasePath(site.logo!.dark)}
                 alt=""
                 width={110}
                 height={110}

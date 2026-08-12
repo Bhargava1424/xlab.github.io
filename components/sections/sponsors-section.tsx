@@ -3,7 +3,7 @@ import Image from "next/image";
 import { ExternalLink } from "@/components/external-link";
 import { RecruitingBanner } from "@/components/sections/recruiting-banner";
 import { getAllSponsors, getSiteMeta } from "@/lib/content";
-import { publicFileExists } from "@/lib/content/assets";
+import { publicFileExists, withBasePath } from "@/lib/content/assets";
 
 export function SponsorsSection() {
   const sponsors = getAllSponsors();
@@ -37,7 +37,7 @@ export function SponsorsSection() {
                         {hasLogo ? (
                           <div className="relative h-full w-full">
                             <Image
-                              src={sponsor.logo}
+                              src={withBasePath(sponsor.logo!)}
                               alt={sponsor.name}
                               fill
                               sizes="120px"

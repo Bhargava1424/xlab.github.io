@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { getPostsByKind } from "@/lib/content";
-import { publicFileExists } from "@/lib/content/assets";
+import { publicFileExists, withBasePath } from "@/lib/content/assets";
 import { formatPostDate } from "@/lib/utils";
 
 export const metadata: Metadata = {
@@ -31,7 +31,7 @@ export default function BlogPage() {
                 {publicFileExists(post.image) && post.image && (
                   <div className="relative h-40 w-full shrink-0 overflow-hidden border border-border bg-muted sm:w-56">
                     <Image
-                      src={post.image}
+                      src={withBasePath(post.image!)}
                       alt={post.title}
                       fill
                       sizes="224px"

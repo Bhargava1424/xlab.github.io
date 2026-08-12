@@ -2,7 +2,7 @@ import Image from "next/image";
 
 import { ExternalLink } from "@/components/external-link";
 import { getPersonById, type Publication } from "@/lib/content";
-import { publicFileExists } from "@/lib/content/assets";
+import { publicFileExists, withBasePath } from "@/lib/content/assets";
 import { getCategoryMetaLine } from "@/lib/publications";
 import { resolvePersonRedirectUrl } from "@/lib/team";
 
@@ -60,7 +60,7 @@ export function ResearchPublicationCard({ publication }: { publication: Publicat
       <div className="relative aspect-video border-b border-brand-orange-soft-border bg-[repeating-linear-gradient(135deg,var(--brand-orange-soft-border)_0_6px,var(--brand-orange-soft-bg)_6px_12px)]">
         {hasThumbnail && publication.thumbnail && (
           <Image
-            src={publication.thumbnail}
+            src={withBasePath(publication.thumbnail!)}
             alt={publication.title}
             fill
             sizes="(min-width: 1024px) 33vw, 100vw"

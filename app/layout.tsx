@@ -5,6 +5,7 @@ import { ThemeProvider } from "next-themes";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { getSiteMeta } from "@/lib/content";
+import { SITE_URL } from "@/lib/base-path";
 import "./globals.css";
 
 const instrumentSans = Instrument_Sans({
@@ -25,6 +26,7 @@ const jetbrainsMono = JetBrains_Mono({
 const site = getSiteMeta();
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: { default: site.title, template: `%s · ${site.title}` },
   description: site.description,
   keywords: site.keywords,

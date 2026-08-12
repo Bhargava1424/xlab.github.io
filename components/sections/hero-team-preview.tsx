@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import { TeamCard } from "@/components/team-card";
 import { getCurrentPeople } from "@/lib/content";
-import { publicFileExists } from "@/lib/content/assets";
+import { publicFileExists, withBasePath } from "@/lib/content/assets";
 import { personTypeShortLabel, sortPeople } from "@/lib/team";
 
 // Live "lab, today" preview band: satellite member tiles flanking the PI.
@@ -43,7 +43,7 @@ export function HeroTeamPreview() {
           <div className="border border-border bg-background p-1.5">
             {publicFileExists(pi.photo) && pi.photo ? (
               <Image
-                src={pi.photo}
+                src={withBasePath(pi.photo!)}
                 alt={pi.name}
                 width={120}
                 height={120}

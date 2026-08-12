@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import { ThemeToggle } from "@/components/theme-toggle";
 import { getInstitutionById, getSiteMeta } from "@/lib/content";
-import { publicFileExists } from "@/lib/content/assets";
+import { publicFileExists, withBasePath } from "@/lib/content/assets";
 
 // Sticky, single-row-that-wraps nav. Deliberately not a hamburger/drawer — the real
 // responsive/mobile pass is a separate concern from this visual pass; flex-wrap keeps
@@ -28,7 +28,7 @@ export function SiteHeader() {
             {hasLogo && logo ? (
               <>
                 <Image
-                  src={logo.light}
+                  src={withBasePath(logo!.light)}
                   alt=""
                   width={30}
                   height={30}
@@ -36,7 +36,7 @@ export function SiteHeader() {
                   priority
                 />
                 <Image
-                  src={logo.dark}
+                  src={withBasePath(logo!.dark)}
                   alt=""
                   width={30}
                   height={30}

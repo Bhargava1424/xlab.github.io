@@ -11,7 +11,7 @@ import {
   getPostsByKind,
   getPublicationById,
 } from "@/lib/content";
-import { publicFileExists } from "@/lib/content/assets";
+import { publicFileExists, withBasePath } from "@/lib/content/assets";
 import { formatPostDate } from "@/lib/utils";
 
 // Blog posts always get a detail page; news posts never do (SPEC.md decision #2) —
@@ -66,7 +66,7 @@ export default async function BlogPostPage({
       {publicFileExists(post.image) && post.image && (
         <div className="relative mt-6 aspect-video w-full overflow-hidden border border-border bg-muted">
           <Image
-            src={post.image}
+            src={withBasePath(post.image!)}
             alt={post.title}
             fill
             sizes="768px"

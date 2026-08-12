@@ -7,7 +7,7 @@ import {
   type Person,
   type Project,
 } from "@/lib/content";
-import { publicFileExists } from "@/lib/content/assets";
+import { publicFileExists, withBasePath } from "@/lib/content/assets";
 import { resolvePersonRedirectUrl } from "@/lib/team";
 
 const STATUS_LABELS: Record<NonNullable<Project["status"]>, string> = {
@@ -74,7 +74,7 @@ export function ProjectCard({ project }: { project: Project }) {
       <div className="relative aspect-video border-b border-brand-soft-border bg-[repeating-linear-gradient(135deg,var(--hairline)_0_6px,var(--bg-alt)_6px_12px)]">
         {hasThumbnail && project.thumbnail && (
           <Image
-            src={project.thumbnail}
+            src={withBasePath(project.thumbnail!)}
             alt={project.title}
             fill
             sizes="(min-width: 1024px) 33vw, 100vw"

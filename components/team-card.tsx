@@ -1,7 +1,7 @@
 import Image from "next/image";
 
 import { PersonLinkIcons } from "@/components/person-link-icons";
-import { publicFileExists } from "@/lib/content/assets";
+import { publicFileExists, withBasePath } from "@/lib/content/assets";
 import type { Person } from "@/lib/content";
 import { cn } from "@/lib/utils";
 import { personTypeShortLabel, resolvePersonRedirectUrl } from "@/lib/team";
@@ -89,7 +89,7 @@ export function TeamCard({
         >
           {hasPhoto && person.photo ? (
             <Image
-              src={person.photo}
+              src={withBasePath(person.photo!)}
               alt={person.name}
               fill
               sizes="(min-width: 512px) 10vw, 20vw"
