@@ -205,7 +205,7 @@ export function TeamSection() {
                 {rest.length} {rest.length === 1 ? "member" : "members"}
               </span>
             </div>
-            <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+            <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
               {rest.map((person) => (
                 <TeamCard key={person.id} person={person} variant="tile" />
               ))}

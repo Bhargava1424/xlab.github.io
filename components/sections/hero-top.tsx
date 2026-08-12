@@ -82,23 +82,26 @@ export function HeroTop() {
 
       {/* STATS */}
 
-      <div className="grid grid-cols-2 gap-x-6 gap-y-5 py-5 sm:grid-cols-3 lg:grid-cols-6 lg:gap-x-8">
-        {statCells.map((cell, i) => {
-          const Icon = cell.icon;
-          const accent = i % 2 === 0 ? "text-brand" : "text-brand-orange";
-          return (
-            <div key={cell.label} className="flex flex-col items-center gap-1 text-center">
-              <div className="flex items-center gap-1">
-                <Icon aria-hidden="true" strokeWidth={2} className={cn("size-6 shrink-0", accent)} />
-                <span className={cn("font-mono text-xl font-bold tracking-tight", accent)}>
-                  <AnimatedCounter value={cell.n} />
-                </span>
+      <div className="flex justify-center py-5">
+        <div className="w-3/4 grid grid-cols-2 gap-x-2 gap-y-5 sm:grid-cols-3 lg:grid-cols-6 lg:gap-x-3">
+          {statCells.map((cell, i) => {
+            const Icon = cell.icon;
+            const accent = i % 2 === 0 ? "text-brand" : "text-brand-orange";
+            return (
+              <div key={cell.label} className="flex flex-col items-center gap-1 text-center">
+                <div className="flex items-center gap-1">
+                  <Icon aria-hidden="true" strokeWidth={2} className={cn("size-6 shrink-0", accent)} />
+                  <span className={cn("font-mono text-xl font-bold tracking-tight", accent)}>
+                    <AnimatedCounter value={cell.n} />
+                  </span>
+                </div>
+                <span className="text-sm leading-snug text-muted-foreground">{cell.label}</span>
               </div>
-              <span className="text-xs leading-snug text-muted-foreground">{cell.label}</span>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
+ 
     </div>
   );
 }
