@@ -245,6 +245,7 @@ export const SiteMetaSchema = z.object({
     .object({
       github: z.string().nullable().optional(),
       linkedin: z.string().nullable().optional(),
+      scholar: z.string().nullable().optional(),
       huggingface: z.string().nullable().optional(),
       twitter: z.string().nullable().optional(),
       youtube: z.string().nullable().optional(),

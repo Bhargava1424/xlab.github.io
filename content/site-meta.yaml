@@ -3,14 +3,14 @@
 
 title: "X-Lab"
 tagline: "Accelerating AI Systems & Solutions"
-description: "X-Lab — cross-stack AI systems and solutions research."
+description: "We build AI across the full stack — from accelerators and compilers up to algorithms and the applications that reach classrooms, power grids, and factory floors. Our aim is not only scaling intelligence, but scaling intelligence per joule."
 
 nav:
-  - label: Home
-    path: /
   - label: Research
     path: /#research
-  - label: Team
+  - label: Projects
+    path: /#research
+  - label: People
     path: /#team
   - label: News
     path: /#news
@@ -19,6 +19,8 @@ nav:
   - label: Blog
     path: /blog
   - label: Sponsors
+    path: /#sponsors
+  - label: Join
     path: /#sponsors
 
 contact:
@@ -49,6 +51,9 @@ socialLinks:
   # The only LinkedIn in any source is the PI's personal profile, not a lab account —
   # used here as the de facto lab link, common practice for a solo-PI lab site.
   linkedin: "https://www.linkedin.com/in/jinjun-xiong/"
+  # Same reasoning as linkedin above — PI's personal Google Scholar profile, reused as
+  # the de facto lab scholar link (see content/people/jinjun-xiong.yaml links.scholar).
+  scholar: "https://scholar.google.com/citations?user=tRt1xPYAAAAJ&hl=en"
   huggingface: "https://huggingface.co/x-labs"
 
 logo:

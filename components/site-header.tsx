@@ -27,17 +27,17 @@ export function SiteHeader() {
                 <Image
                   src={logo.light}
                   alt=""
-                  width={26}
-                  height={26}
-                  className="size-[26px] dark:hidden"
+                  width={34}
+                  height={34}
+                  className="size-[34px] dark:hidden"
                   priority
                 />
                 <Image
                   src={logo.dark}
                   alt=""
-                  width={26}
-                  height={26}
-                  className="hidden size-[26px] dark:block"
+                  width={34}
+                  height={34}
+                  className="hidden size-[34px] dark:block"
                   priority
                 />
               </>
@@ -49,7 +49,7 @@ export function SiteHeader() {
           {institution && (
             <div className="hidden items-center gap-2.5 md:flex">
               <span aria-hidden="true" className="h-[15px] w-px bg-border" />
-              <span className="font-mono text-[11px] tracking-wider text-brand uppercase">
+              <span className="font-mono text-[11px] tracking-wider text-brand-orange uppercase">
                 {institution.name}
               </span>
             </div>
@@ -61,7 +61,7 @@ export function SiteHeader() {
         >
           {site.nav.map((item) => (
             <Link
-              key={item.path}
+              key={item.label}
               href={item.path}
               className="transition-colors hover:text-foreground"
             >
@@ -69,6 +69,27 @@ export function SiteHeader() {
             </Link>
           ))}
           <span aria-hidden="true" className="h-4 w-px bg-border" />
+          <span className="flex items-center gap-x-5 font-mono text-[12px] tracking-wide uppercase">
+            {site.socialLinks?.github ? (
+              <a
+                href={site.socialLinks.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="transition-colors hover:text-foreground"
+              >
+                GitHub
+                <span className="sr-only"> (opens in new tab)</span>
+              </a>
+            ) : (
+              <span
+                aria-disabled="true"
+                title="No lab-org GitHub yet"
+                className="cursor-not-allowed text-text-faint/60"
+              >
+                GitHub
+              </span>
+            )}
+          </span>
           <ThemeToggle />
         </nav>
       </div>

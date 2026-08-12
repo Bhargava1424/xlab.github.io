@@ -3,7 +3,6 @@ import Link from "next/link";
 
 import { AnimatedCounter } from "@/components/animated-counter";
 import { TeamCard } from "@/components/team-card";
-import { Button } from "@/components/ui/button";
 import {
   getAllRecognitions,
   getCurrentPeople,
@@ -53,54 +52,48 @@ export function Hero() {
 
   return (
     <section aria-labelledby="hero-heading" className="border-b border-border">
-      <div className="mx-auto flex max-w-[1600px] flex-col gap-5 px-6 py-8 sm:px-10 sm:py-9">
-        <div className="flex flex-wrap items-center gap-6">
-          <div className="flex flex-none items-center gap-2.5">
+      <div className="mx-auto flex max-w-[1600px] flex-col gap-3 px-6 py-6 sm:px-10 sm:py-6">
+        <div className="flex flex-col items-center gap-6 text-center">
+          <div className="flex items-center gap-3">
             {hasLogo && site.logo && (
               <>
                 <Image
                   src={site.logo.light}
                   alt=""
-                  width={40}
-                  height={40}
-                  className="size-10 dark:hidden"
+                  width={110}
+                  height={110}
+                  className="size-24 dark:hidden"
+                  priority
                 />
                 <Image
                   src={site.logo.dark}
                   alt=""
-                  width={40}
-                  height={40}
-                  className="hidden size-10 dark:block"
+                  width={110}
+                  height={110}
+                  className="hidden size-24 dark:block"
+                  priority
                 />
               </>
             )}
-            <span className="text-2xl font-bold tracking-tight text-foreground">
+            <span className="text-3xl font-bold tracking-tight text-foreground">
               {wordmark}
             </span>
           </div>
-          <span
-            aria-hidden="true"
-            className="hidden h-9 w-px flex-none self-stretch bg-hairline sm:block"
-          />
           <h1
             id="hero-heading"
-            className="flex-1 text-[clamp(1.75rem,4vw,2.75rem)] leading-[1.05] font-bold tracking-tight text-foreground"
+            className="max-w-[26ch] text-[clamp(1rem,1.45vw,1.22rem)] leading-tight font-bold tracking-tight text-foreground"
           >
             {site.tagline}
           </h1>
-          <div className="flex flex-none gap-2.5">
-            <Button asChild className="text-[14px] font-semibold">
-              <Link href="/#sponsors">Join the lab</Link>
-            </Button>
-            <Button asChild variant="outline" className="text-[14px] font-semibold">
-              <Link href="/publications">Publications</Link>
-            </Button>
-          </div>
+     
         </div>
 
-        <p className="max-w-[75ch] text-[17px] leading-relaxed text-muted-foreground">
-          {site.description}
-        </p>
+        <div className="flex w-full justify-center">
+          <p className="max-w-[75ch] text-[17px] leading-relaxed text-muted-foreground text-center">
+            {site.description}
+          </p>
+        </div>
+   
 
         <div className="grid grid-cols-2 gap-px border border-border bg-border sm:grid-cols-3 lg:grid-cols-6">
           {statCells.map((cell) => (
