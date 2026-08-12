@@ -17,39 +17,42 @@ export function SiteHeader() {
     ? getInstitutionById(site.primaryInstitutionId)
     : undefined;
 
+  const [, ...rest] = site.title.split("-");
+  const wordmark = rest.length > 0 ? rest.join("-").toUpperCase() : site.title.toUpperCase();
+
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/92 backdrop-blur-sm supports-[backdrop-filter]:bg-background/85">
       <div className="mx-auto flex max-w-[1600px] flex-wrap items-center justify-between gap-x-6 gap-y-3 px-6 py-3.5 sm:px-10">
         <div className="flex items-center gap-2.5">
-          <Link href="/" className="flex items-center gap-2.5">
+          <Link href="/" className="flex items-center gap-2">
             {hasLogo && logo ? (
               <>
                 <Image
                   src={logo.light}
                   alt=""
-                  width={34}
-                  height={34}
-                  className="size-[34px] dark:hidden"
+                  width={30}
+                  height={30}
+                  className="size-[30px] dark:hidden"
                   priority
                 />
                 <Image
                   src={logo.dark}
                   alt=""
-                  width={34}
-                  height={34}
-                  className="hidden size-[34px] dark:block"
+                  width={30}
+                  height={30}
+                  className="hidden size-[30px] dark:block"
                   priority
                 />
               </>
             ) : null}
-            <span className="text-base font-bold tracking-tight text-foreground">
-              {site.title}
+            <span className="text-lg font-bold tracking-tight text-foreground">
+              {wordmark}
             </span>
           </Link>
           {institution && (
             <div className="hidden items-center gap-2.5 md:flex">
-              <span aria-hidden="true" className="h-[15px] w-px bg-border" />
-              <span className="font-mono text-[11px] tracking-wider text-brand-orange uppercase">
+              <span aria-hidden="true" className="h-[13px] w-px bg-border" />
+              <span className="font-mono text-[10px] tracking-wider text-text-faint uppercase">
                 {institution.name}
               </span>
             </div>

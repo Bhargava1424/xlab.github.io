@@ -1,3 +1,4 @@
+import { BookOpen, GitBranch, Globe2, Star, Trophy, Users } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -12,6 +13,7 @@ import {
 } from "@/lib/content";
 import { publicFileExists } from "@/lib/content/assets";
 import { personTypeShortLabel, sortPeople } from "@/lib/team";
+import { cn } from "@/lib/utils";
 
 function countRecognitions(category: RecognitionCategory): number {
   return getAllRecognitions().filter((r) => r.category === category).length;
@@ -31,15 +33,20 @@ export function Hero() {
     !!site.logo && publicFileExists(site.logo.light) && publicFileExists(site.logo.dark);
 
   const statCells = [
-    { n: stats.publicationCount, label: "Publications" },
-    { n: stats.currentPeopleCount, label: "Lab members" },
-    { n: countRecognitions("best-paper-award"), label: "Best Paper Awards" },
-    { n: countRecognitions("best-paper-nomination"), label: "Best Paper nominations" },
+    { n: stats.publicationCount, label: "Publications", icon: BookOpen },
+    { n: stats.currentPeopleCount, label: "Lab members", icon: Users },
+    { n: countRecognitions("best-paper-award"), label: "Best Paper Awards", icon: Trophy },
+    {
+      n: countRecognitions("best-paper-nomination"),
+      label: "Best Paper nominations",
+      icon: Star,
+    },
     {
       n: countRecognitions("international-competition-award"),
       label: "International competition awards",
+      icon: Globe2,
     },
-    { n: stats.projectCount, label: "Open-source projects" },
+    { n: stats.projectCount, label: "Open-source projects", icon: GitBranch },
   ];
 
   const current = getCurrentPeople();
@@ -95,20 +102,28 @@ export function Hero() {
         </div>
    
 
-        <div className="grid grid-cols-2 gap-px border border-border bg-border sm:grid-cols-3 lg:grid-cols-6">
-          {statCells.map((cell) => (
-            <div
-              key={cell.label}
-              className="flex flex-col gap-0.5 bg-background px-3.5 py-3"
-            >
-              <span className="font-mono text-xl font-bold tracking-tight text-brand">
-                <AnimatedCounter value={cell.n} />
-              </span>
-              <span className="text-xs leading-snug text-muted-foreground">
-                {cell.label}
-              </span>
-            </div>
-          ))}
+        <div className="grid grid-cols-2 gap-x-6 gap-y-5 border-t border-b border-border py-5 sm:grid-cols-3 lg:grid-cols-6 lg:gap-x-8">
+          {statCells.map((cell, i) => {
+            const Icon = cell.icon;
+            const accent = i % 2 === 0 ? "text-brand" : "text-brand-orange";
+            return (
+              <div key={cell.label} className="flex items-start gap-2.5">
+                <Icon
+                  aria-hidden="true"
+                  strokeWidth={2}
+                  className={cn("mt-0.5 size-4 shrink-0", accent)}
+                />
+                <div className="flex flex-col gap-0.5">
+                  <span className={cn("font-mono text-xl font-bold tracking-tight", accent)}>
+                    <AnimatedCounter value={cell.n} />
+                  </span>
+                  <span className="text-xs leading-snug text-muted-foreground">
+                    {cell.label}
+                  </span>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
 
@@ -125,11 +140,14 @@ export function Hero() {
               Full roster ›
             </Link>
           </div>
-          <div className="mx-auto grid max-w-[1600px] grid-cols-1 items-center gap-y-6 lg:grid-cols-[1fr_auto_1fr]">
-            {/* Fixed-width tracks (not 1fr-each) so tiles hug the PI in the center
-                instead of stretching across the whole flexible side column — this
-                was the bug that made the band "totally out of layout". */}
-            <div className="grid grid-cols-[repeat(4,74px)] justify-center gap-3 lg:justify-self-end">
+          <div className="mx-auto grid max-w-[1600px] grid-cols-1 items-center gap-y-6 lg:grid-cols-[1fr_auto_1fr] lg:gap-x-10 xl:gap-x-16">
+            {/* Side tracks stretch across the full flexible column (not a fixed-width
+                cluster hugging the PI) so tiles spread out and use the available
+                width instead of clinging together in the center. TeamCard's mini
+                variant is a fixed w-20 (see team-card.tsx) so every tile — regardless
+                of name length — renders at the same size instead of shrink-wrapping
+                to its caption text. */}
+            <div className="grid grid-cols-4 place-items-center gap-x-4 gap-y-7">
               {left.map((person) => (
                 <TeamCard key={person.id} person={person} variant="mini" />
               ))}
@@ -159,7 +177,7 @@ export function Hero() {
               </div>
             </div>
 
-            <div className="grid grid-cols-[repeat(4,74px)] justify-center gap-3 lg:justify-self-start">
+            <div className="grid grid-cols-4 place-items-center gap-x-4 gap-y-7">
               {right.map((person) => (
                 <TeamCard key={person.id} person={person} variant="mini" />
               ))}
