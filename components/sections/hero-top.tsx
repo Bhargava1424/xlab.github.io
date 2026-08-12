@@ -80,19 +80,21 @@ export function HeroTop() {
         </p>
       </div>
 
-      <div className="grid grid-cols-2 gap-x-6 gap-y-5 border-t border-b border-border py-5 sm:grid-cols-3 lg:grid-cols-6 lg:gap-x-8">
+      {/* STATS */}
+
+      <div className="grid grid-cols-2 gap-x-6 gap-y-5 py-5 sm:grid-cols-3 lg:grid-cols-6 lg:gap-x-8">
         {statCells.map((cell, i) => {
           const Icon = cell.icon;
           const accent = i % 2 === 0 ? "text-brand" : "text-brand-orange";
           return (
-            <div key={cell.label} className="flex items-start gap-2.5">
-              <Icon aria-hidden="true" strokeWidth={2} className={cn("mt-0.5 size-4 shrink-0", accent)} />
-              <div className="flex flex-col gap-0.5">
+            <div key={cell.label} className="flex flex-col items-center gap-1 text-center">
+              <div className="flex items-center gap-1">
+                <Icon aria-hidden="true" strokeWidth={2} className={cn("size-6 shrink-0", accent)} />
                 <span className={cn("font-mono text-xl font-bold tracking-tight", accent)}>
                   <AnimatedCounter value={cell.n} />
                 </span>
-                <span className="text-xs leading-snug text-muted-foreground">{cell.label}</span>
               </div>
+              <span className="text-xs leading-snug text-muted-foreground">{cell.label}</span>
             </div>
           );
         })}

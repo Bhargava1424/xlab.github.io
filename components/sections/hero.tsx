@@ -7,7 +7,7 @@ export function Hero() {
   return (
     <section aria-labelledby="hero-heading" className="border-b border-border">
       <HeroTop />
-      <HeroTeamPreview />
+      {/* <HeroTeamPreview /> */}
     </section>
   );
 }
