@@ -19,7 +19,6 @@ const LINK_ICONS = [
   { key: "website", icon: Globe, label: "Personal website" },
   { key: "universityProfile", icon: Landmark, label: "University profile" },
   { key: "linkedin", icon: Briefcase, label: "LinkedIn" },
-  { key: "github", icon: Code2, label: "GitHub" },
 ] as const;
 
 // Always renders all 6 possible link icons for every person, for visual consistency
