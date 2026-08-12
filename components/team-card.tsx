@@ -40,7 +40,7 @@ export function TeamCard({
   const text = VARIANT_TEXT[variant];
 
   return (
-    <div className={cn("flex flex-col gap-2", variant === "mini" && "w-20 shrink-0")}>
+    <div className={cn("flex flex-col gap-2", variant === "mini" && "w-24 shrink-0")}>
       <a
         href={redirectUrl}
         target="_blank"
