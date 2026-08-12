@@ -44,7 +44,7 @@ export default function RootLayout({
       className={`${instrumentSans.variable} ${jetbrainsMono.variable} motion-safe:scroll-smooth`}
     >
       <body className="antialiased">
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
           <a
             href="#main-content"
             className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground"
