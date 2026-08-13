@@ -120,7 +120,32 @@ export const api = {
     call<{ deploy?: { status: string; conclusion: string | null; createdAt: string; url: string } }>(
       "/status"
     ),
+
+  /** Admin only — the gate refuses this for editors and members. */
+  roster: () => call<{ members: RosterEntry[] }>("/roster"),
+
+  /**
+   * Admin only. Mints a single-use sign-in link for someone already on the roster, which
+   * the admin delivers by hand. This is what lets members sign in with no email provider
+   * configured at all.
+   */
+  invite: (email: string) =>
+    call<{ link: string; expiresInDays: number; name: string }>("/invite", {
+      method: "POST",
+      body: JSON.stringify({ email }),
+    }),
 };
+
+export interface RosterEntry {
+  email: string;
+  name: string;
+  role: "admin" | "editor" | "member";
+  personId?: string;
+  githubLogin?: string;
+  active: boolean;
+}
+
+export const ROSTER_PATH = "access/roster.json";
 
 export interface QueueItem {
   number: number;

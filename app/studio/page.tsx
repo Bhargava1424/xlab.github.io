@@ -23,8 +23,14 @@ import { ENTITIES, entityByKey } from "@/lib/studio/entities";
 import { auditContent, personCompleteness, type HealthIssue } from "@/lib/studio/records";
 import { EntityBrowser } from "@/components/studio/entity-browser";
 import { ReviewQueue } from "@/components/studio/review-queue";
+import { RosterManager } from "@/components/studio/roster-manager";
 
-type View = { kind: "dashboard" } | { kind: "entity"; key: string } | { kind: "queue" } | { kind: "health" };
+type View =
+  | { kind: "dashboard" }
+  | { kind: "entity"; key: string }
+  | { kind: "queue" }
+  | { kind: "health" }
+  | { kind: "roster" };
 
 export default function StudioPage() {
   const [identity, setIdentity] = useState<Identity | null>(null);
@@ -112,6 +118,11 @@ export default function StudioPage() {
           <NavButton active={view.kind === "health"} onClick={() => setView({ kind: "health" })}>
             Data health
           </NavButton>
+          {identity.role === "admin" && (
+            <NavButton active={view.kind === "roster"} onClick={() => setView({ kind: "roster" })}>
+              Roster &amp; access
+            </NavButton>
+          )}
           <p className="px-2 pt-4 pb-1 font-mono text-[10px] font-bold tracking-wider text-text-placeholder uppercase">
             Content
           </p>
@@ -152,6 +163,8 @@ export default function StudioPage() {
             <ReviewQueue canApprove={canApprove} />
           ) : view.kind === "health" ? (
             <Health snapshot={snapshot} />
+          ) : view.kind === "roster" ? (
+            <RosterManager snapshot={snapshot} />
           ) : (
             (() => {
               const entity = entityByKey(view.key);

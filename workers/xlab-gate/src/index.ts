@@ -27,8 +27,12 @@ import {
   toIdentity,
 } from "./roster";
 
-const SESSION_TTL_S = 7 * 24 * 60 * 60; // 7 days
-const MAGIC_TTL_S = 15 * 60; // 15 minutes
+// 90 days. Deliberately long: with no email provider configured, a member whose session
+// expires needs an admin to hand them a fresh invite link. Long sessions keep that rare.
+// The cost is bounded — a session only ever permits submitting changes for review.
+const SESSION_TTL_S = 90 * 24 * 60 * 60;
+const MAGIC_TTL_S = 15 * 60; // emailed magic link — short, since it can be re-requested
+const INVITE_TTL_S = 14 * 24 * 60 * 60; // admin-issued invite — must survive being passed along
 const RATE_LIMIT_WINDOW_S = 15 * 60;
 const RATE_LIMIT_MAX = 5;
 
@@ -335,6 +339,40 @@ export default {
 
       if (path === "/me") return json(env, id);
       if (path === "/submit" && req.method === "POST") return handleSubmit(req, env, id);
+
+      // Roster read + invite issuing. Admin only: these expose lab members' email addresses
+      // and mint credentials, neither of which an editor or member has any business doing.
+      if (path === "/roster") {
+        if (id.role !== "admin") return fail(env, 403, "admins only");
+        return json(env, await loadRoster(env));
+      }
+      if (path === "/invite" && req.method === "POST") {
+        if (id.role !== "admin") return fail(env, 403, "admins only");
+        const { email } = (await req.json().catch(() => ({}))) as { email?: string };
+        if (!email) return fail(env, 400, "email is required");
+        const entry = await findByEmail(env, email);
+        if (!entry) return fail(env, 404, "that address is not on the roster yet");
+
+        // Same single-use mechanism as an emailed magic link — the only difference is that
+        // the admin delivers it by hand instead of a mail provider.
+        const jti = randomId();
+        await env.SESSIONS.put(`magic:${jti}`, entry.email.toLowerCase(), {
+          expirationTtl: INVITE_TTL_S,
+        });
+        const token = await signToken(
+          {
+            jti,
+            email: entry.email.toLowerCase(),
+            exp: Math.floor(Date.now() / 1000) + INVITE_TTL_S,
+          },
+          env.SESSION_SECRET
+        );
+        return json(env, {
+          link: `${new URL(req.url).origin}/auth/verify?token=${encodeURIComponent(token)}`,
+          expiresInDays: INVITE_TTL_S / 86400,
+          name: entry.name,
+        });
+      }
       if (path === "/queue") {
         const queue = await listQueue(env);
         // Members see only their own pending submissions.

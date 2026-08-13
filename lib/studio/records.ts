@@ -42,6 +42,46 @@ export function serializeRecord(entity: EntityDef, record: Record<string, unknow
   return stringify(cleaned, { lineWidth: 0 });
 }
 
+// --- image preparation ---------------------------------------------------------
+
+/**
+ * Downscale and re-encode an image in the browser before it is committed.
+ *
+ * Uploads land in the git repo permanently, so a 6 MB phone photo would be carried in every
+ * clone forever. Capping the long edge and re-encoding keeps member photos in the tens of
+ * kilobytes. PNG input is preserved as PNG because logos and cutouts rely on transparency;
+ * everything else becomes JPEG, which is far smaller for photographs.
+ */
+export async function prepareImage(
+  file: File,
+  maxEdge = 900
+): Promise<{ base64: string; ext: "png" | "jpg"; bytes: number }> {
+  const bitmap = await createImageBitmap(file);
+  const scale = Math.min(1, maxEdge / Math.max(bitmap.width, bitmap.height));
+  const width = Math.max(1, Math.round(bitmap.width * scale));
+  const height = Math.max(1, Math.round(bitmap.height * scale));
+
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) throw new Error("could not process this image");
+  ctx.drawImage(bitmap, 0, 0, width, height);
+  bitmap.close();
+
+  const keepAlpha = file.type === "image/png" || file.type === "image/webp";
+  const dataUrl = keepAlpha
+    ? canvas.toDataURL("image/png")
+    : canvas.toDataURL("image/jpeg", 0.85);
+
+  const base64 = dataUrl.slice(dataUrl.indexOf(",") + 1);
+  return {
+    base64,
+    ext: keepAlpha ? "png" : "jpg",
+    bytes: Math.round((base64.length * 3) / 4),
+  };
+}
+
 // --- data health ---------------------------------------------------------------
 
 export type IssueLevel = "error" | "warning";

@@ -41,8 +41,10 @@
     "EMAIL_FROM_NAME": "X-Lab Studio",
 
     // Paths the Worker will write to. Anything outside this list is rejected before a
-    // GitHub token is ever minted.
-    "ALLOWED_WRITE_PREFIXES": "content/,public/images/",
+    // GitHub token is ever minted. `access/` is included so admins can manage the roster
+    // from Studio; canWritePath() still restricts it to admins alone, and .github/ remains
+    // unreachable to everyone so nothing here can alter what CI runs.
+    "ALLOWED_WRITE_PREFIXES": "content/,public/images/,access/",
     "MAX_PAYLOAD_BYTES": "5242880"
   }
 }

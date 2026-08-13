@@ -155,6 +155,43 @@ export function filePathFor(entity: EntityDef, id: string): string {
 }
 
 /**
+ * Where an uploaded image for a given record + field belongs, matching the conventions
+ * already in public/images/. Returned as the site-relative path stored in the record; the
+ * repo path is this with a `public` prefix.
+ *
+ * Deriving the path rather than letting people choose one is what keeps assets findable and
+ * makes the "photo on disk but no photo: field" class of bug impossible to recreate.
+ */
+export function assetPathFor(
+  entity: EntityDef,
+  id: string,
+  fieldKey: string,
+  ext: string
+): string {
+  switch (`${entity.key}.${fieldKey}`) {
+    case "projects.thumbnail":
+      return `/images/projects/${id}/thumbnail.${ext}`;
+    case "publications.thumbnail":
+      return `/images/publications/${id}/thumbnail.${ext}`;
+    case "people.photo":
+      return `/images/people/${id}.${ext}`;
+    case "posts.image":
+      return `/images/posts/${id}.${ext}`;
+    case "sponsors.logo":
+      return `/images/sponsors/${id}.${ext}`;
+    case "institutions.logo":
+      return `/images/institutions/${id}.${ext}`;
+    default:
+      return `/images/${entity.key}/${id}-${fieldKey}.${ext}`;
+  }
+}
+
+/** Repo path for a site-relative asset path. */
+export function repoAssetPath(assetPath: string): string {
+  return `public${assetPath}`;
+}
+
+/**
  * Records with no UI on the public site today. Studio still manages them so the data stays
  * maintained and validated; surfacing them later needs a component, not a migration.
  * (SPEC.md §7.)
