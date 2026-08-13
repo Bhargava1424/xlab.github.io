@@ -1,0 +1,48 @@
+{
+  // X-Lab Studio Gate — the only component in the system that holds a GitHub credential.
+  //
+  // Deployed once with `npx wrangler deploy` from this directory. It is deliberately
+  // SCHEMA-BLIND: it validates who you are, what path you may write, and how big the
+  // payload is, but knows nothing about the content model. That is what lets the content
+  // schema evolve forever without ever redeploying this Worker.
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "xlab-gate",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-08-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": { "enabled": true },
+
+  // Short-lived state only: magic-link nonces (single-use enforcement) and rate-limit
+  // counters. The source of truth for content and for the member roster is the git repo,
+  // never this namespace — so losing it costs nothing but active sign-in links.
+  "kv_namespaces": [
+    {
+      "binding": "SESSIONS",
+      "id": "b16e0aa2b9f5469da24fd80f0463a7ea"
+    }
+  ],
+
+  // Non-secret configuration. Secrets are set separately via `wrangler secret put` and
+  // never appear in this file or the repo — see README.md.
+  "vars": {
+    "SITE_ORIGIN": "https://bhargava1424.github.io",
+    "STUDIO_URL": "https://bhargava1424.github.io/xlab.github.io/studio/",
+    "REPO_OWNER": "Bhargava1424",
+    "REPO_NAME": "xlab.github.io",
+    "REPO_BRANCH": "main",
+
+    // "brevo" or "resend". Brevo needs only a verified sender address; Resend needs a
+    // verified domain. Switching providers is a config change, not a code change.
+    //
+    // Brevo chosen because no domain is owned (2026-08-13). EMAIL_FROM must be an address
+    // verified in the Brevo dashboard under Senders — sign-in links will not send otherwise.
+    "EMAIL_PROVIDER": "brevo",
+    "EMAIL_FROM": "sribhargava2002@gmail.com",
+    "EMAIL_FROM_NAME": "X-Lab Studio",
+
+    // Paths the Worker will write to. Anything outside this list is rejected before a
+    // GitHub token is ever minted.
+    "ALLOWED_WRITE_PREFIXES": "content/,public/images/",
+    "MAX_PAYLOAD_BYTES": "5242880"
+  }
+}

@@ -5,6 +5,9 @@ const eslintConfig = [
   {
     ignores: [
       "labbench/**",
+      // Cloudflare Worker — targets the Workers runtime with its own tsconfig and
+      // toolchain, same footing as labbench/. Never part of the root Next.js build.
+      "workers/**",
       "out/**",
       ".next/**",
       "Polo Club Website Inspiration/**",

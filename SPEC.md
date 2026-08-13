@@ -99,7 +99,7 @@ content/
   courses/<id>.yaml
   sponsors/<id>.yaml
 
-access/roster.yaml        # Studio members + roles. NOT content/ — never in the public snapshot.
+access/roster.json        # Studio members + roles. NOT content/ — never in the public snapshot.
 
 public/images/
   people/<slug>.jpg

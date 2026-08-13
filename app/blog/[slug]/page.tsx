@@ -14,13 +14,23 @@ import {
 import { publicFileExists, withBasePath } from "@/lib/content/assets";
 import { formatPostDate } from "@/lib/utils";
 
+// `output: "export"` rejects an empty generateStaticParams() and fails the whole build —
+// so a lab with no blog posts yet (or one that deletes its last post) would take the
+// entire site down, not just this route. Content counts are variable by definition, so
+// zero has to be a supported state: fall back to a sentinel slug that no post can own
+// (ids are validated as kebab-case, so leading underscores are unreachable). The
+// notFound() in the page body below turns it into a 404 exactly like any other bad slug.
+const NO_POSTS_SENTINEL = "__no-posts__";
+
 // Blog posts always get a detail page; news posts never do (SPEC.md decision #2) —
 // only including kind:"blog" ids here means a news slug simply has no static page to
 // serve, in prod. The kind check in the page body below keeps `next dev` consistent
 // with that (dev doesn't restrict routes to generateStaticParams the way the static
 // export build does).
 export function generateStaticParams() {
-  return getPostsByKind("blog").map((post) => ({ slug: post.id }));
+  const posts = getPostsByKind("blog");
+  if (posts.length === 0) return [{ slug: NO_POSTS_SENTINEL }];
+  return posts.map((post) => ({ slug: post.id }));
 }
 
 export async function generateMetadata({
