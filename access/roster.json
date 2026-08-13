@@ -1,7 +1,6 @@
 {
   "_comment": [
-    "Who may sign in to X-Lab Studio, and as what. Managed through Studio's roster screen —",
-    "you should not need to hand-edit this file after setup.",
+    "Who may sign in to X-Lab Studio, and as what. Managed through Studio's roster screen.",
     "",
     "Deliberately OUTSIDE content/ so it never lands in public/content-snapshot.json.",
     "It lives in the repo (not a database) so that 'who had access when' stays answerable",
@@ -22,6 +21,13 @@
       "role": "admin",
       "githubLogin": "Bhargava1424",
       "active": true
+    },
+    {
+      "email": "ABC@GMAIL.COM",
+      "name": "jinjun",
+      "role": "member",
+      "active": true,
+      "personId": "jinjun-xiong"
     }
   ]
 }
