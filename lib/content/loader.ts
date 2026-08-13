@@ -1,13 +1,19 @@
-// Low-level file readers for content/. Everything here is filesystem + parsing only —
-// no Zod validation (that happens in index.ts, where errors from every file are
-// collected and reported together instead of failing on the first one found).
+// Low-level file readers for content/. Filesystem + parsing only — no Zod validation
+// (that happens in index.ts, where errors from every file are collected and reported
+// together instead of failing on the first bad file).
+//
+// SERVER/BUILD ONLY. This module uses fs and must never be imported by client code or by
+// the Studio UI. Import lib/content/schema.ts there instead — it is pure Zod.
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
-import { load as loadYaml } from "js-yaml";
+// v2 uses `yaml` (eemeli) rather than js-yaml: it round-trips comments, reports parse
+// errors with line/column, and is the same parser the migration and validation scripts use.
+import { parse as parseYaml } from "yaml";
 import type { ZodType } from "zod";
 
-const CONTENT_ROOT = path.join(process.cwd(), "content");
+/** Overridable so scripts can validate a candidate tree (e.g. content-v2/) before swapping. */
+const CONTENT_ROOT = path.join(process.cwd(), process.env.CONTENT_DIR ?? "content");
 
 export class ContentValidationError extends Error {}
 
@@ -47,14 +53,19 @@ function absPath(relativePath: string): string {
 export function readYaml(relativePath: string): unknown {
   const full = absPath(relativePath);
   if (!fs.existsSync(full)) return undefined;
-  const raw = fs.readFileSync(full, "utf-8");
-  return loadYaml(raw);
+  return parseYaml(fs.readFileSync(full, "utf-8"));
 }
 
-/** Read+parse every *.yaml/*.yml file directly inside a directory relative to content/. */
+/**
+ * Read+parse every *.yaml file directly inside a directory relative to content/.
+ *
+ * v2 stores one record per file for every entity. The returned `file` is used both as the
+ * error label and, by the validator, to assert that the filename matches the record's id —
+ * which is what makes duplicate ids structurally impossible.
+ */
 export function readYamlDir(
   relativeDir: string
-): { file: string; data: unknown }[] {
+): { file: string; basename: string; data: unknown }[] {
   const full = absPath(relativeDir);
   if (!fs.existsSync(full)) return [];
   return fs
@@ -62,15 +73,16 @@ export function readYamlDir(
     .filter((f) => f.endsWith(".yaml") || f.endsWith(".yml"))
     .sort()
     .map((file) => ({
-      file: path.join(relativeDir, file),
-      data: loadYaml(fs.readFileSync(path.join(full, file), "utf-8")),
+      file: `${relativeDir}/${file}`,
+      basename: file.replace(/\.ya?ml$/, ""),
+      data: parseYaml(fs.readFileSync(path.join(full, file), "utf-8")),
     }));
 }
 
 /** Read+parse every *.mdx file directly inside a directory relative to content/. */
 export function readMdxDir(
   relativeDir: string
-): { file: string; frontmatter: unknown; body: string }[] {
+): { file: string; basename: string; frontmatter: unknown; body: string }[] {
   const full = absPath(relativeDir);
   if (!fs.existsSync(full)) return [];
   return fs
@@ -80,6 +92,11 @@ export function readMdxDir(
     .map((file) => {
       const raw = fs.readFileSync(path.join(full, file), "utf-8");
       const { data, content } = matter(raw);
-      return { file: path.join(relativeDir, file), frontmatter: data, body: content.trim() };
+      return {
+        file: `${relativeDir}/${file}`,
+        basename: file.replace(/\.mdx?$/, ""),
+        frontmatter: data,
+        body: content.trim(),
+      };
     });
 }

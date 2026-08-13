@@ -1,12 +1,9 @@
-# Source: data-extraction/sources/01-xlab-test-web-hugo-site/extracted/opensource-projects.yaml
-# themeId: inferred, not sourced — the old site never cross-referenced projects to themes
-# (see content/research/themes.yaml). MLModelScope is an evaluation/measurement platform,
-# the clearest fit is ai-tools ("making AI development more accessible and efficient").
 id: mlmodelscope
 title: MLModelScope
-tagline: "A hardware/software agnostic platform to facilitate the evaluation, measurement, and introspection of ML models."
+tagline: A hardware/software agnostic platform to facilitate the evaluation, measurement, and introspection of ML models.
 thumbnail: /images/projects/mlmodelscope/thumbnail.png
-themeId: ai-tools
-status: active
 links:
-  code: "https://github.com/c3sr/mlmodelscope"
+  code: https://github.com/c3sr/mlmodelscope
+themeIds:
+  - ai-tools
+projectStatus: active

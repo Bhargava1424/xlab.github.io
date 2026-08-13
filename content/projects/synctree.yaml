@@ -1,13 +1,9 @@
-# Source: data-extraction/sources/01-xlab-test-web-hugo-site/extracted/opensource-projects.yaml
-# themeId: inferred, not sourced — see mlmodelscope.yaml for why. SyncTREE applies a GNN to
-# IC design timing analysis, closest fit is ai-accelerators (hardware/chip-design domain).
-# code link: real repo unknown per SPEC.md §3.6 — placeholder until confirmed, was
-# previously pointing at a lab member's personal GitHub profile, not a project repo.
 id: synctree
 title: SyncTREE
-tagline: "Fast timing analysis for integrated circuit design through physics-informed tree-based graph neural networks."
+tagline: Fast timing analysis for integrated circuit design through physics-informed tree-based graph neural networks.
 thumbnail: /images/projects/synctree/thumbnail.png
-themeId: ai-accelerators
-status: active
 links:
-  code: "https://www.google.com/search?q=SyncTREE+GitHub" # PLACEHOLDER — see SPEC.md §3.6
+  code: https://www.google.com/search?q=SyncTREE+GitHub
+themeIds:
+  - ai-accelerators
+projectStatus: active

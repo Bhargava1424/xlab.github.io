@@ -10,7 +10,9 @@ import {
 import { publicFileExists, withBasePath } from "@/lib/content/assets";
 import { resolvePersonRedirectUrl } from "@/lib/team";
 
-const STATUS_LABELS: Record<NonNullable<Project["status"]>, string> = {
+// `projectStatus` (active/deployed/archived), not the schema-v2 `status` envelope every
+// entity carries for draft/published/hidden.
+const STATUS_LABELS: Record<NonNullable<Project["projectStatus"]>, string> = {
   active: "Active",
   deployed: "Deployed",
   archived: "Archived",
@@ -88,9 +90,9 @@ export function ProjectCard({ project }: { project: Project }) {
             <span aria-hidden="true" className="size-1.5 bg-brand" />
             Project
           </span>
-          {project.status && (
+          {project.projectStatus && (
             <span className="font-mono text-[11px] font-medium text-muted-foreground">
-              {STATUS_LABELS[project.status]}
+              {STATUS_LABELS[project.projectStatus]}
             </span>
           )}
         </div>

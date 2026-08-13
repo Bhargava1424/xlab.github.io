@@ -1,25 +1,20 @@
-# Source: data-extraction/sources/01-xlab-test-web-hugo-site/extracted/team-staff.yaml
-# No joined/left year in source — labTenure left absent per SPEC.md §7 rather than invented.
-# Duzce University (secondaryTitles) is not in content/institutions.yaml on purpose — that
-# table is scoped to institutions the lab's people are affiliated with in a lab context, not
-# a general org registry; this one external chair title stays free text instead.
-
 id: yusuf-akemoglu
-name: "Yusuf Akemoğlu"
+name: Yusuf Akemoğlu
 personType: research-staff
-roleTitle: "Research Scholar, National AI Institute for Artificial Intelligence"
+roleTitle: Research Scholar, National AI Institute for Artificial Intelligence
 secondaryTitles:
-  - "Associate Professor, Duzce University"
-office: "215 Lockwood"
+  - Associate Professor, Duzce University
+office: 215 Lockwood
 photo: /images/people/yusuf-akemoglu.png
-
 links:
   email: yusufake@buffalo.edu
-  scholar: "https://scholar.google.com/citations?user=o-19cEkAAAAJ&hl=en"
-  universityProfile: "https://www.buffalo.edu/ai-data-science/people/external-faculty.host.html/content/shared/www/ai-data-science/faculty/akemoglu-yusuf.html"
-
+  scholar: https://scholar.google.com/citations?user=o-19cEkAAAAJ&hl=en
+  universityProfile: https://www.buffalo.edu/ai-data-science/people/external-faculty.host.html/content/shared/www/ai-data-science/faculty/akemoglu-yusuf.html
 affiliations:
   - institutionId: ub
-    department: "National AI Institute for Artificial Intelligence"
-    roleTitle: "Research Scholar"
+    department: National AI Institute for Artificial Intelligence
+    roleTitle: Research Scholar
     type: affiliate
+_meta:
+  source: data-extraction/sources/01-xlab-test-web-hugo-site/extracted/team-staff.yaml
+  note: No joined/left year in source — labTenure left absent per SPEC.md §7 rather than invented. Duzce University (secondaryTitles) is not in content/institutions.yaml on purpose — that table is scoped to institutions the lab's people are affiliated with in a lab context, not a general org registry; this one external chair title stays free text instead.

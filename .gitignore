@@ -11,6 +11,10 @@ next-env.d.ts
 build/
 dist/
 
+# Generated at build time by scripts/build-snapshot.ts (npm run prebuild).
+# Never commit it — it would drift from content/ and become a second source of truth.
+public/content-snapshot.json
+
 # Env
 .env*.local
 .env

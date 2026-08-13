@@ -2,7 +2,7 @@
 
 Single source of truth for what this site is, how it's built, and what goes where.
 
-**Supersedes and replaces** `docs/PLAN.md`, `docs/SCHEMA.md`, `docs/content-placement/*` (12 files), and `content/README.md`. Those are deleted — don't recreate them, and don't split this back out into per-entity files. `types/content.ts` stays the literal field-level source of truth for data shapes; this doc explains what those fields mean and where they render on the site, it doesn't restate every field.
+**Supersedes and replaces** `docs/PLAN.md`, `docs/SCHEMA.md`, `docs/content-placement/*` (12 files), and `content/README.md`. Those are deleted — don't recreate them, and don't split this back out into per-entity files. `lib/content/schema.ts` is the literal field-level source of truth for data shapes; this doc explains what those fields mean and where they render on the site, it doesn't restate every field.
 
 `JOBS.md` is the execution checklist that implements this spec, phase by phase. If the two ever disagree, this file wins — fix JOBS.md.
 
@@ -29,6 +29,23 @@ Structural inspiration is [poloclub.github.io](https://poloclub.github.io/) (Geo
   renamed, nowhere else.
 - **Hard constraint: fully static.** No API routes, no server actions, no middleware, no ISR, no request-time SSR. Anything that needs to feel dynamic (search/filter, animations, stat counters) runs client-side against the static bundle, not a backend.
 - No backend / FastAPI in scope. Revisit only if a genuine server-side need shows up later (e.g. a contact form) — don't let one creep in via a Next.js feature that assumes a server.
+- **Amendment 2026-08-13 — X-Lab Studio.** The lab's content must be maintainable by
+  distributed members without editing the repo, which needs authentication and a write
+  path. This is a *documented, bounded* exception, not a loosening of the rule above:
+  - The **public site stays exactly as constrained**: still `output: "export"`, still no
+    API routes, server actions, middleware, ISR, or request-time SSR. Nothing in the
+    section above changes for any page a visitor sees.
+  - Studio lives at `app/studio/**` as **client-only** routes in the same static export,
+    marked `noindex`. It reads `public/content-snapshot.json` (generated at build time) and
+    talks to an external service; it never makes the site itself dynamic.
+  - All auth and repo writes happen in a separate **Cloudflare Worker** (`workers/xlab-gate/`),
+    outside this Next.js app. It holds the only GitHub credential and is deliberately
+    schema-blind, so content-model changes never require redeploying it.
+  - Every write becomes a pull request validated by `.github/workflows/validate.yml` and
+    merged only on admin approval. If validation fails, Pages keeps serving the last good
+    deploy — bad data cannot take the site down.
+  - Hard boundary: `app/studio/**` may import `lib/content/schema.ts` (pure Zod, client-safe)
+    but **never** `lib/content/index.ts` or `loader.ts`, which use `fs`.
 - `labbench/` (dev-only tooling, e.g. `schema-visualizer`) stays fully outside the root build/workspace — has its own `package.json`/`node_modules`, `next build` must never touch it.
 
 ## 3. Decisions
@@ -49,7 +66,7 @@ Structural inspiration is [poloclub.github.io](https://poloclub.github.io/) (Geo
 
 **"Mongo, not SQL"**: every relationship between entities is an optional id reference — never required, never validated for referential integrity at write time. A record can exist with the reference unset; content gets added incrementally, imported in bulk, and linked up later without a migration.
 
-Entities (`types/content.ts` is the literal field source; this is what each one is *for*):
+Entities (`lib/content/schema.ts` is the literal field source; this is what each one is *for*):
 
 - **Institution** — lookup table for `Person`/`Course` references. Not a general org registry — award-granting orgs like "IBM Research" stay free text on `Recognition`.
 - **Person** — one file per person, `content/people/<slug>.yaml`. `photo` is always an explicit path, never fuzzy-filename-matched. `labTenure` (is this person a current lab member) is independent of `affiliations` (which institution(s), historically) — collapsing the two breaks the moment someone's institutional tie outlives their lab involvement, or the reverse.
@@ -66,19 +83,23 @@ Entities (`types/content.ts` is the literal field source; this is what each one 
 
 File layout:
 
+File layout (**schema v2**, 2026-08-13):
+
 ```
 content/
-  site-meta.yaml
-  institutions.yaml
-  people/<slug>.yaml
-  research/themes.yaml
-  projects/<slug>.yaml
-  publications/{patents,journals,conferences,workshops,invited-papers,book-chapters}.yaml
-  posts/<yyyy-mm-dd>-<slug>.mdx
-  recognitions/{best-paper-awards,best-paper-nominations,best-poster-awards,international-competition-awards,professional-honor-awards}.yaml
-  service.yaml
-  teaching.yaml
-  sponsors.yaml
+  site.yaml
+  institutions/<id>.yaml
+  people/<id>.yaml
+  themes/<id>.yaml
+  projects/<id>.yaml
+  publications/<id>.yaml
+  posts/<id>.mdx
+  recognitions/<id>.yaml
+  service/<id>.yaml
+  courses/<id>.yaml
+  sponsors/<id>.yaml
+
+access/roster.yaml        # Studio members + roles. NOT content/ — never in the public snapshot.
 
 public/images/
   people/<slug>.jpg
@@ -88,7 +109,27 @@ public/images/
   sponsors/<slug>.png
 ```
 
-Per-record files for `people/`/`projects/` (hand-curated, one edit at a time); per-category array files for `publications/`/`recognitions/` (bulk historical/imported data, no per-record editing benefit). YAML for hand-authored data, MDX for `posts/` where a real markdown body exists. `lib/content/` (built in Phase 2) validates every file against a Zod mirror of `types/content.ts`, failing the build on drift.
+**One record per file, for every entity.** v1 used per-category array files for
+`publications/`/`recognitions/`, which meant two people editing different papers both
+modified `conferences.yaml` and hit a merge conflict. Per-record files make concurrent
+edits touch disjoint files, and make duplicate ids structurally impossible — the filename
+*is* the primary key, and `lib/content/index.ts` enforces `filename === id`.
+
+YAML for structured data, MDX for `posts/` where a real markdown body exists.
+
+`lib/content/schema.ts` is the **single source of truth** for every shape; the app's
+TypeScript types are `z.infer`red from it, so a type and its validator cannot drift.
+(v1 kept a hand-written mirror at `types/content.ts`; the two had already diverged, and
+that file is deleted — do not reintroduce it.)
+
+`lib/content/validate.ts` adds the cross-record constraints a per-record schema cannot
+express: referential integrity for every foreign key, asset existence for every referenced
+image, and id uniqueness. Run via `npm run validate:content`; enforced in CI by
+`.github/workflows/validate.yml` on every PR and again on `main` before deploy.
+
+Provenance lives in a structured `_meta { source, note }` field on each record, **not in
+YAML comments**. v1 kept the entire decision record in comments, which any programmatic
+writer destroys — moving it into the data is what allows Studio to write records safely.
 
 ## 5. Information architecture
 

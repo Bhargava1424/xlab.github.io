@@ -1,9 +1,13 @@
-// Typed content getters for the app. Reads YAML/MDX from content/, validates every
-// record against the Zod mirror in schema.ts, and fails the build (via
-// ContentValidationError) with every problem found across the whole tree at once
-// rather than stopping at the first bad file.
+// Typed content getters for the app. Reads YAML/MDX from content/, validates every record
+// against schema.ts, and fails the build (via ContentValidationError) with every problem
+// found across the whole tree at once rather than stopping at the first bad file.
+//
+// SERVER/BUILD ONLY — this pulls in loader.ts, which uses fs. The Studio UI must import
+// lib/content/schema.ts directly instead.
+//
+// v2 layout: every entity is one record per file in its own directory. See
+// scripts/migrate-content-v2.mjs for why.
 import {
-  AffiliationSchema,
   CourseSchema,
   InstitutionSchema,
   PersonSchema,
@@ -36,24 +40,29 @@ import {
   validateOrCollect,
 } from "./loader";
 
-// Re-export the category types so callers don't need to reach into ./schema directly.
-export type { PublicationCategory, RecognitionCategory } from "./schema";
+// Re-export types so callers don't need to reach into ./schema directly.
 export type {
-  AuthorRef,
   Affiliation,
+  AuthorRef,
   Course,
+  EntityKind,
   Institution,
   Person,
+  PersonType,
   Post,
+  PostKind,
   Project,
   Publication,
+  PublicationCategory,
   Recognition,
+  RecognitionCategory,
+  RecordStatus,
   ServiceRecord,
   SiteMeta,
   Sponsor,
 } from "./schema";
 
-interface AllContent {
+export interface AllContent {
   siteMeta: SiteMeta;
   institutions: Institution[];
   people: Person[];
@@ -63,119 +72,107 @@ interface AllContent {
   posts: Post[];
   recognitions: Recognition[];
   service: ServiceRecord[];
-  teaching: Course[];
+  courses: Course[];
   sponsors: Sponsor[];
 }
 
-let cached: AllContent | undefined;
+let rawCache: AllContent | undefined;
+let publishedCache: AllContent | undefined;
 
-function loadAll(): AllContent {
-  if (cached) return cached;
+/** Validate a directory of one-record-per-file YAML. */
+function loadDir<T>(
+  dir: string,
+  schema: Parameters<typeof validateOrCollect<T>>[0],
+  errors: string[]
+): T[] {
+  return readYamlDir(dir)
+    .map(({ file, basename, data }) => {
+      const rec = validateOrCollect(schema, data, file, errors);
+      // The filename is the primary key. Enforcing filename === id is what makes duplicate
+      // ids impossible: a filesystem cannot hold two files with the same name.
+      if (rec && (rec as { id?: string }).id !== basename) {
+        errors.push(
+          `${file}: id "${(rec as { id?: string }).id}" does not match its filename "${basename}"`
+        );
+      }
+      return rec;
+    })
+    .filter((v): v is T => v !== undefined);
+}
+
+/**
+ * Every record in content/, including drafts and hidden ones.
+ * Used by the snapshot builder and the validator; the site itself uses loadAll().
+ */
+export function loadAllRecords(): AllContent {
+  if (rawCache) return rawCache;
   const errors: string[] = [];
 
   const siteMeta = validateOrCollect(
     SiteMetaSchema,
-    readYaml("site-meta.yaml"),
-    "site-meta.yaml",
+    readYaml("site.yaml"),
+    "site.yaml",
     errors
   );
 
-  const institutions = (
-    (readYaml("institutions.yaml") as unknown[]) ?? []
-  )
-    .map((v, i) =>
-      validateOrCollect(InstitutionSchema, v, `institutions.yaml[${i}]`, errors)
-    )
-    .filter((v): v is Institution => v !== undefined);
-
-  const people = readYamlDir("people")
-    .map(({ file, data }) => validateOrCollect(PersonSchema, data, file, errors))
-    .filter((v): v is Person => v !== undefined);
-
-  const researchThemes = (
-    (readYaml("research/themes.yaml") as unknown[]) ?? []
-  )
-    .map((v, i) =>
-      validateOrCollect(
-        ResearchThemeSchema,
-        v,
-        `research/themes.yaml[${i}]`,
-        errors
-      )
-    )
-    .filter((v): v is ResearchTheme => v !== undefined);
-
-  const projects = readYamlDir("projects")
-    .map(({ file, data }) => validateOrCollect(ProjectSchema, data, file, errors))
-    .filter((v): v is Project => v !== undefined);
-
-  const publications = readYamlDir("publications").flatMap(({ file, data }) =>
-    ((data as unknown[]) ?? [])
-      .map((v, i) =>
-        validateOrCollect(PublicationSchema, v, `${file}[${i}]`, errors)
-      )
-      .filter((v): v is Publication => v !== undefined)
-  );
-
   const posts = readMdxDir("posts")
-    .map(({ file, frontmatter, body }) =>
-      validateOrCollect(
+    .map(({ file, basename, frontmatter, body }) => {
+      const rec = validateOrCollect(
         PostSchema,
         { ...(frontmatter as object), body: body || undefined },
         file,
         errors
-      )
-    )
+      );
+      if (rec && rec.id !== basename) {
+        errors.push(`${file}: id "${rec.id}" does not match its filename "${basename}"`);
+      }
+      return rec;
+    })
     .filter((v): v is Post => v !== undefined);
 
-  const recognitions = readYamlDir("recognitions").flatMap(({ file, data }) =>
-    ((data as unknown[]) ?? [])
-      .map((v, i) =>
-        validateOrCollect(RecognitionSchema, v, `${file}[${i}]`, errors)
-      )
-      .filter((v): v is Recognition => v !== undefined)
-  );
-
-  const service = (
-    (readYaml("service.yaml") as unknown[]) ?? []
-  )
-    .map((v, i) =>
-      validateOrCollect(ServiceRecordSchema, v, `service.yaml[${i}]`, errors)
-    )
-    .filter((v): v is ServiceRecord => v !== undefined);
-
-  const teaching = (
-    (readYaml("teaching.yaml") as unknown[]) ?? []
-  )
-    .map((v, i) =>
-      validateOrCollect(CourseSchema, v, `teaching.yaml[${i}]`, errors)
-    )
-    .filter((v): v is Course => v !== undefined);
-
-  const sponsors = (
-    (readYaml("sponsors.yaml") as unknown[]) ?? []
-  )
-    .map((v, i) =>
-      validateOrCollect(SponsorSchema, v, `sponsors.yaml[${i}]`, errors)
-    )
-    .filter((v): v is Sponsor => v !== undefined);
+  const content: AllContent = {
+    siteMeta: siteMeta as SiteMeta,
+    institutions: loadDir<Institution>("institutions", InstitutionSchema, errors),
+    people: loadDir<Person>("people", PersonSchema, errors),
+    researchThemes: loadDir<ResearchTheme>("themes", ResearchThemeSchema, errors),
+    projects: loadDir<Project>("projects", ProjectSchema, errors),
+    publications: loadDir<Publication>("publications", PublicationSchema, errors),
+    posts,
+    recognitions: loadDir<Recognition>("recognitions", RecognitionSchema, errors),
+    service: loadDir<ServiceRecord>("service", ServiceRecordSchema, errors),
+    courses: loadDir<Course>("courses", CourseSchema, errors),
+    sponsors: loadDir<Sponsor>("sponsors", SponsorSchema, errors),
+  };
 
   assertNoErrors(errors, "content/**");
+  rawCache = content;
+  return rawCache;
+}
 
-  cached = {
-    siteMeta: siteMeta as SiteMeta,
-    institutions,
-    people,
-    researchThemes,
-    projects,
-    publications,
-    posts,
-    recognitions,
-    service,
-    teaching,
-    sponsors,
+/**
+ * What the public site renders: published records only. Draft and hidden records stay in
+ * the repo and in Studio but never reach the built site.
+ */
+function loadAll(): AllContent {
+  if (publishedCache) return publishedCache;
+  const all = loadAllRecords();
+  const pub = <T extends { status: string }>(xs: T[]) =>
+    xs.filter((x) => x.status === "published");
+
+  publishedCache = {
+    siteMeta: all.siteMeta,
+    institutions: pub(all.institutions),
+    people: pub(all.people),
+    researchThemes: pub(all.researchThemes),
+    projects: pub(all.projects),
+    publications: pub(all.publications),
+    posts: pub(all.posts),
+    recognitions: pub(all.recognitions),
+    service: pub(all.service),
+    courses: pub(all.courses),
+    sponsors: pub(all.sponsors),
   };
-  return cached;
+  return publishedCache;
 }
 
 // --- SiteMeta -----------------------------------------------------------------
@@ -227,7 +224,7 @@ export function getProjectById(id: string): Project | undefined {
   return loadAll().projects.find((p) => p.id === id);
 }
 export function getProjectsByTheme(themeId: string): Project[] {
-  return loadAll().projects.filter((p) => p.themeId === themeId);
+  return loadAll().projects.filter((p) => p.themeIds.includes(themeId));
 }
 
 // --- Publication ----------------------------------------------------------------
@@ -251,7 +248,7 @@ export function getFeaturedPublications(): Publication[] {
 }
 export function getPublicationsByTheme(themeId: string): Publication[] {
   return loadAll()
-    .publications.filter((p) => p.themeId === themeId)
+    .publications.filter((p) => p.themeIds.includes(themeId))
     .sort((a, b) => (b.year ?? 0) - (a.year ?? 0));
 }
 
@@ -281,7 +278,7 @@ export function getAllServiceRecords(): ServiceRecord[] {
 
 // --- Course -----------------------------------------------------------------
 export function getAllCourses(): Course[] {
-  return loadAll().teaching;
+  return loadAll().courses;
 }
 
 // --- Sponsor ------------------------------------------------------------------

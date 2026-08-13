@@ -36,6 +36,15 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # Re-checked on main even though the PR gate already ran it: direct pushes and merge
+      # results can differ from what any single PR was validated against. A failure here
+      # stops the deploy, and Pages keeps serving the previous successful build.
+      - name: Validate content
+        run: npm run validate:content
+
+      - name: Typecheck
+        run: npm run typecheck
+
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v5
