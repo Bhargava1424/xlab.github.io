@@ -216,15 +216,32 @@ export async function listQueue(env: Env): Promise<QueueItem[]> {
 
   return Promise.all(
     prs.map(async (pr) => {
+      // GitHub Actions reports results as CHECK RUNS, not as legacy commit statuses. The
+      // /status endpoint therefore returns "pending" forever for an Actions-only repo,
+      // which would silently defeat the "never merge a failing submission" guard in
+      // index.ts. Read check-runs instead and fail closed on anything unresolved.
       let checks = "unknown";
       try {
-        const status = await gh<{ state: string }>(
-          repoPath(env, `/commits/${pr.head.sha}/status`),
-          token
-        );
-        checks = status.state;
+        const res = await gh<{
+          total_count: number;
+          check_runs: { status: string; conclusion: string | null }[];
+        }>(repoPath(env, `/commits/${pr.head.sha}/check-runs`), token);
+
+        if (res.total_count === 0) {
+          checks = "pending";
+        } else if (res.check_runs.some((c) => c.status !== "completed")) {
+          checks = "pending";
+        } else if (
+          res.check_runs.some(
+            (c) => c.conclusion !== "success" && c.conclusion !== "neutral" && c.conclusion !== "skipped"
+          )
+        ) {
+          checks = "failure";
+        } else {
+          checks = "success";
+        }
       } catch {
-        /* status API is best-effort; a missing status must not break the queue */
+        /* best-effort; a missing checks API must not break the queue listing */
       }
       return {
         number: pr.number,
@@ -251,7 +268,22 @@ export async function prFiles(env: Env, number: number) {
   );
 }
 
-export async function approvePR(env: Env, number: number): Promise<void> {
+/**
+ * Delete a submission branch once its PR is resolved.
+ *
+ * Without this the repo accumulates one dead branch per edit forever — this system is meant
+ * to run unattended for years. Best-effort: the branch is cosmetic once the PR is closed,
+ * so a failure here must never make an approval look like it failed.
+ */
+async function deleteBranch(env: Env, token: string, branch: string): Promise<void> {
+  try {
+    await gh(repoPath(env, `/git/refs/heads/${branch}`), token, { method: "DELETE" });
+  } catch (err) {
+    console.error(`could not delete branch ${branch}:`, err);
+  }
+}
+
+export async function approvePR(env: Env, number: number, branch?: string): Promise<void> {
   const token = await installationToken(env);
   await gh(repoPath(env, `/pulls/${number}/merge`), token, {
     method: "PUT",
@@ -259,9 +291,15 @@ export async function approvePR(env: Env, number: number): Promise<void> {
     // Studio activity log and one-click revert legible.
     body: JSON.stringify({ merge_method: "squash" }),
   });
+  if (branch) await deleteBranch(env, token, branch);
 }
 
-export async function rejectPR(env: Env, number: number, reason: string): Promise<void> {
+export async function rejectPR(
+  env: Env,
+  number: number,
+  reason: string,
+  branch?: string
+): Promise<void> {
   const token = await installationToken(env);
   if (reason.trim()) {
     await gh(repoPath(env, `/issues/${number}/comments`), token, {
@@ -273,6 +311,7 @@ export async function rejectPR(env: Env, number: number, reason: string): Promis
     method: "PATCH",
     body: JSON.stringify({ state: "closed" }),
   });
+  if (branch) await deleteBranch(env, token, branch);
 }
 
 /** Latest deploy run, so Studio can show whether an approved change is live yet. */

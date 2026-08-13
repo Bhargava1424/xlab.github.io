@@ -258,14 +258,22 @@ async function handleApproveOrReject(
   const item = queue.find((q) => q.number === number);
   if (!item) return fail(env, 404, "submission not found or already closed");
 
-  // Refuse to merge a submission whose CI gate has not passed. This is the line that makes
-  // "bad data cannot reach main" true rather than aspirational.
-  if (action === "approve" && item.checks === "failure") {
-    return fail(env, 409, "validation is failing on this submission — it cannot be approved");
+  // Refuse to merge a submission that is not verifiably green. This is the line that makes
+  // "bad data cannot reach main" true rather than aspirational, so it fails closed: only an
+  // explicit "success" is allowed through. "unknown" is permitted because it means the
+  // checks API itself errored, and an unreachable GitHub endpoint must not permanently
+  // freeze the review queue.
+  if (action === "approve") {
+    if (item.checks === "failure") {
+      return fail(env, 409, "validation is failing on this submission — fix the errors before approving");
+    }
+    if (item.checks === "pending") {
+      return fail(env, 409, "validation is still running — try again in a minute");
+    }
   }
 
-  if (action === "approve") await approvePR(env, number);
-  else await rejectPR(env, number, reason ?? "");
+  if (action === "approve") await approvePR(env, number, item.branch);
+  else await rejectPR(env, number, reason ?? "", item.branch);
 
   const match = item.body.match(/<!-- studio:(.*?) -->/);
   if (match) {
