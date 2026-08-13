@@ -102,7 +102,16 @@ export function canWritePath(id: Identity, path: string, isCreate: boolean): boo
 
   // Members: their own person record, plus create-only in the collections they contribute
   // to. They may never edit or delete another person's record.
-  if (id.personId && path === `content/people/${id.personId}.yaml`) return true;
+  //
+  // Every rule here is guarded on personId being present. Without the guard, a member whose
+  // roster entry has no linked profile would be authorized for the literal path
+  // ".../undefined.png" — harmless in practice, but it is exactly the kind of hole that
+  // stops being harmless once someone adds a rule above it.
+  if (!id.personId) return false;
+
+  // Path equality, not a prefix — and deliberately not conditioned on the file already
+  // existing, which is what lets a member CREATE their own profile on first sign-in.
+  if (path === `content/people/${id.personId}.yaml`) return true;
   if (path === `public/images/people/${id.personId}.png`) return true;
   if (path === `public/images/people/${id.personId}.jpg`) return true;
 

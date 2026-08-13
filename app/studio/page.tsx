@@ -24,17 +24,20 @@ import { auditContent, personCompleteness, type HealthIssue } from "@/lib/studio
 import { EntityBrowser } from "@/components/studio/entity-browser";
 import { ReviewQueue } from "@/components/studio/review-queue";
 import { RosterManager } from "@/components/studio/roster-manager";
+import { MemberHome } from "@/components/studio/member-home";
 
 type View =
   | { kind: "dashboard" }
   | { kind: "entity"; key: string }
   | { kind: "queue" }
   | { kind: "health" }
-  | { kind: "roster" };
+  | { kind: "roster" }
+  | { kind: "me" };
 
 export default function StudioPage() {
   const [identity, setIdentity] = useState<Identity | null>(null);
   const [snapshot, setSnapshot] = useState<Snapshot>();
+  // Members land on their own page; admins and editors land on the lab-wide dashboard.
   const [view, setView] = useState<View>({ kind: "dashboard" });
   const [loading, setLoading] = useState(true);
   const [authError, setAuthError] = useState<string>();
@@ -74,11 +77,15 @@ export default function StudioPage() {
   }
 
   const canApprove = identity.role === "admin" || identity.role === "editor";
+  const isMember = !canApprove;
   const canEdit = (record: Record<string, unknown> | undefined) => {
     if (canApprove) return true;
     // Members may edit only their own person record; the gate enforces this server-side too.
     return Boolean(identity.personId && record && record.id === identity.personId);
   };
+
+  // A member's first view is their own page, not the lab-wide dashboard.
+  const current: View = isMember && view.kind === "dashboard" ? { kind: "me" } : view;
 
   return (
     <div className="mx-auto max-w-[1400px] px-5 py-6">
@@ -109,27 +116,38 @@ export default function StudioPage() {
 
       <div className="grid gap-6 lg:grid-cols-[190px_1fr]">
         <nav className="space-y-0.5">
-          <NavButton active={view.kind === "dashboard"} onClick={() => setView({ kind: "dashboard" })}>
-            Dashboard
-          </NavButton>
-          <NavButton active={view.kind === "queue"} onClick={() => setView({ kind: "queue" })}>
-            Review queue
-          </NavButton>
-          <NavButton active={view.kind === "health"} onClick={() => setView({ kind: "health" })}>
-            Data health
+          {isMember ? (
+            <NavButton active={current.kind === "me"} onClick={() => setView({ kind: "me" })}>
+              My page
+            </NavButton>
+          ) : (
+            <>
+              <NavButton
+                active={current.kind === "dashboard"}
+                onClick={() => setView({ kind: "dashboard" })}
+              >
+                Dashboard
+              </NavButton>
+              <NavButton active={current.kind === "health"} onClick={() => setView({ kind: "health" })}>
+                Data health
+              </NavButton>
+            </>
+          )}
+          <NavButton active={current.kind === "queue"} onClick={() => setView({ kind: "queue" })}>
+            {isMember ? "My submissions" : "Review queue"}
           </NavButton>
           {identity.role === "admin" && (
-            <NavButton active={view.kind === "roster"} onClick={() => setView({ kind: "roster" })}>
+            <NavButton active={current.kind === "roster"} onClick={() => setView({ kind: "roster" })}>
               Roster &amp; access
             </NavButton>
           )}
           <p className="px-2 pt-4 pb-1 font-mono text-[10px] font-bold tracking-wider text-text-placeholder uppercase">
-            Content
+            {isMember ? "Browse the lab" : "Content"}
           </p>
           {ENTITIES.map((e) => (
             <NavButton
               key={e.key}
-              active={view.kind === "entity" && view.key === e.key}
+              active={current.kind === "entity" && current.key === e.key}
               onClick={() => setView({ kind: "entity", key: e.key })}
             >
               {e.plural}
@@ -157,17 +175,19 @@ export default function StudioPage() {
 
           {!snapshot ? (
             <p className="text-sm text-text-faint">Loading content…</p>
-          ) : view.kind === "dashboard" ? (
+          ) : current.kind === "me" ? (
+            <MemberHome identity={identity} snapshot={snapshot} onSubmitted={(pr) => setToast(pr)} />
+          ) : current.kind === "dashboard" ? (
             <Dashboard snapshot={snapshot} onNavigate={setView} />
-          ) : view.kind === "queue" ? (
+          ) : current.kind === "queue" ? (
             <ReviewQueue canApprove={canApprove} />
-          ) : view.kind === "health" ? (
+          ) : current.kind === "health" ? (
             <Health snapshot={snapshot} />
-          ) : view.kind === "roster" ? (
+          ) : current.kind === "roster" ? (
             <RosterManager snapshot={snapshot} />
           ) : (
             (() => {
-              const entity = entityByKey(view.key);
+              const entity = entityByKey(current.key);
               if (!entity) return <p className="text-sm text-text-faint">Unknown section.</p>;
               return (
                 <EntityBrowser
@@ -175,6 +195,9 @@ export default function StudioPage() {
                   snapshot={snapshot}
                   canEdit={canEdit}
                   onSubmitted={(pr) => setToast(pr)}
+                  // Members browse the lab's content for context but change it only from
+                  // their own page, where the scoping and permissions are explicit.
+                  readOnly={isMember}
                 />
               );
             })()

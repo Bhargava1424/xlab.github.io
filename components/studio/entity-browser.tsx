@@ -52,16 +52,26 @@ export function EntityBrowser({
   snapshot,
   canEdit,
   onSubmitted,
+  startCreating,
+  scopeTo,
+  readOnly,
 }: {
   entity: EntityDef;
   snapshot: Snapshot;
   canEdit: (record: Rec | undefined) => boolean;
   onSubmitted: (pr: { number: number; url: string }) => void;
+  /** Open straight into a create form seeded with these values (member onboarding). */
+  startCreating?: Rec;
+  /** Narrow the list to a subset — "my publications" rather than all 301. */
+  scopeTo?: (record: Rec) => boolean;
+  /** Browse-only: hide create, delete and bulk actions entirely. */
+  readOnly?: boolean;
 }) {
-  const records = snapshot.content[entity.snapshotKey] as unknown as Rec[];
+  const all = snapshot.content[entity.snapshotKey] as unknown as Rec[];
+  const records = useMemo(() => (scopeTo ? all.filter(scopeTo) : all), [all, scopeTo]);
   const [query, setQuery] = useState("");
   const [editing, setEditing] = useState<Rec | undefined>();
-  const [creating, setCreating] = useState(false);
+  const [creating, setCreating] = useState(Boolean(startCreating));
   const [selected, setSelected] = useState<Set<string>>(new Set());
 
   const filtered = useMemo(() => {
@@ -75,8 +85,11 @@ export function EntityBrowser({
       <RecordForm
         entity={entity}
         snapshot={snapshot}
-        initial={editing}
+        initial={editing ?? (creating ? startCreating : undefined)}
         isNew={creating}
+        // A seeded id came from the roster and must not be edited — the Worker authorizes
+        // exactly that one path, so changing it here would produce a confusing 403.
+        lockId={Boolean(creating && startCreating?.id)}
         onCancel={() => {
           setEditing(undefined);
           setCreating(false);
@@ -107,12 +120,14 @@ export function EntityBrowser({
           >
             Export CSV
           </button>
-          <button
-            onClick={() => setCreating(true)}
-            className="rounded-sm bg-invert-bg px-3 py-1.5 font-mono text-[11px] font-bold tracking-wider text-invert-fg uppercase"
-          >
-            New {entity.label}
-          </button>
+          {!readOnly && (
+            <button
+              onClick={() => setCreating(true)}
+              className="rounded-sm bg-invert-bg px-3 py-1.5 font-mono text-[11px] font-bold tracking-wider text-invert-fg uppercase"
+            >
+              New {entity.label}
+            </button>
+          )}
         </div>
       </div>
 
@@ -124,7 +139,7 @@ export function EntityBrowser({
         className="w-full rounded-sm border border-border bg-background px-3 py-2 text-sm outline-none focus:border-brand"
       />
 
-      {selected.size > 0 && (
+      {!readOnly && selected.size > 0 && (
         <BulkThemeBar
           entity={entity}
           snapshot={snapshot}
@@ -141,7 +156,7 @@ export function EntityBrowser({
         <table className="w-full min-w-[560px] border-collapse text-sm">
           <thead>
             <tr className="border-b border-border text-left">
-              {supportsThemes(entity) && <th className="w-7" />}
+              {!readOnly && supportsThemes(entity) && <th className="w-7" />}
               {entity.columns.map((c) => (
                 <th key={c} className="py-2 pr-3 font-mono text-[10.5px] font-bold tracking-wider text-text-faint uppercase">
                   {c}
@@ -153,7 +168,7 @@ export function EntityBrowser({
           <tbody>
             {filtered.map((r) => (
               <tr key={String(r.id)} className="border-b border-hairline hover:bg-bg-alt">
-                {supportsThemes(entity) && (
+                {!readOnly && supportsThemes(entity) && (
                   <td className="py-2 align-top">
                     <input
                       type="checkbox"
@@ -192,6 +207,17 @@ export function EntityBrowser({
       </div>
     </div>
   );
+}
+
+/**
+ * Site-relative image paths a record points at, found via the schema's `asset` fields rather
+ * than a hardcoded list — so a new image field is cleaned up on delete automatically.
+ */
+function assetPathsOf(fields: FieldSpec[], record: Rec): string[] {
+  return fields
+    .filter((f) => f.asset)
+    .map((f) => record[f.key])
+    .filter((v): v is string => typeof v === "string" && v.startsWith("/images/"));
 }
 
 /** Entities that carry research thrusts, and so support bulk tagging. */
@@ -392,6 +418,7 @@ function RecordForm({
   snapshot,
   initial,
   isNew,
+  lockId,
   onCancel,
   onSubmitted,
 }: {
@@ -399,6 +426,7 @@ function RecordForm({
   snapshot: Snapshot;
   initial?: Rec;
   isNew: boolean;
+  lockId?: boolean;
   onCancel: () => void;
   onSubmitted: (pr: { number: number; url: string }) => void;
 }) {
@@ -471,7 +499,17 @@ function RecordForm({
           : `${isNew ? "Add" : "Update"} ${entity.label.toLowerCase()}: ${record.title ?? record.name ?? id}`,
         summary: `Submitted from Studio.`,
         files: deleteRecord
-          ? [{ path, delete: true }]
+          ? [
+              { path, delete: true },
+              // Remove the record's images in the same commit. Without this, every deletion
+              // leaves an orphaned file behind — harmless individually, but it accumulates
+              // over years of members joining and leaving, and the validator has to keep
+              // warning about files nothing will ever reference again.
+              ...assetPathsOf(fields, record).map((assetPath) => ({
+                path: repoAssetPath(assetPath),
+                delete: true,
+              })),
+            ]
           : [
               { path, content: serializeRecord(entity, record) },
               // Uploaded images ride along in the same commit as the record that
@@ -513,7 +551,7 @@ function RecordForm({
         {fields.map((f) => (
           <div key={f.key} className={f.kind === "text" || f.kind === "object" || f.kind === "array" ? "md:col-span-2" : ""}>
             <FieldInput
-              spec={{ ...f, readOnly: f.readOnly || (f.key === "id" && !isNew) }}
+              spec={{ ...f, readOnly: f.readOnly || (f.key === "id" && (!isNew || lockId)) }}
               value={record[f.key]}
               onChange={(next) => setRecord((r) => ({ ...r, [f.key]: next }))}
               error={errors[f.key]}
@@ -541,7 +579,15 @@ function RecordForm({
         {!isNew && (
           <button
             onClick={() => {
-              if (confirm(`Submit a request to delete "${record.id}"? It still needs approval before anything changes.`)) {
+              const images = assetPathsOf(fields, record);
+              const detail = images.length
+                ? `\n\nIts ${images.length === 1 ? "image" : "images"} will be removed too:\n${images.join("\n")}`
+                : "";
+              if (
+                confirm(
+                  `Submit a request to delete "${record.id}"?${detail}\n\nNothing changes until this is approved.`
+                )
+              ) {
                 void save(true);
               }
             }}

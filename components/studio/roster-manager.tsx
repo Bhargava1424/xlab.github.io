@@ -10,6 +10,7 @@
 // direct write — which is what keeps "who had access when" answerable from git history.
 import { useCallback, useEffect, useState } from "react";
 import { api, ROSTER_PATH, type RosterEntry, type Snapshot } from "@/lib/studio/api";
+import { slugify } from "@/lib/studio/entities";
 
 const input =
   "w-full rounded-sm border border-border bg-background px-2.5 py-1.5 text-sm outline-none focus:border-brand";
@@ -154,24 +155,27 @@ export function RosterManager({ snapshot }: { snapshot: Snapshot }) {
                   </select>
                 </td>
                 <td className="py-2 pr-3">
-                  <select
+                  {/*
+                    A free-text id, not a dropdown of existing people: a member's profile
+                    legitimately does not exist yet — they create it themselves on first
+                    sign-in — so a picker over current records could not express it.
+                  */}
+                  <input
                     value={m.personId ?? ""}
                     disabled={busy}
-                    onChange={(e) => {
-                      const next = members.map((x, j) =>
-                        j === i ? { ...x, personId: e.target.value || undefined } : x
-                      );
-                      setMembers(next);
-                    }}
-                    className="max-w-[190px] rounded-sm border border-border bg-background px-1.5 py-1 text-[12.5px]"
-                  >
-                    <option value="">— none —</option>
-                    {snapshot.content.people.map((p) => (
-                      <option key={p.id} value={p.id}>
-                        {p.name}
-                      </option>
-                    ))}
-                  </select>
+                    placeholder="—"
+                    onChange={(e) =>
+                      setMembers(
+                        members.map((x, j) =>
+                          j === i ? { ...x, personId: e.target.value || undefined } : x
+                        )
+                      )
+                    }
+                    className="w-[170px] rounded-sm border border-border bg-background px-1.5 py-1 font-mono text-[12px]"
+                  />
+                  {m.personId && !profileExists(snapshot, m.personId) && (
+                    <span className="ml-1.5 font-mono text-[10px] text-text-placeholder">not created yet</span>
+                  )}
                 </td>
                 <td className="py-2 text-right whitespace-nowrap">
                   <button
@@ -211,7 +215,13 @@ export function RosterManager({ snapshot }: { snapshot: Snapshot }) {
             className={input}
             placeholder="Name"
             value={draft.name}
-            onChange={(e) => setDraft({ ...draft, name: e.target.value })}
+            onChange={(e) => {
+              const name = e.target.value;
+              // Keep the id in step with the name until it is edited by hand, so the common
+              // case needs no thought and the unusual case is still possible.
+              const auto = draft.personId === undefined || draft.personId === slugify(draft.name);
+              setDraft({ ...draft, name, ...(auto ? { personId: slugify(name) || undefined } : {}) });
+            }}
           />
           <input
             className={input}
@@ -231,23 +241,38 @@ export function RosterManager({ snapshot }: { snapshot: Snapshot }) {
               </option>
             ))}
           </select>
-          <select
-            className={input}
+          <input
+            className={`${input} font-mono text-[12px]`}
+            placeholder="profile-id (auto)"
             value={draft.personId ?? ""}
             onChange={(e) => setDraft({ ...draft, personId: e.target.value || undefined })}
-          >
-            <option value="">Link to a profile…</option>
-            {snapshot.content.people.map((p) => (
-              <option key={p.id} value={p.id}>
-                {p.name}
-              </option>
-            ))}
-          </select>
+          />
         </div>
         <p className="text-[11.5px] text-text-faint">{ROLE_HELP[draft.role]}</p>
+        {/*
+          The profile id is filled in automatically from the name and does NOT need to
+          already exist. That is the whole point: the member creates their own profile at
+          this id on first sign-in, so adding someone is one action instead of three
+          (stub profile -> link -> invite).
+        */}
+        {draft.role === "member" && (
+          <p className="text-[11.5px] text-text-faint">
+            {profileExists(snapshot, draft.personId) ? (
+              <>
+                Links to the existing profile{" "}
+                <span className="font-mono">{draft.personId}</span>.
+              </>
+            ) : (
+              <>
+                They will create their own profile at{" "}
+                <span className="font-mono">{draft.personId || "…"}</span> when they first sign in.
+              </>
+            )}
+          </p>
+        )}
         {unlinked.length > 0 && draft.role === "member" && (
           <p className="text-[11.5px] text-text-faint">
-            {unlinked.length} profile{unlinked.length === 1 ? "" : "s"} not yet linked to anyone.
+            {unlinked.length} existing profile{unlinked.length === 1 ? "" : "s"} not linked to anyone yet — type its id above to link instead of creating a new one.
           </p>
         )}
         <button
@@ -255,6 +280,12 @@ export function RosterManager({ snapshot }: { snapshot: Snapshot }) {
             if (!draft.email.trim() || !draft.name.trim()) return alert("Name and email are required.");
             if (members.some((m) => m.email.toLowerCase() === draft.email.trim().toLowerCase()))
               return alert("That email is already on the roster.");
+            if (draft.role === "member" && !draft.personId)
+              return alert("A member needs a profile id — it is normally filled in from their name.");
+            // Two roster entries pointing at one profile would let each overwrite the other's
+            // edits, with the second submission silently winning.
+            if (draft.personId && members.some((m) => m.personId === draft.personId))
+              return alert(`Someone on the roster already owns the profile "${draft.personId}".`);
             void saveRoster([...members, { ...draft, email: draft.email.trim() }], `Add ${draft.name} to the roster`);
             setDraft({ email: "", name: "", role: "member", active: true });
           }}
@@ -266,6 +297,10 @@ export function RosterManager({ snapshot }: { snapshot: Snapshot }) {
       </div>
     </div>
   );
+}
+
+function profileExists(snapshot: Snapshot, personId?: string): boolean {
+  return Boolean(personId && snapshot.content.people.some((p) => p.id === personId));
 }
 
 const ROSTER_COMMENT = [
