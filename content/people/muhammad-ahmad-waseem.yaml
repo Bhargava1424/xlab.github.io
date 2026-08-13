@@ -1,5 +1,5 @@
 id: muhammad-ahmad-waseem
-name: Muhammad Ahmad Waseem
+name: Muhammad Ahmed Waseem
 personType: phd-student
 roleTitle: PhD Student, 2nd Year, Computer Science & Engineering
 photo: /images/people/muhammad-ahmad-waseem.png
@@ -12,6 +12,7 @@ affiliations:
     department: Computer Science & Engineering
     roleTitle: PhD Student
     type: primary
+status: published
 _meta:
   source: data-extraction/sources/01-xlab-test-web-hugo-site/extracted/team-phd.yaml
   note: "No joined/left year in source — labTenure left absent per SPEC.md §7 rather than invented. photo: the old site's fuzzy filename-matcher searched for \"muhammad\" and found nothing (flagged as missing in static-team-validation.json), but _phd7_Ahmad.png / Ahmad.png very likely ARE this person's photo, matched on middle name instead — using it here as an explicit human-reviewed choice, not a fuzzy match. Verify with the person when possible."
