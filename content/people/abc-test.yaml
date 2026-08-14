@@ -1,0 +1,9 @@
+id: abc-test
+name: Abc Test
+personType: phd-student
+status: published
+roleTitle: PhD Student
+photo: /images/people/abc-test.png
+labTenure:
+  joinedYear: 2018
+  leftYear: 2022
