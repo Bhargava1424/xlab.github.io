@@ -1,9 +1,26 @@
 id: abc-test
 name: Abc Test
 personType: phd-student
-status: published
 roleTitle: PhD Student
 photo: /images/people/abc-test.png
 labTenure:
   joinedYear: 2018
   leftYear: 2022
+status: published
+bio: Alex completed his Ph.D. in Computer Science at The University of Texas at San Antonio in 2022, focusing on scalable deep learning architectures, distributed systems, and edge AI optimization. During his doctoral studies at UTSA, Alex contributed to multi-cloud resource scheduling and efficient neural network inference on heterogeneous edge devices. He now leads research initiatives in scalable machine learning infrastructure.
+profile:
+  researchPhilosophy: Bridging theoretical systems design with real-world, efficient edge intelligence.
+  education:
+    - year: 2022
+      degree: Ph.D. in Computer Science
+      institution: University of Texas at San Antonio
+  researchInterests:
+    - Distributed Machine Learning
+    - Edge Computing & Systems
+    - Heterogeneous Computing
+  futureVision: Democratizing low-latency, privacy-preserving AI inference across resource-constrained distributed systems.
+  quote: Scalable computing is about making complex models work efficiently everywhere
+links:
+  email: alex.rivera.test@alumni.utsa.edu
+  scholar: https://scholar.google.com/citations?user=abc123Test
+  linkedin: https://linkedin.com/in/alex-rivera-test](https://linkedin.com/in/alex-rivera-test
