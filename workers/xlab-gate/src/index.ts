@@ -305,6 +305,17 @@ async function handleApproveOrReject(
 
 export default {
   async fetch(req: Request, env: Env): Promise<Response> {
+    // CORS preflight, answered before any routing or auth.
+    //
+    // This MUST stay ahead of route(). A preflight is an unauthenticated OPTIONS request, so
+    // if it reaches the router it matches a path, fails the session check, and returns 401 —
+    // and a non-2xx preflight makes the browser refuse the real request with
+    // "Response to preflight request doesn't pass access control check". That failure looks
+    // like a CORS misconfiguration but is really "the preflight was never handled".
+    if (req.method === "OPTIONS") {
+      return new Response(null, { status: 204, headers: cors(env) });
+    }
+
     const ctx: RequestContext = {};
     try {
       // THE single await point for the whole Worker.
