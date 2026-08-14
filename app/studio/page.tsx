@@ -99,10 +99,15 @@ export default function StudioPage() {
               </span>
             )}
           </h1>
-          <p className="font-mono text-[11px] text-text-faint">
-            {identity.name} · {identity.role}
-          </p>
-        </div>
+          <div className="mt-1 mb-2">
+            <div className="text-xl font-bold text-foreground">
+              Hello {identity.name}
+            </div>
+            <div className="font-mono text-[11px] text-text-faint">
+              {identity.role}
+            </div>
+          </div>
+   
         <button
           onClick={() => {
             clearToken();
