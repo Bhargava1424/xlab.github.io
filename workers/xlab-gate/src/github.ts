@@ -285,13 +285,33 @@ async function deleteBranch(env: Env, token: string, branch: string): Promise<vo
 
 export async function approvePR(env: Env, number: number, branch?: string): Promise<void> {
   const token = await installationToken(env);
-  await gh(repoPath(env, `/pulls/${number}/merge`), token, {
-    method: "PUT",
-    // Squash keeps main's history one-commit-per-approved-change, which is what makes the
-    // Studio activity log and one-click revert legible.
-    body: JSON.stringify({ merge_method: "squash" }),
-  });
-  if (branch) await deleteBranch(env, token, branch);
+
+  // Squash first: it keeps main's history one-commit-per-approved-change, which is what
+  // makes the activity log and one-click revert legible. But a repository can have squash
+  // merging disabled in its settings, and GitHub then rejects the request outright — so
+  // fall back rather than leaving the owner unable to approve anything with no way to tell
+  // why. The fallbacks produce messier history, which is strictly better than a dead button.
+  const methods = ["squash", "merge", "rebase"] as const;
+  let lastError: unknown;
+
+  for (const merge_method of methods) {
+    try {
+      await gh(repoPath(env, `/pulls/${number}/merge`), token, {
+        method: "PUT",
+        body: JSON.stringify({ merge_method }),
+      });
+      if (branch) await deleteBranch(env, token, branch);
+      return;
+    } catch (err) {
+      lastError = err;
+      // 405/409 mean "this merge method is not allowed / not currently possible"; anything
+      // else (auth, missing PR, conflict) will fail identically for the other methods, so
+      // stop rather than retrying twice more for nothing.
+      const status = String(err).match(/-> (\d{3}):/)?.[1];
+      if (status !== "405" && status !== "422") throw err;
+    }
+  }
+  throw lastError;
 }
 
 export async function rejectPR(

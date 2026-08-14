@@ -302,6 +302,9 @@ export default {
 
     if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: cors(env) });
 
+    // Hoisted so the catch below can decide how much detail to reveal.
+    let identity: Identity | undefined;
+
     try {
       // --- public ---
       if (path === "/" ) return json(env, { service: "xlab-gate", ok: true });
@@ -328,17 +331,24 @@ export default {
           : "not configured — member magic links disabled, admin GitHub sign-in unaffected";
         return json(env, { service: "xlab-gate", checks });
       }
-      if (path === "/auth/email" && req.method === "POST") return handleAuthEmail(req, env);
-      if (path === "/auth/verify") return handleAuthVerify(req, env);
-      if (path === "/auth/github/start") return handleGithubStart(req, env);
-      if (path === "/auth/github/callback") return handleGithubCallback(req, env);
+      // NOTE: every handler call below is `return await`, never a bare `return`.
+      // In an async function, `try { return somePromise }` does NOT catch that promise's
+      // rejection — the try block has already exited by the time it settles. Without the
+      // await, a failing handler escapes the catch, Cloudflare serves its own error page,
+      // and because that page carries no CORS headers the browser reports a misleading
+      // "blocked by CORS policy" instead of the actual error.
+      if (path === "/auth/email" && req.method === "POST") return await handleAuthEmail(req, env);
+      if (path === "/auth/verify") return await handleAuthVerify(req, env);
+      if (path === "/auth/github/start") return await handleGithubStart(req, env);
+      if (path === "/auth/github/callback") return await handleGithubCallback(req, env);
 
       // --- authenticated ---
       const id = await currentIdentity(req, env);
       if (!id) return fail(env, 401, "not signed in");
+      identity = id;
 
       if (path === "/me") return json(env, id);
-      if (path === "/submit" && req.method === "POST") return handleSubmit(req, env, id);
+      if (path === "/submit" && req.method === "POST") return await handleSubmit(req, env, id);
 
       // Roster read + invite issuing. Admin only: these expose lab members' email addresses
       // and mint credentials, neither of which an editor or member has any business doing.
@@ -387,16 +397,24 @@ export default {
         return json(env, { files: await prFiles(env, number) });
       }
       if (path === "/approve" && req.method === "POST")
-        return handleApproveOrReject(req, env, id, "approve");
+        return await handleApproveOrReject(req, env, id, "approve");
       if (path === "/reject" && req.method === "POST")
-        return handleApproveOrReject(req, env, id, "reject");
+        return await handleApproveOrReject(req, env, id, "reject");
       if (path === "/status") return json(env, { deploy: await deployStatus(env) });
 
       return fail(env, 404, "no such endpoint");
     } catch (err) {
-      // Log the detail, return a generic message — GitHub API errors can echo internals.
       console.error("unhandled error:", err);
-      return fail(env, 500, "internal error");
+      // Reviewers get the real message; everyone else gets a generic one. Without this the
+      // only way to diagnose a failure is `wrangler tail`, which is not something the site's
+      // owner should have to reach for — and an admin can already see everything this could
+      // disclose. Secrets never appear in these messages: github.ts throws the API's own
+      // response body, which carries no credentials.
+      const detail =
+        identity && (identity.role === "admin" || identity.role === "editor")
+          ? ` — ${String(err).replace(/\s+/g, " ").slice(0, 400)}`
+          : "";
+      return fail(env, 500, `internal error${detail}`);
     }
   },
 };
