@@ -91,7 +91,7 @@ export default function StudioPage() {
     <div className="mx-auto max-w-[1400px] px-5 py-6">
       <header className="mb-6 flex flex-wrap items-center justify-between gap-3 border-b border-border pb-4">
         <div>
-          <h1 className="text-lg font-bold tracking-tight text-foreground">
+          <h1 className="text-xl font-black leading-tight tracking-tight text-foreground flex items-center gap-3">
             X-Lab Studio
             {snapshot && (
               <span className="ml-2 font-mono text-[11px] font-normal text-text-faint">
@@ -99,14 +99,25 @@ export default function StudioPage() {
               </span>
             )}
           </h1>
-          <div className="mt-1 mb-2">
-            <div className="text-xl font-bold text-foreground">
-              Hello {identity.name}
-            </div>
-            <div className="font-mono text-[11px] text-text-faint">
+          <div className="flex items-baseline gap-2 mt-1">
+            <span className="text-2xl font-bold text-foreground">
+              Hello, {identity.name}
+            </span>
+            <span className="mx-1 text-lg text-text-faint select-none" aria-hidden="true">·</span>
+            <span
+              className={
+                "font-mono text-xs px-2 py-0.5 rounded" +
+                (identity.role === "admin"
+                  ? " bg-blue-100 text-blue-700 border border-blue-200"
+                  : identity.role === "editor"
+                  ? " bg-green-100 text-green-700 border border-green-200"
+                  : " bg-gray-100 text-gray-700 border border-gray-200")
+              }
+            >
               {identity.role}
-            </div>
+            </span>
           </div>
+        </div>
    
         <button
           onClick={() => {
