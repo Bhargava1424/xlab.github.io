@@ -35,6 +35,13 @@
       "role": "member",
       "active": true,
       "personId": "abc-test"
+    },
+    {
+      "email": "utkarsh@gmail.com",
+      "name": "Utkarsh",
+      "role": "admin",
+      "active": true,
+      "personId": "utkarsh"
     }
   ]
 }
