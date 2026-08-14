@@ -28,6 +28,13 @@
       "role": "admin",
       "active": true,
       "personId": "jinjun-xiong"
+    },
+    {
+      "email": "abctest@gmail.com",
+      "name": "Abc Test",
+      "role": "member",
+      "active": true,
+      "personId": "abc-test"
     }
   ]
 }
