@@ -90,21 +90,23 @@ export default function StudioPage() {
   return (
     <div className="mx-auto max-w-[1400px] px-5 py-6">
       <header className="mb-6 flex flex-wrap items-center justify-between gap-3 border-b border-border pb-4">
-        <div className="flex flex-col items-start">
-          <div className="flex items-center gap-3">
-            <span className="text-xl font-semibold tracking-tight text-foreground">
-              Hello, {identity.name}
-            </span>
+        <div>
+          <h1 className="text-lg font-bold tracking-tight text-foreground">
+            X-Lab Studio
             {snapshot && (
-              <span className="ml-1 rounded bg-muted px-2 py-0.5 font-mono text-[11px] font-semibold text-muted-foreground border border-border">
+              <span className="ml-2 font-mono text-[11px] font-normal text-text-faint">
                 live @ {snapshot.commit}
               </span>
             )}
+          </h1>
+          <div className="mt-1 mb-2">
+            <div className="text-xl font-bold text-foreground">
+              Hello {identity.name}
+            </div>
+            <div className="font-mono text-[11px] text-text-faint">
+              {identity.role}
+            </div>
           </div>
-          <span className="mt-1 ml-0.5 font-mono text-xs text-text-faint">
-            {identity.role.charAt(0).toUpperCase() + identity.role.slice(1)}
-          </span>
-        </div>
    
         <button
           onClick={() => {
