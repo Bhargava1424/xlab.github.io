@@ -129,10 +129,26 @@ async function handleAuthVerify(req: Request, env: Env): Promise<Response> {
 
   const stored = await env.SESSIONS.get(`magic:${payload.jti}`);
   if (stored !== payload.email) return redirect("error=already_used");
-  await env.SESSIONS.delete(`magic:${payload.jti}`);
 
+  // Roster lookup happens BEFORE the nonce is spent, because whether it gets spent depends
+  // on the role.
   const entry = await findByEmail(env, payload.email);
   if (!entry) return redirect("error=not_authorized");
+
+  // Admin links are REUSABLE until they expire; everyone else's are single-use.
+  //
+  // Two practical reasons. An admin who burns their own link — by testing it, or because a
+  // mail scanner or chat app prefetched the URL before the human clicked — has no one to
+  // issue them a replacement, since issuing links is itself an admin action. And an admin is
+  // the person most likely to sign in from a second device.
+  //
+  // The cost is real and must not be understated: a reusable admin link is an admin
+  // password with an expiry date. Anyone holding it can sign in repeatedly until it lapses.
+  // POST /revoke-invites kills outstanding links for an address, and rotating
+  // SESSION_SECRET invalidates every link and session at once.
+  if (entry.role !== "admin") {
+    await env.SESSIONS.delete(`magic:${payload.jti}`);
+  }
 
   return redirect(`token=${encodeURIComponent(await issueSession(env, toIdentity(entry)))}`);
 }
@@ -433,7 +449,36 @@ async function route(req: Request, env: Env, ctx: RequestContext): Promise<Respo
       link: `${new URL(req.url).origin}/auth/verify?token=${encodeURIComponent(token)}`,
       expiresInDays: INVITE_TTL_S / 86400,
       name: entry.name,
+      // Admin links stay valid until they expire, so the UI must say so plainly — the
+      // handling required of a one-shot link and a standing credential is different.
+      reusable: entry.role === "admin",
     });
+  }
+
+  // Kill every outstanding sign-in link for one address. The necessary counterpart to
+  // admin links being reusable: without it, a leaked admin link would stand for two weeks
+  // and the only remedy would be rotating SESSION_SECRET, which signs everyone out.
+  if (path === "/revoke-invites" && req.method === "POST") {
+    if (ctx.identity?.role !== "admin") return fail(env, 403, "admins only");
+    const { email } = (await req.json().catch(() => ({}))) as { email?: string };
+    if (!email) return fail(env, 400, "email is required");
+    const target = email.trim().toLowerCase();
+
+    // Few keys ever exist at once (one per outstanding link), so a scan is cheap.
+    let revoked = 0;
+    let cursor: string | undefined;
+    do {
+      const page = await env.SESSIONS.list({ prefix: "magic:", cursor });
+      for (const key of page.keys) {
+        if ((await env.SESSIONS.get(key.name)) === target) {
+          await env.SESSIONS.delete(key.name);
+          revoked++;
+        }
+      }
+      cursor = page.list_complete ? undefined : page.cursor;
+    } while (cursor);
+
+    return json(env, { ok: true, revoked });
   }
   if (path === "/queue") {
     const queue = await listQueue(env);

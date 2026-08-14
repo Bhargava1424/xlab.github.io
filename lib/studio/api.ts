@@ -130,7 +130,14 @@ export const api = {
    * configured at all.
    */
   invite: (email: string) =>
-    call<{ link: string; expiresInDays: number; name: string }>("/invite", {
+    call<{ link: string; expiresInDays: number; name: string; reusable: boolean }>("/invite", {
+      method: "POST",
+      body: JSON.stringify({ email }),
+    }),
+
+  /** Admin only — invalidates every outstanding sign-in link for one address. */
+  revokeInvites: (email: string) =>
+    call<{ ok: true; revoked: number }>("/revoke-invites", {
       method: "POST",
       body: JSON.stringify({ email }),
     }),

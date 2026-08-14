@@ -21,7 +21,17 @@ import process from "node:process";
 
 const GATE = process.env.GATE_URL ?? "https://xlab-gate.xlab-studio.workers.dev";
 const ORIGIN = process.env.SITE_ORIGIN ?? "https://bhargava1424.github.io";
-const ENDPOINTS = ["/queue", "/approve", "/submit", "/roster", "/invite", "/me", "/status", "/health"];
+const ENDPOINTS = [
+  "/queue",
+  "/approve",
+  "/submit",
+  "/roster",
+  "/invite",
+  "/revoke-invites",
+  "/me",
+  "/status",
+  "/health",
+];
 
 let failures = 0;
 const check = (name, ok, detail = "") => {

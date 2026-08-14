@@ -26,7 +26,13 @@ export function RosterManager({ snapshot }: { snapshot: Snapshot }) {
   const [members, setMembers] = useState<RosterEntry[]>();
   const [error, setError] = useState<string>();
   const [busy, setBusy] = useState(false);
-  const [invite, setInvite] = useState<{ name: string; link: string; days: number }>();
+  const [invite, setInvite] = useState<{
+    name: string;
+    email: string;
+    link: string;
+    days: number;
+    reusable: boolean;
+  }>();
   const [draft, setDraft] = useState<RosterEntry>({
     email: "",
     name: "",
@@ -74,9 +80,27 @@ export function RosterManager({ snapshot }: { snapshot: Snapshot }) {
   async function makeInvite(entry: RosterEntry) {
     try {
       const res = await api.invite(entry.email);
-      setInvite({ name: res.name, link: res.link, days: res.expiresInDays });
+      setInvite({
+        name: res.name,
+        email: entry.email,
+        link: res.link,
+        days: res.expiresInDays,
+        reusable: res.reusable,
+      });
     } catch (err) {
       alert(err instanceof Error ? err.message : "Could not create an invite link.");
+    }
+  }
+
+  async function revokeInvites(entry: RosterEntry) {
+    if (!confirm(`Invalidate every outstanding sign-in link for ${entry.name}?\n\nAnyone still holding one will not be able to use it. Sessions already signed in are unaffected.`))
+      return;
+    try {
+      const res = await api.revokeInvites(entry.email);
+      setInvite(undefined);
+      alert(res.revoked === 0 ? "There were no outstanding links." : `Revoked ${res.revoked} link(s).`);
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "Could not revoke links.");
     }
   }
 
@@ -99,9 +123,18 @@ export function RosterManager({ snapshot }: { snapshot: Snapshot }) {
       {invite && (
         <div className="rounded-sm border border-brand-soft-border bg-brand-soft-bg p-3">
           <p className="text-sm font-medium text-brand-strong">Sign-in link for {invite.name}</p>
-          <p className="mt-1 text-[12px] text-text-faint">
-            Single use, expires in {invite.days} days. Send it however you normally contact them.
-          </p>
+          {invite.reusable ? (
+            <p className="mt-1 text-[12px] text-text-faint">
+              <strong className="text-brand-orange">Works repeatedly</strong> for {invite.days} days
+              — admin links are reusable, so testing it or a mail scanner opening it will not burn
+              it. Treat it like a password: send it privately, and use{" "}
+              <strong>Revoke links</strong> if it ever goes somewhere it should not.
+            </p>
+          ) : (
+            <p className="mt-1 text-[12px] text-text-faint">
+              Single use, expires in {invite.days} days. Send it however you normally contact them.
+            </p>
+          )}
           <div className="mt-2 flex gap-2">
             <input readOnly value={invite.link} className={`${input} font-mono text-[11px]`} onFocus={(e) => e.target.select()} />
             <button
@@ -184,6 +217,13 @@ export function RosterManager({ snapshot }: { snapshot: Snapshot }) {
                     className="font-mono text-[11px] text-brand-strong hover:underline disabled:text-text-placeholder"
                   >
                     Invite link
+                  </button>
+                  <button
+                    onClick={() => void revokeInvites(m)}
+                    title="Invalidate every outstanding sign-in link for this person"
+                    className="ml-3 font-mono text-[11px] text-text-faint hover:text-brand-orange"
+                  >
+                    Revoke links
                   </button>
                   <button
                     onClick={() =>
