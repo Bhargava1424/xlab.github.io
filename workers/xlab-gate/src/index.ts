@@ -23,6 +23,7 @@ import {
   canWritePath,
   findByEmail,
   findByGithubLogin,
+  invalidateRosterCache,
   loadRoster,
   toIdentity,
 } from "./roster";
@@ -276,8 +277,15 @@ async function handleApproveOrReject(
     }
   }
 
-  if (action === "approve") await approvePR(env, number, item.branch);
-  else await rejectPR(env, number, reason ?? "", item.branch);
+  if (action === "approve") {
+    await approvePR(env, number, item.branch);
+    // The roster is cached for a minute to avoid a GitHub round trip per request. Without
+    // dropping it here, adding someone and immediately clicking "Invite link" fails with
+    // "that address is not on the roster yet" — the exact moment an admin would try it.
+    invalidateRosterCache();
+  } else {
+    await rejectPR(env, number, reason ?? "", item.branch);
+  }
 
   const match = item.body.match(/<!-- studio:(.*?) -->/);
   if (match) {
@@ -297,124 +305,143 @@ async function handleApproveOrReject(
 
 export default {
   async fetch(req: Request, env: Env): Promise<Response> {
-    const url = new URL(req.url);
-    const path = url.pathname.replace(/\/+$/, "") || "/";
-
-    if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: cors(env) });
-
-    // Hoisted so the catch below can decide how much detail to reveal.
-    let identity: Identity | undefined;
-
+    const ctx: RequestContext = {};
     try {
-      // --- public ---
-      if (path === "/" ) return json(env, { service: "xlab-gate", ok: true });
-
-      // Unauthenticated on purpose: this is how you confirm the gate is wired up before
-      // anyone can sign in, and it is what Studio's status panel polls. It reports whether
-      // each dependency works, never what it contains — no counts, names, or credentials.
-      if (path === "/health") {
-        const checks: Record<string, string> = {};
-        try {
-          await installationToken(env);
-          checks.github = "ok";
-        } catch (err) {
-          checks.github = `fail — ${String(err).slice(0, 300)}`;
-        }
-        try {
-          const roster = await loadRoster(env);
-          checks.roster = roster.members.length > 0 ? "ok" : "empty — commit access/roster.json";
-        } catch (err) {
-          checks.roster = `fail — ${String(err).slice(0, 200)}`;
-        }
-        checks.email = env.EMAIL_API_KEY
-          ? "configured"
-          : "not configured — member magic links disabled, admin GitHub sign-in unaffected";
-        return json(env, { service: "xlab-gate", checks });
-      }
-      // NOTE: every handler call below is `return await`, never a bare `return`.
-      // In an async function, `try { return somePromise }` does NOT catch that promise's
-      // rejection — the try block has already exited by the time it settles. Without the
-      // await, a failing handler escapes the catch, Cloudflare serves its own error page,
-      // and because that page carries no CORS headers the browser reports a misleading
-      // "blocked by CORS policy" instead of the actual error.
-      if (path === "/auth/email" && req.method === "POST") return await handleAuthEmail(req, env);
-      if (path === "/auth/verify") return await handleAuthVerify(req, env);
-      if (path === "/auth/github/start") return await handleGithubStart(req, env);
-      if (path === "/auth/github/callback") return await handleGithubCallback(req, env);
-
-      // --- authenticated ---
-      const id = await currentIdentity(req, env);
-      if (!id) return fail(env, 401, "not signed in");
-      identity = id;
-
-      if (path === "/me") return json(env, id);
-      if (path === "/submit" && req.method === "POST") return await handleSubmit(req, env, id);
-
-      // Roster read + invite issuing. Admin only: these expose lab members' email addresses
-      // and mint credentials, neither of which an editor or member has any business doing.
-      if (path === "/roster") {
-        if (id.role !== "admin") return fail(env, 403, "admins only");
-        return json(env, await loadRoster(env));
-      }
-      if (path === "/invite" && req.method === "POST") {
-        if (id.role !== "admin") return fail(env, 403, "admins only");
-        const { email } = (await req.json().catch(() => ({}))) as { email?: string };
-        if (!email) return fail(env, 400, "email is required");
-        const entry = await findByEmail(env, email);
-        if (!entry) return fail(env, 404, "that address is not on the roster yet");
-
-        // Same single-use mechanism as an emailed magic link — the only difference is that
-        // the admin delivers it by hand instead of a mail provider.
-        const jti = randomId();
-        await env.SESSIONS.put(`magic:${jti}`, entry.email.toLowerCase(), {
-          expirationTtl: INVITE_TTL_S,
-        });
-        const token = await signToken(
-          {
-            jti,
-            email: entry.email.toLowerCase(),
-            exp: Math.floor(Date.now() / 1000) + INVITE_TTL_S,
-          },
-          env.SESSION_SECRET
-        );
-        return json(env, {
-          link: `${new URL(req.url).origin}/auth/verify?token=${encodeURIComponent(token)}`,
-          expiresInDays: INVITE_TTL_S / 86400,
-          name: entry.name,
-        });
-      }
-      if (path === "/queue") {
-        const queue = await listQueue(env);
-        // Members see only their own pending submissions.
-        const visible = canApprove(id)
-          ? queue
-          : queue.filter((q) => q.body.includes(`"email":"${id.email}"`));
-        return json(env, { queue: visible });
-      }
-      if (path.startsWith("/queue/") && path.endsWith("/files")) {
-        if (!canApprove(id)) return fail(env, 403, "not allowed");
-        const number = Number(path.split("/")[2]);
-        return json(env, { files: await prFiles(env, number) });
-      }
-      if (path === "/approve" && req.method === "POST")
-        return await handleApproveOrReject(req, env, id, "approve");
-      if (path === "/reject" && req.method === "POST")
-        return await handleApproveOrReject(req, env, id, "reject");
-      if (path === "/status") return json(env, { deploy: await deployStatus(env) });
-
-      return fail(env, 404, "no such endpoint");
+      // THE single await point for the whole Worker.
+      //
+      // Structural, not stylistic: `try { return somePromise }` inside an async function does
+      // NOT catch that promise's rejection, because the try block exits before it settles.
+      // That once let every handler's errors escape to Cloudflare's own error page, which
+      // carries no CORS headers — so the browser reported a misleading "blocked by CORS
+      // policy" and the real message was invisible.
+      //
+      // Routing now lives in one function that is awaited exactly here, so no future handler
+      // can reintroduce that bug by forgetting an `await`. Do not inline routing back into
+      // this method.
+      return await route(req, env, ctx);
     } catch (err) {
       console.error("unhandled error:", err);
-      // Reviewers get the real message; everyone else gets a generic one. Without this the
-      // only way to diagnose a failure is `wrangler tail`, which is not something the site's
-      // owner should have to reach for — and an admin can already see everything this could
-      // disclose. Secrets never appear in these messages: github.ts throws the API's own
-      // response body, which carries no credentials.
+      // Reviewers get the real message; everyone else gets a generic one. Diagnosing a
+      // failure otherwise means reaching for `wrangler tail`, which the site's owner should
+      // never have to do — and an admin can already see everything this could disclose.
+      // Secrets never appear here: github.ts throws the API's own response body.
       const detail =
-        identity && (identity.role === "admin" || identity.role === "editor")
+        ctx.identity && (ctx.identity.role === "admin" || ctx.identity.role === "editor")
           ? ` — ${String(err).replace(/\s+/g, " ").slice(0, 400)}`
           : "";
       return fail(env, 500, `internal error${detail}`);
     }
   },
 };
+
+interface RequestContext {
+  /** Set once the caller is identified, so the catch in fetch() can tailor its message. */
+  identity?: Identity;
+}
+
+/**
+ * All routing. Deliberately does NOT catch its own errors — fetch() above owns that, which
+ * is what guarantees every failure comes back as JSON with CORS headers attached.
+ */
+async function route(req: Request, env: Env, ctx: RequestContext): Promise<Response> {
+  const url = new URL(req.url);
+  const path = url.pathname.replace(/\/+$/, "") || "/";
+
+  // --- public ---
+  if (path === "/" ) return json(env, { service: "xlab-gate", ok: true });
+
+  // Unauthenticated on purpose: this is how you confirm the gate is wired up before
+  // anyone can sign in, and it is what Studio's status panel polls. It reports whether
+  // each dependency works, never what it contains — no counts, names, or credentials.
+  if (path === "/health") {
+    const checks: Record<string, string> = {};
+    try {
+      await installationToken(env);
+      checks.github = "ok";
+    } catch (err) {
+      checks.github = `fail — ${String(err).slice(0, 300)}`;
+    }
+    try {
+      const roster = await loadRoster(env);
+      checks.roster = roster.members.length > 0 ? "ok" : "empty — commit access/roster.json";
+    } catch (err) {
+      checks.roster = `fail — ${String(err).slice(0, 200)}`;
+    }
+    checks.email = env.EMAIL_API_KEY
+      ? "configured"
+      : "not configured — member magic links disabled, admin GitHub sign-in unaffected";
+    return json(env, { service: "xlab-gate", checks });
+  }
+  // NOTE: every handler call below is `return await`, never a bare `return`.
+  // In an async function, `try { return somePromise }` does NOT catch that promise's
+  // rejection — the try block has already exited by the time it settles. Without the
+  // await, a failing handler escapes the catch, Cloudflare serves its own error page,
+  // and because that page carries no CORS headers the browser reports a misleading
+  // "blocked by CORS policy" instead of the actual error.
+  if (path === "/auth/email" && req.method === "POST") return await handleAuthEmail(req, env);
+  if (path === "/auth/verify") return await handleAuthVerify(req, env);
+  if (path === "/auth/github/start") return await handleGithubStart(req, env);
+  if (path === "/auth/github/callback") return await handleGithubCallback(req, env);
+
+  // --- authenticated ---
+  const id = await currentIdentity(req, env);
+  if (!id) return fail(env, 401, "not signed in");
+  ctx.identity = id;
+
+  if (path === "/me") return json(env, id);
+  if (path === "/submit" && req.method === "POST") return await handleSubmit(req, env, id);
+
+  // Roster read + invite issuing. Admin only: these expose lab members' email addresses
+  // and mint credentials, neither of which an editor or member has any business doing.
+  if (path === "/roster") {
+    if (id.role !== "admin") return fail(env, 403, "admins only");
+    return json(env, await loadRoster(env));
+  }
+  if (path === "/invite" && req.method === "POST") {
+    if (id.role !== "admin") return fail(env, 403, "admins only");
+    const { email } = (await req.json().catch(() => ({}))) as { email?: string };
+    if (!email) return fail(env, 400, "email is required");
+    const entry = await findByEmail(env, email);
+    if (!entry) return fail(env, 404, "that address is not on the roster yet");
+
+    // Same single-use mechanism as an emailed magic link — the only difference is that
+    // the admin delivers it by hand instead of a mail provider.
+    const jti = randomId();
+    await env.SESSIONS.put(`magic:${jti}`, entry.email.toLowerCase(), {
+      expirationTtl: INVITE_TTL_S,
+    });
+    const token = await signToken(
+      {
+        jti,
+        email: entry.email.toLowerCase(),
+        exp: Math.floor(Date.now() / 1000) + INVITE_TTL_S,
+      },
+      env.SESSION_SECRET
+    );
+    return json(env, {
+      link: `${new URL(req.url).origin}/auth/verify?token=${encodeURIComponent(token)}`,
+      expiresInDays: INVITE_TTL_S / 86400,
+      name: entry.name,
+    });
+  }
+  if (path === "/queue") {
+    const queue = await listQueue(env);
+    // Members see only their own pending submissions.
+    const visible = canApprove(id)
+      ? queue
+      : queue.filter((q) => q.body.includes(`"email":"${id.email}"`));
+    return json(env, { queue: visible });
+  }
+  if (path.startsWith("/queue/") && path.endsWith("/files")) {
+    if (!canApprove(id)) return fail(env, 403, "not allowed");
+    const number = Number(path.split("/")[2]);
+    return json(env, { files: await prFiles(env, number) });
+  }
+  if (path === "/approve" && req.method === "POST")
+    return await handleApproveOrReject(req, env, id, "approve");
+  if (path === "/reject" && req.method === "POST")
+    return await handleApproveOrReject(req, env, id, "reject");
+  if (path === "/status") return json(env, { deploy: await deployStatus(env) });
+
+  return fail(env, 404, "no such endpoint");
+}
