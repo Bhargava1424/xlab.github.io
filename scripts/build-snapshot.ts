@@ -15,6 +15,7 @@ import fs from "fs";
 import path from "path";
 import { execSync } from "child_process";
 import { loadAllRecords } from "../lib/content/index";
+import { validateContent } from "../lib/content/validate";
 
 const OUT = path.join(process.cwd(), "public", "content-snapshot.json");
 
@@ -27,6 +28,14 @@ function gitRev(): string {
 }
 
 const content = loadAllRecords();
+
+// The integrity verdict is computed HERE, once, and shipped with the data.
+//
+// Studio used to re-implement these checks in the browser because the snapshot carried no
+// answer — two copies of the same rules, which had already drifted apart. Embedding the real
+// validator's output means the Studio displays exactly what CI decided, and there is only
+// ever one place a rule is written.
+const report = validateContent(content);
 
 const snapshot = {
   // Studio compares this against the live site's snapshot to tell whether an approved
@@ -46,6 +55,7 @@ const snapshot = {
     courses: content.courses.length,
     sponsors: content.sponsors.length,
   },
+  report: { issues: report.issues, coverage: report.coverage },
   content,
 };
 
@@ -54,4 +64,8 @@ fs.writeFileSync(OUT, JSON.stringify(snapshot), "utf-8");
 
 const kb = Math.round(fs.statSync(OUT).size / 1024);
 const total = Object.values(snapshot.counts).reduce((a, b) => a + b, 0);
-console.log(`content-snapshot.json — ${total} records, ${kb} KB, commit ${snapshot.commit}`);
+const errors = report.issues.filter((i) => i.level === "error").length;
+console.log(
+  `content-snapshot.json — ${total} records, ${kb} KB, commit ${snapshot.commit}` +
+    ` · ${errors} error${errors === 1 ? "" : "s"}, ${report.issues.length - errors} warnings`
+);

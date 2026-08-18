@@ -22,29 +22,36 @@ import {
 } from "@/lib/studio/schema-fields";
 import { prepareImage, serializeRecord } from "@/lib/studio/records";
 import { fetchByDoi } from "@/lib/studio/crossref";
+import { COLLECTION_KEY, labelOf, referencesTo, refFieldTargets } from "@/lib/content/relations";
+import type { EntityKind } from "@/lib/content/schema";
 import { FieldInput } from "./field-input";
 import type { ZodType } from "zod";
 
 type Rec = Record<string, unknown>;
 
-/** Which snapshot list backs each reference field, so users pick ids instead of typing them. */
-function buildSuggestions(snap: Snapshot) {
-  const people = snap.content.people.map((p) => ({ id: p.id, label: p.name }));
-  const themes = snap.content.researchThemes.map((t) => ({ id: t.id, label: t.title }));
-  const institutions = snap.content.institutions.map((i) => ({ id: i.id, label: i.shortName ?? i.name }));
-  const publications = snap.content.publications
-    .slice(0, 400)
-    .map((p) => ({ id: p.id, label: `${p.title.slice(0, 60)} (${p.year ?? "n.d."})` }));
-  return {
-    personId: people,
-    authorId: people,
-    contributors: people,
-    themeIds: themes,
-    institutionId: institutions,
-    primaryInstitutionId: institutions,
-    publicationId: publications,
-    relatedPublicationId: publications,
-  };
+/**
+ * Which snapshot list backs each reference field, so users pick ids instead of typing them.
+ *
+ * Derived from the relation table rather than hand-listed by field name. That matters: the
+ * old hardcoded map meant any reference field missing from it silently fell through to a
+ * free-text box, so a new relation would quietly lose its picker. Now adding a line to
+ * RELATIONS is enough.
+ */
+function buildSuggestions(snap: Snapshot): Record<string, { id: string; label: string }[]> {
+  const content = snap.content as unknown as Record<string, unknown>;
+  const options: Record<string, { id: string; label: string }[]> = {};
+
+  for (const [fieldKey, target] of Object.entries(refFieldTargets())) {
+    const records = (content[COLLECTION_KEY[target]] as Record<string, unknown>[]) ?? [];
+    // Publications are the only list long enough to be worth capping in a <datalist>.
+    const capped = target === "publications" ? records.slice(0, 400) : records;
+    options[fieldKey] = capped.map((r) => {
+      const label = labelOf(target, r) ?? String(r.id);
+      const year = target === "publications" ? ` (${r.year ?? "n.d."})` : "";
+      return { id: String(r.id), label: `${label.slice(0, 60)}${year}` };
+    });
+  }
+  return options;
 }
 
 export function EntityBrowser({
@@ -579,13 +586,33 @@ function RecordForm({
         {!isNew && (
           <button
             onClick={() => {
+              // What else points at this record. CI rejects a deletion that leaves a dangling
+              // reference, so finding out here saves a whole submit → fail → return cycle —
+              // and, more usefully, names the records that have to be fixed first.
+              const inbound = referencesTo(
+                snapshot.content as unknown as Record<string, unknown>,
+                entity.key as EntityKind,
+                String(record.id)
+              );
+              if (inbound.length > 0) {
+                alert(
+                  `"${record.id}" cannot be deleted yet — ${inbound.length} record${inbound.length === 1 ? "" : "s"} still point at it:\n\n` +
+                    inbound
+                      .slice(0, 15)
+                      .map((ref) => `• ${ref.from}/${ref.fromId} — ${ref.where} (${ref.relation.label})`)
+                      .join("\n") +
+                    (inbound.length > 15 ? `\n… +${inbound.length - 15} more` : "") +
+                    `\n\nRemove or repoint those references first. CI would reject the deletion otherwise.`
+                );
+                return;
+              }
               const images = assetPathsOf(fields, record);
               const detail = images.length
                 ? `\n\nIts ${images.length === 1 ? "image" : "images"} will be removed too:\n${images.join("\n")}`
                 : "";
               if (
                 confirm(
-                  `Submit a request to delete "${record.id}"?${detail}\n\nNothing changes until this is approved.`
+                  `Submit a request to delete "${record.id}"?${detail}\n\nNothing else references it.\nNothing changes until this is approved.`
                 )
               ) {
                 void save(true);

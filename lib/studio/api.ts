@@ -7,6 +7,7 @@
 
 import { GATE_URL, SNAPSHOT_PATH, TOKEN_KEY } from "./config";
 import { withBasePath } from "@/lib/base-path";
+import type { SnapshotReport } from "@/lib/content/report";
 import type {
   Course,
   Institution,
@@ -208,6 +209,13 @@ export interface Snapshot {
   commit: string;
   schemaVersion: number;
   counts: Record<string, number>;
+  /**
+   * The integrity verdict, computed by the real validator at build time.
+   *
+   * Optional only so a snapshot published before this field existed still loads; every
+   * snapshot built from this commit onwards carries it.
+   */
+  report?: SnapshotReport;
   content: SnapshotContent;
 }
 

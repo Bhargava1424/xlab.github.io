@@ -20,17 +20,20 @@ import {
   type Snapshot,
 } from "@/lib/studio/api";
 import { ENTITIES, entityByKey } from "@/lib/studio/entities";
-import { auditContent, personCompleteness, type HealthIssue } from "@/lib/studio/records";
+import { personCompleteness } from "@/lib/studio/records";
+import { ISSUE_TITLES, type Issue } from "@/lib/content/report";
 import { EntityBrowser } from "@/components/studio/entity-browser";
 import { ReviewQueue } from "@/components/studio/review-queue";
 import { RosterManager } from "@/components/studio/roster-manager";
 import { MemberHome } from "@/components/studio/member-home";
+import { AuthorLinker } from "@/components/studio/author-linker";
 
 type View =
   | { kind: "dashboard" }
   | { kind: "entity"; key: string }
   | { kind: "queue" }
   | { kind: "health" }
+  | { kind: "linker" }
   | { kind: "roster" }
   | { kind: "me" };
 
@@ -147,6 +150,9 @@ export default function StudioPage() {
               <NavButton active={current.kind === "health"} onClick={() => setView({ kind: "health" })}>
                 Data health
               </NavButton>
+              <NavButton active={current.kind === "linker"} onClick={() => setView({ kind: "linker" })}>
+                Link authors
+              </NavButton>
             </>
           )}
           <NavButton active={current.kind === "queue"} onClick={() => setView({ kind: "queue" })}>
@@ -196,9 +202,11 @@ export default function StudioPage() {
           ) : current.kind === "dashboard" ? (
             <Dashboard snapshot={snapshot} onNavigate={setView} />
           ) : current.kind === "queue" ? (
-            <ReviewQueue canApprove={canApprove} />
+            <ReviewQueue canApprove={canApprove} snapshot={snapshot} />
           ) : current.kind === "health" ? (
             <Health snapshot={snapshot} />
+          ) : current.kind === "linker" ? (
+            <AuthorLinker snapshot={snapshot} onSubmitted={(pr) => setToast(pr)} />
           ) : current.kind === "roster" ? (
             <RosterManager snapshot={snapshot} />
           ) : (
@@ -227,7 +235,7 @@ export default function StudioPage() {
 // --- views ---------------------------------------------------------------------
 
 function Dashboard({ snapshot, onNavigate }: { snapshot: Snapshot; onNavigate: (v: View) => void }) {
-  const issues = useMemo(() => auditContent(snapshot.content), [snapshot]);
+  const issues = snapshot.report?.issues ?? [];
   const errors = issues.filter((i) => i.level === "error").length;
   const warnings = issues.length - errors;
 
@@ -303,40 +311,94 @@ function Dashboard({ snapshot, onNavigate }: { snapshot: Snapshot; onNavigate: (
   );
 }
 
+/**
+ * Data health.
+ *
+ * Reads the verdict the real validator produced at build time (see scripts/build-snapshot.ts)
+ * rather than recomputing it here. There was previously a second implementation of the checks
+ * in the browser, and the two had drifted apart — different checks, different wording. The
+ * snapshot now carries the answer, so there is exactly one place a rule is written.
+ */
 function Health({ snapshot }: { snapshot: Snapshot }) {
-  const issues = useMemo(() => auditContent(snapshot.content), [snapshot]);
+  const report = snapshot.report;
   const grouped = useMemo(() => {
-    const map = new Map<string, HealthIssue[]>();
-    for (const i of issues) map.set(i.message, [...(map.get(i.message) ?? []), i]);
-    return [...map.entries()].sort((a, b) => b[1].length - a[1].length);
-  }, [issues]);
+    const map = new Map<string, Issue[]>();
+    for (const issue of report?.issues ?? []) {
+      map.set(issue.code, [...(map.get(issue.code) ?? []), issue]);
+    }
+    // Errors first, then whatever affects the most records.
+    return [...map.entries()].sort((a, b) => {
+      const byLevel = Number(b[1][0].level === "error") - Number(a[1][0].level === "error");
+      return byLevel !== 0 ? byLevel : b[1].length - a[1].length;
+    });
+  }, [report]);
 
-  if (issues.length === 0) {
-    return <p className="text-sm text-brand-strong">Everything checks out — no issues found.</p>;
+  if (!report) {
+    return (
+      <p className="text-sm text-text-faint">
+        This snapshot was built before health reporting existed. It appears after the next deploy.
+      </p>
+    );
   }
 
   return (
     <div className="space-y-4">
       <h2 className="text-xl font-bold tracking-tight text-foreground">Data health</h2>
-      <p className="text-[12.5px] text-text-faint">
-        Errors block a submission from being approved. Warnings are things worth fixing but never block anything.
+      <p className="max-w-2xl text-[12.5px] leading-relaxed text-text-faint">
+        Errors block a submission from being approved. Warnings never block anything. Coverage is
+        not a problem at all — it is how much of the optional linking has been done, and only a
+        person can decide whether a given link belongs.
       </p>
-      {grouped.map(([message, list]) => (
-        <div key={message} className="rounded-sm border border-border p-3">
-          <p className="text-sm">
-            <span className={list[0].level === "error" ? "font-medium text-brand-orange" : "text-foreground"}>
-              {message}
-            </span>
-            <span className="ml-2 font-mono text-[11px] text-text-faint">
-              {list.length} record{list.length === 1 ? "" : "s"}
-            </span>
+
+      {report.coverage.length > 0 && (
+        <div className="rounded-sm border border-border p-3">
+          <p className="font-mono text-[10.5px] font-bold tracking-wider text-text-faint uppercase">
+            Coverage
           </p>
-          <p className="mt-1 font-mono text-[11px] leading-relaxed text-text-faint">
-            {list.slice(0, 12).map((i) => i.id).join(", ")}
-            {list.length > 12 && ` … +${list.length - 12} more`}
-          </p>
+          <div className="mt-2 space-y-2">
+            {report.coverage.map((stat) => {
+              const pct = stat.total === 0 ? 100 : Math.round((stat.covered / stat.total) * 100);
+              return (
+                <div key={stat.key}>
+                  <div className="flex items-baseline gap-3">
+                    <span className="min-w-0 flex-1 text-[12.5px] text-foreground">{stat.label}</span>
+                    <span className="h-1 w-24 shrink-0 overflow-hidden rounded-full bg-bg-alt">
+                      <span className="block h-full bg-brand" style={{ width: `${pct}%` }} />
+                    </span>
+                    <span className="w-16 shrink-0 text-right font-mono text-[11px] text-text-faint">
+                      {stat.covered}/{stat.total}
+                    </span>
+                  </div>
+                  {stat.hint && (
+                    <p className="mt-0.5 text-[11.5px] leading-snug text-text-placeholder">{stat.hint}</p>
+                  )}
+                </div>
+              );
+            })}
+          </div>
         </div>
-      ))}
+      )}
+
+      {grouped.length === 0 ? (
+        <p className="text-sm text-brand-strong">Everything checks out — no issues found.</p>
+      ) : (
+        grouped.map(([code, list]) => (
+          <div key={code} className="rounded-sm border border-border p-3">
+            <p className="text-sm">
+              <span className={list[0].level === "error" ? "font-medium text-brand-orange" : "text-foreground"}>
+                {ISSUE_TITLES[code] ?? code}
+              </span>
+              <span className="ml-2 font-mono text-[11px] text-text-faint">
+                {list.length} record{list.length === 1 ? "" : "s"}
+              </span>
+            </p>
+            <p className="mt-1 font-mono text-[11px] leading-relaxed text-text-faint">
+              {list.slice(0, 12).map((i) => i.id ?? i.message).join(", ")}
+              {list.length > 12 && ` … +${list.length - 12} more`}
+            </p>
+          </div>
+        ))
+      )}
     </div>
   );
 }

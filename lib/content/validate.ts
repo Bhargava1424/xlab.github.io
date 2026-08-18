@@ -6,22 +6,39 @@
 //
 //   * REFERENTIAL INTEGRITY — every foreign key resolves. Previously a dangling personId or
 //     themeId passed validation and silently rendered nothing, which is the worst kind of
-//     bug: invisible in CI, invisible on the page, discovered by a visitor.
+//     bug: invisible in CI, invisible on the page, discovered by a visitor. The relations
+//     themselves are declared once in relations.ts and driven from there.
 //   * ASSET INTEGRITY — every referenced image actually exists on disk.
 //   * KEY UNIQUENESS — enforced structurally by filename===id (see loader.ts), re-asserted
 //     here as a defence in depth.
+//   * DUPLICATE RECORDS — the same paper entered twice. Invisible to every check above,
+//     because both copies are individually valid, and the single most likely form of real
+//     corruption once several people submit their own co-authored papers independently.
+//   * STATUS CONSISTENCY — a published record pointing at a draft one. CI green, page blank.
+//
+// It also reports COVERAGE: how many records have made an optional link at all. Coverage is
+// never an error. A paper with no lab author is a real paper; blocking it would only teach
+// people to invent links. It is measured in aggregate so it can be worked through
+// deliberately, rather than nagged about once per record.
 //
 // Warnings are reported but never fail the build; errors fail it.
 import fs from "fs";
 import path from "path";
 import { loadAllRecords, type AllContent } from "./index";
 import { ContentValidationError } from "./loader";
+import { titleKey } from "./matching";
+import {
+  COLLECTION_KEY,
+  RELATIONS,
+  resolveRefs,
+  type RelationOwner,
+} from "./relations";
+import { ENTITY_KINDS, type EntityKind } from "./schema";
+import type { CoverageStat, Issue, ValidationReport } from "./report";
 
-export interface ValidationReport {
-  errors: string[];
-  warnings: string[];
-  counts: Record<string, number>;
-}
+// The report's shape lives in report.ts so the Studio can render it without importing this
+// file, which reads the filesystem.
+export type { CoverageStat, Issue, IssueLevel, ValidationReport } from "./report";
 
 const PUBLIC_ROOT = path.join(process.cwd(), "public");
 
@@ -47,112 +64,157 @@ function referencedAssets(c: AllContent): Map<string, string[]> {
   return refs;
 }
 
-export function validateContent(): ValidationReport {
-  const errors: string[] = [];
-  const warnings: string[] = [];
+/** The on-disk file a record lives in, used verbatim in error messages. */
+function fileOf(owner: RelationOwner, id: string): string {
+  if (owner === "site") return "site.yaml";
+  return `${owner}/${id}.${owner === "posts" ? "mdx" : "yaml"}`;
+}
+
+export function validateContent(preloaded?: AllContent): ValidationReport {
+  const issues: Issue[] = [];
+  const add = (issue: Issue) => issues.push(issue);
 
   let content: AllContent;
   try {
-    content = loadAllRecords();
+    content = preloaded ?? loadAllRecords();
   } catch (err) {
     if (err instanceof ContentValidationError) {
       // Schema errors block the integrity pass — there is no reliable data to check FKs
       // against until shapes are correct. Report them and stop.
+      const errors = err.message.split("\n").slice(1).map((l) => l.replace(/^\s*-\s*/, ""));
       return {
-        errors: err.message.split("\n").slice(1).map((l) => l.replace(/^\s*-\s*/, "")),
+        errors,
         warnings: ["integrity checks skipped — fix the schema errors above first"],
+        issues: [
+          ...errors.map((message) => ({ level: "error" as const, code: "schema", entity: "content", message })),
+          {
+            level: "warning" as const,
+            code: "integrity-skipped",
+            entity: "content",
+            message: "integrity checks skipped — fix the schema errors above first",
+          },
+        ],
+        coverage: [],
         counts: {},
       };
     }
     throw err;
   }
 
+  const recordsOf = (kind: EntityKind): { id: string; status?: string }[] =>
+    (content as unknown as Record<string, unknown>)[COLLECTION_KEY[kind]] as { id: string }[];
+
   // --- id uniqueness (defence in depth; filename===id already enforces this) ----
   const idSets: Record<string, Set<string>> = {};
-  const checkUnique = (kind: string, records: { id: string }[]) => {
+  for (const kind of ENTITY_KINDS) {
     const seen = new Set<string>();
-    for (const r of records) {
-      if (seen.has(r.id)) errors.push(`${kind}: duplicate id "${r.id}"`);
+    for (const r of recordsOf(kind)) {
+      if (seen.has(r.id)) {
+        add({ level: "error", code: "duplicate-id", entity: kind, id: r.id, message: `${kind}: duplicate id "${r.id}"` });
+      }
       seen.add(r.id);
     }
     idSets[kind] = seen;
-  };
-  checkUnique("institutions", content.institutions);
-  checkUnique("people", content.people);
-  checkUnique("themes", content.researchThemes);
-  checkUnique("projects", content.projects);
-  checkUnique("publications", content.publications);
-  checkUnique("posts", content.posts);
-  checkUnique("recognitions", content.recognitions);
-  checkUnique("service", content.service);
-  checkUnique("courses", content.courses);
-  checkUnique("sponsors", content.sponsors);
+  }
+
+  // Status lookup, so a published record pointing at a draft one can be spotted below.
+  const statusOf = new Map<string, string>();
+  for (const kind of ENTITY_KINDS) {
+    for (const r of recordsOf(kind)) statusOf.set(`${kind}/${r.id}`, r.status ?? "published");
+  }
 
   // --- referential integrity ---------------------------------------------------
-  const ref = (
-    value: string | undefined | null,
-    target: keyof typeof idSets,
-    where: string
-  ) => {
-    if (value === undefined || value === null) return;
-    if (!idSets[target].has(value)) {
-      errors.push(`${where}: "${value}" does not resolve to any ${target} record`);
-    }
-  };
+  // Driven entirely by RELATIONS. Adding a reference field to the schema and a line to that
+  // table is all it takes for CI, the Studio picker, and the review queue to know about it.
+  for (const relation of RELATIONS) {
+    const owners: { record: unknown; id: string }[] =
+      relation.from === "site"
+        ? [{ record: content.siteMeta, id: "site" }]
+        : recordsOf(relation.from).map((r) => ({ record: r, id: r.id }));
 
-  if (content.siteMeta.primaryInstitutionId) {
-    ref(content.siteMeta.primaryInstitutionId, "institutions", "site.yaml primaryInstitutionId");
+    for (const { record, id } of owners) {
+      const ownerFile = fileOf(relation.from, id);
+      const ownerPublished =
+        relation.from === "site" || statusOf.get(`${relation.from}/${id}`) === "published";
+
+      for (const { value, where } of resolveRefs(record, relation.path)) {
+        if (!idSets[relation.to].has(value)) {
+          add({
+            level: "error",
+            code: "dangling-reference",
+            entity: relation.from,
+            id,
+            where,
+            message: `${ownerFile} ${where}: "${value}" does not resolve to any ${relation.to} record`,
+          });
+          continue;
+        }
+        // The reference resolves, but points at something the public site hides. Green CI,
+        // blank page — the same silent failure the FK checks exist to prevent.
+        const targetStatus = statusOf.get(`${relation.to}/${value}`);
+        if (ownerPublished && targetStatus && targetStatus !== "published") {
+          add({
+            level: "warning",
+            code: "published-points-at-unpublished",
+            entity: relation.from,
+            id,
+            where,
+            message: `${ownerFile} ${where}: this record is published but its ${relation.label} "${value}" is ${targetStatus} — the link renders as nothing`,
+          });
+        }
+      }
+    }
   }
 
-  for (const p of content.people) {
-    for (const [i, a] of (p.affiliations ?? []).entries()) {
-      ref(a.institutionId, "institutions", `people/${p.id}.yaml affiliations[${i}].institutionId`);
-    }
-  }
-
-  for (const p of content.projects) {
-    for (const [i, t] of p.themeIds.entries()) {
-      ref(t, "themes", `projects/${p.id}.yaml themeIds[${i}]`);
-    }
-    for (const [i, c] of p.contributors.entries()) {
-      ref(c, "people", `projects/${p.id}.yaml contributors[${i}]`);
-    }
-    ref(p.links?.publicationId, "publications", `projects/${p.id}.yaml links.publicationId`);
-  }
-
+  // --- duplicate records -------------------------------------------------------
+  // Two publications with the same DOI are the same paper, always. Title alone is not
+  // enough: a conference paper extended into a journal article legitimately shares a title,
+  // and 23 such pairs exist in this content set. Requiring the category and year to match
+  // as well narrows it to the case that is genuinely a mistake.
+  const byDoi = new Map<string, string[]>();
+  const byTitle = new Map<string, string[]>();
   for (const p of content.publications) {
-    for (const [i, t] of p.themeIds.entries()) {
-      ref(t, "themes", `publications/${p.id}.yaml themeIds[${i}]`);
+    if (p.doi) {
+      const key = p.doi.toLowerCase();
+      byDoi.set(key, [...(byDoi.get(key) ?? []), p.id]);
     }
-    for (const [i, a] of p.authors.entries()) {
-      ref(a.personId, "people", `publications/${p.id}.yaml authors[${i}].personId`);
+    const key = `${titleKey(p.title)}|${p.category}|${p.year ?? ""}`;
+    byTitle.set(key, [...(byTitle.get(key) ?? []), p.id]);
+  }
+  for (const [doi, ids] of byDoi) {
+    if (ids.length > 1) {
+      add({
+        level: "error",
+        code: "duplicate-doi",
+        entity: "publications",
+        id: ids[0],
+        message: `DOI ${doi} is used by ${ids.length} publications: ${ids.join(", ")} — a DOI identifies exactly one paper`,
+      });
     }
   }
-
-  for (const p of content.posts) {
-    ref(p.authorId, "people", `posts/${p.id}.mdx authorId`);
-    ref(p.relatedPublicationId, "publications", `posts/${p.id}.mdx relatedPublicationId`);
-  }
-
-  for (const r of content.recognitions) {
-    ref(r.personId, "people", `recognitions/${r.id}.yaml personId`);
-    ref(r.publicationId, "publications", `recognitions/${r.id}.yaml publicationId`);
-  }
-
-  for (const s of content.service) {
-    ref(s.personId, "people", `service/${s.id}.yaml personId`);
-  }
-
-  for (const c of content.courses) {
-    ref(c.personId, "people", `courses/${c.id}.yaml personId`);
-    ref(c.institutionId, "institutions", `courses/${c.id}.yaml institutionId`);
+  for (const ids of byTitle.values()) {
+    if (ids.length > 1) {
+      add({
+        level: "warning",
+        code: "possible-duplicate-publication",
+        entity: "publications",
+        id: ids[0],
+        message: `same title, category and year: ${ids.join(", ")} — probably the same paper entered twice`,
+      });
+    }
   }
 
   // --- asset integrity ---------------------------------------------------------
   const refs = referencedAssets(content);
   for (const [assetPath, wheres] of refs) {
     if (!assetExists(assetPath)) {
-      errors.push(`missing image "${assetPath}" referenced by ${wheres.join(", ")}`);
+      add({
+        level: "error",
+        code: "missing-asset",
+        entity: "assets",
+        id: assetPath,
+        message: `missing image "${assetPath}" referenced by ${wheres.join(", ")}`,
+      });
     }
   }
 
@@ -168,7 +230,15 @@ export function validateContent(): ValidationReport {
       });
     for (const file of walk(imagesRoot)) {
       const rel = "/" + path.relative(PUBLIC_ROOT, file).split(path.sep).join("/");
-      if (!refs.has(rel)) warnings.push(`unreferenced image on disk: ${rel}`);
+      if (!refs.has(rel)) {
+        add({
+          level: "warning",
+          code: "unreferenced-image",
+          entity: "assets",
+          id: rel,
+          message: `unreferenced image on disk: ${rel}`,
+        });
+      }
     }
   }
 
@@ -177,31 +247,70 @@ export function validateContent(): ValidationReport {
     if (p.personType !== "lab-lead" && p.labTenure?.joinedYear === undefined) {
       // Not an error: 16 records have no sourced joined year and this project's rule is
       // never to invent data. Studio requires it for new and edited records.
-      warnings.push(`people/${p.id}.yaml: no labTenure.joinedYear`);
+      add({ level: "warning", code: "no-joined-year", entity: "people", id: p.id, message: `people/${p.id}.yaml: no labTenure.joinedYear` });
     }
-    if (!p.photo) warnings.push(`people/${p.id}.yaml: no photo`);
+    if (!p.photo) {
+      add({ level: "warning", code: "no-photo", entity: "people", id: p.id, message: `people/${p.id}.yaml: no photo` });
+    }
   }
-  const untagged = content.publications.filter((p) => p.themeIds.length === 0).length;
+
+  // --- coverage ----------------------------------------------------------------
+  // Reported, never enforced. One line per relation instead of one warning per record:
+  // 284 individual nags would only train everyone to ignore warnings entirely.
+  const authorEntries = content.publications.flatMap((p) => p.authors);
+  const coverage: CoverageStat[] = [
+    {
+      key: "publications-with-lab-author",
+      label: "Publications with at least one linked lab author",
+      covered: content.publications.filter((p) => p.authors.some((a) => a.personId)).length,
+      total: content.publications.length,
+      hint: "Unlinked papers never appear on their authors' profiles.",
+    },
+    {
+      key: "author-entries-linked",
+      label: "Author entries linked to a person record",
+      covered: authorEntries.filter((a) => a.personId).length,
+      total: authorEntries.length,
+      hint: "Most co-authors are external and should stay unlinked; this counts lab members too.",
+    },
+    {
+      key: "publications-with-theme",
+      label: "Publications tagged with a research theme",
+      covered: content.publications.filter((p) => p.themeIds.length > 0).length,
+      total: content.publications.length,
+      hint: "Untagged publications do not appear in the research browser.",
+    },
+    {
+      key: "projects-with-contributors",
+      label: "Projects listing contributors",
+      covered: content.projects.filter((p) => p.contributors.length > 0).length,
+      total: content.projects.length,
+    },
+    {
+      key: "recognitions-with-publication",
+      label: "Awards linked to the paper they were given for",
+      covered: content.recognitions.filter((r) => r.publicationId).length,
+      total: content.recognitions.length,
+    },
+  ];
+
+  // The one aggregate the CLI has always printed, kept so a fresh eye sees it without
+  // opening Studio.
+  const untagged = content.publications.length - (coverage.find((c) => c.key === "publications-with-theme")?.covered ?? 0);
   if (untagged) {
-    warnings.push(
-      `${untagged}/${content.publications.length} publications have no themeIds — they will not appear in the research browser`
-    );
+    add({
+      level: "warning",
+      code: "publications-untagged",
+      entity: "publications",
+      message: `${untagged}/${content.publications.length} publications have no themeIds — they will not appear in the research browser`,
+    });
   }
 
   return {
-    errors,
-    warnings,
-    counts: {
-      institutions: content.institutions.length,
-      people: content.people.length,
-      themes: content.researchThemes.length,
-      projects: content.projects.length,
-      publications: content.publications.length,
-      posts: content.posts.length,
-      recognitions: content.recognitions.length,
-      service: content.service.length,
-      courses: content.courses.length,
-      sponsors: content.sponsors.length,
-    },
+    errors: issues.filter((i) => i.level === "error").map((i) => i.message),
+    warnings: issues.filter((i) => i.level === "warning").map((i) => i.message),
+    issues,
+    coverage,
+    counts: Object.fromEntries(ENTITY_KINDS.map((kind) => [kind, recordsOf(kind).length])),
   };
 }

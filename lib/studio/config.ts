@@ -14,5 +14,17 @@ export const GATE_URL = "https://xlab-gate.xlab-studio.workers.dev";
  */
 export const SNAPSHOT_PATH = "/content-snapshot.json";
 
+/**
+ * The public repo, used to read a submission's proposed file contents straight from its
+ * branch via raw.githubusercontent.com.
+ *
+ * The diff the gate returns is a patch — enough to show what changed, not enough to check
+ * whether the resulting record's links resolve. Reading the whole file needs no credential
+ * (the repo is public), no account, and no change to the Worker. Must match REPO_OWNER and
+ * REPO_NAME in workers/xlab-gate/wrangler.jsonc.
+ */
+export const REPO_OWNER = "Bhargava1424";
+export const REPO_NAME = "xlab.github.io";
+
 /** localStorage key for the session bearer token. */
 export const TOKEN_KEY = "xlab-studio-token";
